@@ -11,8 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+import modules from '../../modules';
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header = () => {
@@ -76,9 +78,11 @@ const Header = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                {modules.map((module) => (
+                  <MenuItem key={module.name} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                      <Link to={module.routeProps.path}>{module.name}</Link>
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -92,13 +96,13 @@ const Header = () => {
               LOGO
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+              {modules.map((module) => (
                 <Button
-                  key={page}
+                  key={module.name}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  {page}
+                  <Link to={module.routeProps.path}>{module.name}</Link>
                 </Button>
               ))}
             </Box>

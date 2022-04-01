@@ -1,12 +1,16 @@
 import './App.scss';
+import AppRouting from './AppRouting';
 import Header from './shared/components/Header';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <div className='App-header'>
         <Header />
-      </header>
+      </div>
+      <div className='App-content'>
+        <AppRouting />
+      </div>
     </div>
   );
 }
