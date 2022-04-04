@@ -1,0 +1,17 @@
+enum SymbolType {
+  CRYPTO
+  STOCK
+}
+
+type CurrentPrice @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  price: String
+  last_update: String
+  symbol: Symbol @hasOne
+}
+
+type Symbol @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  symbol: String
+  type: SymbolType
+}

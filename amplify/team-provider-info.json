@@ -10,6 +10,14 @@
       "StackName": "amplify-mypo-dev-203822",
       "StackId": "arn:aws:cloudformation:us-east-1:157356677452:stack/amplify-mypo-dev-203822/2bb7e830-b457-11ec-bc03-120b17e7cf1d",
       "AmplifyAppId": "d9y58zm1bjgsd"
+    },
+    "categories": {
+      "function": {
+        "populateSymbols": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/populateSymbols-686848716675646f6334-build.zip"
+        }
+      }
     }
   }
 }
