@@ -1,4 +1,7 @@
 {
   "permissions": {},
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "secretNames": [
+    "FINNHUB_API_KEY"
+  ]
 }

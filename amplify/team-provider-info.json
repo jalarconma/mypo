@@ -19,7 +19,8 @@
         },
         "populateCryptoSymbols": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/populateCryptoSymbols-7734627a39574c654444-build.zip"
+          "s3Key": "amplify-builds/populateCryptoSymbols-794a4b354c6b4e363748-build.zip",
+          "secretsPathAmplifyAppId": "d9y58zm1bjgsd"
         }
       }
     }

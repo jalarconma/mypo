@@ -1,3 +1,17 @@
+/*
+Use the following code to retrieve configured secrets from SSM:
+
+const aws = require('aws-sdk');
+
+const { Parameters } = await (new aws.SSM())
+  .getParameters({
+    Names: ["FINNHUB_API_KEY"].map(secretName => process.env[secretName]),
+    WithDecryption: true,
+  })
+  .promise();
+
+Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
+*/
 /* Amplify Params - DO NOT EDIT
   ENV
   REGION
@@ -8,8 +22,11 @@ Amplify Params - DO NOT EDIT */
  */
 
  const AWS = require('aws-sdk');
- const docClient = new AWS.DynamoDB.DocumentClient();
  const https = require('https');
+ const FINNHUB_API_KEY_NAME = 'FINNHUB_API_KEY';
+ 
+ const docClient = new AWS.DynamoDB.DocumentClient();
+ const ssm = new AWS.SSM();
  
  function getRequest(url) {
    return new Promise((resolve, reject) => {
@@ -36,46 +53,73 @@ Amplify Params - DO NOT EDIT */
    });
  }
  
+ async function getFinnHubApiKey() {
+   const params = {
+     Name: process.env[FINNHUB_API_KEY_NAME],
+     WithDecryption: true
+   };
  
- async function createItem() {
-   const result = await getRequest('https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=c95gv0qad3i8q7sn6tcg');
+   const request = await ssm.getParameter(params).promise();
+ 
+   return request.Parameter.Value;
+ }
+ 
+ async function getSymbols() {
+   const finnHubApiKey = await getFinnHubApiKey();
+   const result = await getRequest(`https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=${finnHubApiKey}`);
+   
+   console.log('result data ok... filtering....');
+   
    const data = result.filter(symbolData => symbolData.symbol.includes('USDT'));
    const symbols = data.map(symbolData => ({ id: symbolData.symbol, symbol: symbolData.symbol, type: 'CRYPTO' }));
  
+   return symbols;
+ }
+ 
+ async function storeOnDB(symbols25) {
+   const params = {
+     RequestItems: {
+       "Symbol-3wefbaba7bc5tpd64l5yzdmmoy-dev": symbols25.map(symbol => ({
+         PutRequest: {
+           Item: { ...symbol }
+         }
+       }))
+     }
+   };
+   
+   console.log('To store', symbols25);
+ 
+   const storeResult = await docClient.batchWrite(params).promise();
+   console.log('stored', storeResult);
+ }
+ 
+ 
+ async function createItems() {
+   const symbols = await getSymbols();
+   
+ 
+ 
    const chunckSize = 25;
-   const loopLimit = Math.ceil(symbols.length/25);
+   const loopLimit = Math.ceil(symbols.length / 25);
  
    for (let i = 0; i <= loopLimit; i++) {
-     const initial = i*chunckSize;
+     const initial = i * chunckSize;
      const end = initial + chunckSize;
      const symbols25 = symbols.slice(initial, end);
-     
-     console.log('To store', symbols25);
-     
-     if(symbols25.length <= 0) {
+ 
+     if (symbols25.length <= 0) {
        console.log('loop data', { lenght: symbols.length, loopLimit, initial, end });
        continue;
      }
      
-     const params = {
-       RequestItems: {
-         "Symbol-3wefbaba7bc5tpd64l5yzdmmoy-dev": symbols25.map(symbol => ({
-           PutRequest: {
-             Item: { ...symbol }
-           }
-         }))
-       }
-     };
- 
-     const storeResult = await docClient.batchWrite(params).promise();
-     console.log('stored', storeResult);
+     storeOnDB(symbols25);
    }
  
  }
  
  exports.handler = async (event) => {
    try {
-     await createItem();
+     await createItems();
      return { body: 'Successfully created crypto symbols!' };
    }
    catch (err) {
