@@ -15,7 +15,11 @@
       "function": {
         "populateSymbols": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/populateSymbols-686848716675646f6334-build.zip"
+          "s3Key": "amplify-builds/populateSymbols-71672b73687434386852-build.zip"
+        },
+        "populateCryptoSymbols": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/populateCryptoSymbols-7734627a39574c654444-build.zip"
         }
       }
     }

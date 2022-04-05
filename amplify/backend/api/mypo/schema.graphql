@@ -15,3 +15,4 @@ type Symbol @model @auth(rules: [{allow: public}]) {
   symbol: String
   type: SymbolType
 }
+ 
