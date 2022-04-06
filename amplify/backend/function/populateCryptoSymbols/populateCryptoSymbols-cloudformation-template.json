@@ -236,6 +236,7 @@
                       {
                         "Ref": "apimypov1GraphQLAPIIdOutput"
                       },
+                      "-",
                       {
                         "Ref": "env"
                       }

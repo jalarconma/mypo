@@ -4,7 +4,9 @@
 	API_MYPOV1_GRAPHQLAPIKEYOUTPUT
 	ENV
 	REGION
-Amplify Params - DO NOT EDIT *//*
+Amplify Params - DO NOT EDIT */
+
+/*
 Use the following code to retrieve configured secrets from SSM:
 
 const aws = require('aws-sdk');
@@ -18,10 +20,6 @@ const { Parameters } = await (new aws.SSM())
 
 Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
 */
-/* Amplify Params - DO NOT EDIT
-  ENV
-  REGION
-Amplify Params - DO NOT EDIT */
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -30,10 +28,12 @@ Amplify Params - DO NOT EDIT */
  const AWS = require('aws-sdk');
  const https = require('https');
  const FINNHUB_API_KEY_NAME = 'FINNHUB_API_KEY';
- const TABLE_NAME = `Symbol-${process.env['API_MYPOV1_GRAPHQLAPIIDOUTPUT']}-${process.env['ENV']}`
+ const TABLE_NAME = `Symbol-${process.env['API_MYPOV1_GRAPHQLAPIIDOUTPUT']}-${process.env['ENV']}`;
  
  const docClient = new AWS.DynamoDB.DocumentClient();
  const ssm = new AWS.SSM();
+ 
+ AWS.config.update({ region: process.env['REGION'] });
  
  function getRequest(url) {
    return new Promise((resolve, reject) => {
@@ -86,13 +86,15 @@ Amplify Params - DO NOT EDIT */
  async function storeOnDB(symbols25) {
    const params = {
      RequestItems: {
-       TABLE_NAME: symbols25.map(symbol => ({
+       [TABLE_NAME]: symbols25.map(symbol => ({
          PutRequest: {
            Item: { ...symbol }
          }
        }))
      }
    };
+
+   console.log('params', params);
    
    console.log('To store', symbols25);
  
