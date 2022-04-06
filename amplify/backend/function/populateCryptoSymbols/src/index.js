@@ -1,4 +1,10 @@
-/*
+/* Amplify Params - DO NOT EDIT
+	API_MYPOV1_GRAPHQLAPIENDPOINTOUTPUT
+	API_MYPOV1_GRAPHQLAPIIDOUTPUT
+	API_MYPOV1_GRAPHQLAPIKEYOUTPUT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT *//*
 Use the following code to retrieve configured secrets from SSM:
 
 const aws = require('aws-sdk');
@@ -24,6 +30,7 @@ Amplify Params - DO NOT EDIT */
  const AWS = require('aws-sdk');
  const https = require('https');
  const FINNHUB_API_KEY_NAME = 'FINNHUB_API_KEY';
+ const TABLE_NAME = `Symbol-${process.env['API_MYPOV1_GRAPHQLAPIIDOUTPUT']}-${process.env['ENV']}`
  
  const docClient = new AWS.DynamoDB.DocumentClient();
  const ssm = new AWS.SSM();
@@ -79,7 +86,7 @@ Amplify Params - DO NOT EDIT */
  async function storeOnDB(symbols25) {
    const params = {
      RequestItems: {
-       "Symbol-3wefbaba7bc5tpd64l5yzdmmoy-dev": symbols25.map(symbol => ({
+       TABLE_NAME: symbols25.map(symbol => ({
          PutRequest: {
            Item: { ...symbol }
          }
@@ -96,9 +103,7 @@ Amplify Params - DO NOT EDIT */
  
  async function createItems() {
    const symbols = await getSymbols();
-   
- 
- 
+  
    const chunckSize = 25;
    const loopLimit = Math.ceil(symbols.length / 25);
  

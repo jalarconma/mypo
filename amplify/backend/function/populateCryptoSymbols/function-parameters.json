@@ -1,5 +1,13 @@
 {
-  "permissions": {},
+  "permissions": {
+    "api": {
+      "mypov1": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    }
+  },
   "lambdaLayers": [],
   "secretNames": [
     "FINNHUB_API_KEY"

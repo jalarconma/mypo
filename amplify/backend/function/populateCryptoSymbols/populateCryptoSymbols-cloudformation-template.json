@@ -18,6 +18,18 @@
     },
     "secretsPathAmplifyAppId": {
       "Type": "String"
+    },
+    "apimypov1GraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apimypov1GraphQLAPIIdOutput"
+    },
+    "apimypov1GraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apimypov1GraphQLAPIEndpointOutput"
+    },
+    "apimypov1GraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apimypov1GraphQLAPIKeyOutput"
     }
   },
   "Conditions": {
@@ -94,6 +106,15 @@
                   "FINNHUB_API_KEY"
                 ]
               ]
+            },
+            "API_MYPOV1_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apimypov1GraphQLAPIIdOutput"
+            },
+            "API_MYPOV1_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apimypov1GraphQLAPIEndpointOutput"
+            },
+            "API_MYPOV1_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apimypov1GraphQLAPIKeyOutput"
             }
           }
         },
@@ -198,7 +219,30 @@
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem"
               ],
-              "Resource": "arn:aws:dynamodb:*:*:table/Symbol-3wefbaba7bc5tpd64l5yzdmmoy-dev"
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/Symbol-",
+                      {
+                        "Ref": "apimypov1GraphQLAPIIdOutput"
+                      },
+                      {
+                        "Ref": "env"
+                      }
+                    ]
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -260,6 +304,93 @@
       "DependsOn": [
         "LambdaExecutionRole"
       ]
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "appsync:GraphQL"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apimypov1GraphQLAPIIdOutput"
+                      },
+                      "/types/Query/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apimypov1GraphQLAPIIdOutput"
+                      },
+                      "/types/Mutation/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apimypov1GraphQLAPIIdOutput"
+                      },
+                      "/types/Subscription/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
     }
   },
   "Outputs": {
