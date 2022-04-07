@@ -74,13 +74,36 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
  async function getSymbols() {
    const finnHubApiKey = await getFinnHubApiKey();
    const result = await getRequest(`https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=${finnHubApiKey}`);
-   
+ 
    console.log('result data ok... filtering....');
-   
+ 
    const data = result.filter(symbolData => symbolData.symbol.includes('USDT'));
    const symbols = data.map(symbolData => ({ id: symbolData.symbol, symbol: symbolData.symbol, type: 'CRYPTO' }));
  
    return symbols;
+ }
+ 
+ async function createCurrentPrice(symbols25) {
+   const CURRENT_PRICE_TABLE_NAME = `CurrentPrice-${process.env['API_MYPOV1_GRAPHQLAPIIDOUTPUT']}-${process.env['ENV']}`;
+   const params = {
+     RequestItems: {
+       [CURRENT_PRICE_TABLE_NAME]: symbols25.map(symbol => ({
+         PutRequest: {
+           Item: {
+             id: `CP-${symbol.symbol}`,
+             price: 0.0,
+             updated: false,
+             symbol: symbol.id
+           }
+         }
+       }))
+     }
+   };
+ 
+   console.log('price params', params);
+ 
+   const storeResult = await docClient.batchWrite(params).promise();
+   console.log('price stored', storeResult);
  }
  
  async function storeOnDB(symbols25) {
@@ -93,19 +116,21 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
        }))
      }
    };
-
+ 
    console.log('params', params);
-   
+ 
    console.log('To store', symbols25);
  
    const storeResult = await docClient.batchWrite(params).promise();
    console.log('stored', storeResult);
+ 
+   await createCurrentPrice(symbols25);
  }
  
  
  async function createItems() {
    const symbols = await getSymbols();
-  
+ 
    const chunckSize = 25;
    const loopLimit = Math.ceil(symbols.length / 25);
  
@@ -118,7 +143,7 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
        console.log('loop data', { lenght: symbols.length, loopLimit, initial, end });
        continue;
      }
-     
+ 
      storeOnDB(symbols25);
    }
  

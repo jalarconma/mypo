@@ -10,7 +10,7 @@ export const createCurrentPrice = /* GraphQL */ `
     createCurrentPrice(input: $input, condition: $condition) {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol
@@ -38,7 +38,7 @@ export const updateCurrentPrice = /* GraphQL */ `
     updateCurrentPrice(input: $input, condition: $condition) {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol
@@ -66,7 +66,7 @@ export const deleteCurrentPrice = /* GraphQL */ `
     deleteCurrentPrice(input: $input, condition: $condition) {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol

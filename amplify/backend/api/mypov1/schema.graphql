@@ -5,14 +5,14 @@ enum SymbolType {
 
 type CurrentPrice @model @auth(rules: [{allow: public}]) {
   id: ID!
-  price: String
-  last_update: String
-  symbol: Symbol @hasOne
+  price: Float!
+  updated: Boolean!
+  symbol: Symbol! @hasOne
 }
 
 type Symbol @model @auth(rules: [{allow: public}]) {
   id: ID!
-  symbol: String
-  type: SymbolType
+  symbol: String!
+  type: SymbolType!
 }
  

@@ -13,15 +13,15 @@ export const schema = {
                 "price": {
                     "name": "price",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": "Float",
+                    "isRequired": true,
                     "attributes": []
                 },
-                "last_update": {
-                    "name": "last_update",
+                "updated": {
+                    "name": "updated",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": "Boolean",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "symbol": {
@@ -30,7 +30,7 @@ export const schema = {
                     "type": {
                         "model": "Symbol"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "HAS_ONE",
@@ -58,7 +58,7 @@ export const schema = {
                     "name": "currentPriceSymbolId",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 }
             },
@@ -101,7 +101,7 @@ export const schema = {
                     "name": "symbol",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "type": {
@@ -110,7 +110,7 @@ export const schema = {
                     "type": {
                         "enum": "SymbolType"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -166,5 +166,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "9ff979cca78294f507a89f2e40d9434a"
+    "version": "50213d0520abc07f38db6413f6792df3"
 };

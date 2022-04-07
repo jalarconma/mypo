@@ -7,7 +7,7 @@ export const getCurrentPrice = /* GraphQL */ `
     getCurrentPrice(id: $id) {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol
@@ -37,7 +37,7 @@ export const listCurrentPrices = /* GraphQL */ `
       items {
         id
         price
-        last_update
+        updated
         symbol {
           id
           symbol
@@ -76,7 +76,7 @@ export const syncCurrentPrices = /* GraphQL */ `
       items {
         id
         price
-        last_update
+        updated
         symbol {
           id
           symbol

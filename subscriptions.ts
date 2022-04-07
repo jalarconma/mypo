@@ -7,7 +7,7 @@ export const onCreateCurrentPrice = /* GraphQL */ `
     onCreateCurrentPrice {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol
@@ -32,7 +32,7 @@ export const onUpdateCurrentPrice = /* GraphQL */ `
     onUpdateCurrentPrice {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol
@@ -57,7 +57,7 @@ export const onDeleteCurrentPrice = /* GraphQL */ `
     onDeleteCurrentPrice {
       id
       price
-      last_update
+      updated
       symbol {
         id
         symbol
