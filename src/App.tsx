@@ -9,7 +9,6 @@ import Header from './shared/components/Header';
 
 function App() {
   const [user, setUser] = useState(null);
-  
 
   useEffect(() => {
     Hub.listen('auth', ({ payload: { event, data } }) => {
@@ -44,7 +43,6 @@ function App() {
     <div className="App">
       <div className='App-header'>
         <Header />
-        <p>User: {user ? JSON.stringify(user.attributes) : 'None'}</p>
       </div>
       <div className='App-content'>
         <AppRouting />
