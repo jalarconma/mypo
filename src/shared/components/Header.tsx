@@ -13,6 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
+import Amplify, { Auth, Hub } from 'aws-amplify';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+
 import modules from '../../modules';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -32,8 +35,14 @@ const Header = () => {
       setAnchorElNav(null);
     };
   
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = (setting) => {
       setAnchorElUser(null);
+
+      if(setting === 'Logout') {
+        Auth.signOut()
+      } else {
+        Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Google });
+      }
     };
   
     return (
@@ -130,7 +139,7 @@ const Header = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={handleCloseUserMenu(setting)}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}

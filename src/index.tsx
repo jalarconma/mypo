@@ -6,6 +6,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { Amplify } from 'aws-amplify';
+import updatedAwsConfig from './amplify-config/amplify-config';
+
+Amplify.configure(updatedAwsConfig);
+
 const rootElement = document.getElementById("root");
 
 ReactDOM.render(
