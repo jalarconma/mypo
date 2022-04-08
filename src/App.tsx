@@ -9,6 +9,7 @@ import Header from './shared/components/Header';
 
 function App() {
   const [user, setUser] = useState(null);
+  
 
   useEffect(() => {
     Hub.listen('auth', ({ payload: { event, data } }) => {
