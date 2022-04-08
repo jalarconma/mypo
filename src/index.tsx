@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 
 import { Amplify } from 'aws-amplify';
 import updatedAwsConfig from './amplify-config/amplify-config';
+import GlobalServices from './core/components/GlobalServices';
 
 Amplify.configure(updatedAwsConfig);
 
@@ -16,7 +17,9 @@ const rootElement = document.getElementById("root");
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <GlobalServices>
+        <App />
+      </GlobalServices>
     </React.StrictMode>
   </BrowserRouter>,
   rootElement

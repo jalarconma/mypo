@@ -1,7 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
-import modules from './modules';
+import { loggedInModules, loggedOutModules} from './modules';
 
 const AppRouting = () => {
+  const modules = [...loggedInModules, ...loggedOutModules];
   return (
     <Routes>
       {
