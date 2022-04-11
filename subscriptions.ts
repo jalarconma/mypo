@@ -2,6 +2,102 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateUserPortafolio = /* GraphQL */ `
+  subscription OnCreateUserPortafolio {
+    onCreateUserPortafolio {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateUserPortafolio = /* GraphQL */ `
+  subscription OnUpdateUserPortafolio {
+    onUpdateUserPortafolio {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteUserPortafolio = /* GraphQL */ `
+  subscription OnDeleteUserPortafolio {
+    onDeleteUserPortafolio {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const onCreateCurrentPrice = /* GraphQL */ `
   subscription OnCreateCurrentPrice {
     onCreateCurrentPrice {
@@ -12,6 +108,7 @@ export const onCreateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -37,6 +134,7 @@ export const onUpdateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -62,6 +160,7 @@ export const onDeleteCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -83,6 +182,7 @@ export const onCreateSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version
@@ -97,6 +197,7 @@ export const onUpdateSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version
@@ -111,6 +212,7 @@ export const onDeleteSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version

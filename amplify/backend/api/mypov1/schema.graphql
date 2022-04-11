@@ -1,3 +1,18 @@
+enum PortafolioAction {
+  BUY
+  SELL
+}
+
+type UserPortafolio @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  user: AWSEmail!
+  action: PortafolioAction!
+  asset_quantity: Float!
+  action_date: String!
+  current_asset_price: Float!
+  symbol: [Symbol!] @hasMany(indexName: "byUserPortafolio", fields: ["id"])
+}
+
 enum SymbolType {
   CRYPTO
   STOCK
@@ -14,5 +29,6 @@ type Symbol @model @auth(rules: [{allow: public}]) {
   id: ID!
   symbol: String!
   type: SymbolType!
+  userportafolioID: ID! @index(name: "byUserPortafolio")
 }
  

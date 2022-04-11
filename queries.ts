@@ -2,6 +2,102 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getUserPortafolio = /* GraphQL */ `
+  query GetUserPortafolio($id: ID!) {
+    getUserPortafolio(id: $id) {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listUserPortafolios = /* GraphQL */ `
+  query ListUserPortafolios(
+    $filter: ModelUserPortafolioFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserPortafolios(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        user
+        action
+        asset_quantity
+        action_date
+        current_asset_price
+        symbol {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncUserPortafolios = /* GraphQL */ `
+  query SyncUserPortafolios(
+    $filter: ModelUserPortafolioFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUserPortafolios(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        user
+        action
+        asset_quantity
+        action_date
+        current_asset_price
+        symbol {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getCurrentPrice = /* GraphQL */ `
   query GetCurrentPrice($id: ID!) {
     getCurrentPrice(id: $id) {
@@ -12,6 +108,7 @@ export const getCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -42,6 +139,7 @@ export const listCurrentPrices = /* GraphQL */ `
           id
           symbol
           type
+          userportafolioID
           createdAt
           updatedAt
           _version
@@ -81,6 +179,7 @@ export const syncCurrentPrices = /* GraphQL */ `
           id
           symbol
           type
+          userportafolioID
           createdAt
           updatedAt
           _version
@@ -105,6 +204,7 @@ export const getSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version
@@ -124,6 +224,7 @@ export const listSymbols = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -152,6 +253,7 @@ export const syncSymbols = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version

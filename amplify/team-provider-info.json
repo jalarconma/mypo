@@ -25,7 +25,7 @@
         "updateCryptoSymbolPrices": {
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/updateCryptoSymbolPrices-477450513031342b4632-build.zip"
+          "s3Key": "amplify-builds/updateCryptoSymbolPrices-6a322f57664658716b4a-build.zip"
         }
       },
       "auth": {

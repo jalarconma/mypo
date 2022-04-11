@@ -2,6 +2,111 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createUserPortafolio = /* GraphQL */ `
+  mutation CreateUserPortafolio(
+    $input: CreateUserPortafolioInput!
+    $condition: ModelUserPortafolioConditionInput
+  ) {
+    createUserPortafolio(input: $input, condition: $condition) {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateUserPortafolio = /* GraphQL */ `
+  mutation UpdateUserPortafolio(
+    $input: UpdateUserPortafolioInput!
+    $condition: ModelUserPortafolioConditionInput
+  ) {
+    updateUserPortafolio(input: $input, condition: $condition) {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteUserPortafolio = /* GraphQL */ `
+  mutation DeleteUserPortafolio(
+    $input: DeleteUserPortafolioInput!
+    $condition: ModelUserPortafolioConditionInput
+  ) {
+    deleteUserPortafolio(input: $input, condition: $condition) {
+      id
+      user
+      action
+      asset_quantity
+      action_date
+      current_asset_price
+      symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const createCurrentPrice = /* GraphQL */ `
   mutation CreateCurrentPrice(
     $input: CreateCurrentPriceInput!
@@ -15,6 +120,7 @@ export const createCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -43,6 +149,7 @@ export const updateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -71,6 +178,7 @@ export const deleteCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        userportafolioID
         createdAt
         updatedAt
         _version
@@ -95,6 +203,7 @@ export const createSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version
@@ -112,6 +221,7 @@ export const updateSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version
@@ -129,6 +239,7 @@ export const deleteSymbol = /* GraphQL */ `
       id
       symbol
       type
+      userportafolioID
       createdAt
       updatedAt
       _version

@@ -24,7 +24,16 @@
             }
           ]
         }
-      }
+      },
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "mypo11c19568",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
     }
   },
   "function": {
