@@ -93,7 +93,12 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
              id: `CP-${symbol.symbol}`,
              price: 0.0,
              updated: false,
-             symbol: symbol.id
+             symbol: symbol.id,
+             createdAt: new Date().toISOString(),
+             updatedAt: new Date().toISOString(),
+             _version: '1',
+             _deleted: null,
+             _lastChangedAt: Date.now()
            }
          }
        }))
@@ -111,7 +116,14 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
      RequestItems: {
        [TABLE_NAME]: symbols25.map(symbol => ({
          PutRequest: {
-           Item: { ...symbol }
+           Item: {
+             ...symbol,
+             createdAt: new Date().toISOString(),
+             updatedAt: new Date().toISOString(),
+             _version: '1',
+             _deleted: null,
+             _lastChangedAt: Date.now()
+           }
          }
        }))
      }

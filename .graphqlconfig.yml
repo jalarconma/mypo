@@ -1,15 +1,18 @@
 projects:
   mypov1:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/mypov1/build/schema.graphql
     includes:
-      - mypoapi
+      - src/graphql/**/*.ts
     excludes:
       - ./amplify/**
     extensions:
       amplify:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
-        docsFilePath: .
+        docsFilePath: src/graphql
+        region: us-east-1
+        apiId: null
+        maxDepth: 2
 extensions:
   amplify:
     version: 3

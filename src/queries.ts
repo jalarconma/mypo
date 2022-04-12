@@ -12,6 +12,17 @@ export const getUserPortafolio = /* GraphQL */ `
       action_date
       current_asset_price
       symbol {
+        items {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
         nextToken
         startedAt
       }
@@ -37,6 +48,10 @@ export const listUserPortafolios = /* GraphQL */ `
         asset_quantity
         action_date
         current_asset_price
+        symbol {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -68,6 +83,10 @@ export const syncUserPortafolios = /* GraphQL */ `
         asset_quantity
         action_date
         current_asset_price
+        symbol {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -116,6 +135,17 @@ export const listCurrentPrices = /* GraphQL */ `
         id
         price
         updated
+        symbol {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
         createdAt
         updatedAt
         _version
@@ -145,6 +175,17 @@ export const syncCurrentPrices = /* GraphQL */ `
         id
         price
         updated
+        symbol {
+          id
+          symbol
+          type
+          userportafolioID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
         createdAt
         updatedAt
         _version
