@@ -8,9 +8,9 @@ type UserPortafolio @model @auth(rules: [{allow: private}]) {
   user: AWSEmail!
   action: PortafolioAction!
   asset_quantity: Float!
-  action_date: String!
+  action_date: AWSDate!
   current_asset_price: Float!
-  symbol: [Symbol!] @hasMany(indexName: "byUserPortafolio", fields: ["id"])
+  symbol: Symbol! @hasOne
 }
 
 enum SymbolType {
@@ -29,6 +29,5 @@ type Symbol @model @auth(rules: [{allow: private, operations: [read]}]) {
   id: ID!
   symbol: String!
   type: SymbolType!
-  userportafolioID: ID @index(name: "byUserPortafolio")
 }
  

@@ -31,9 +31,10 @@ export declare class UserPortafolio {
   readonly asset_quantity: number;
   readonly action_date: string;
   readonly current_asset_price: number;
-  readonly symbol?: Symbol[];
-  readonly createdAt?: string;
-  readonly updatedAt?: string;
+  readonly symbol: Symbol;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly userPortafolioSymbolId: string;
   constructor(init: ModelInit<UserPortafolio, UserPortafolioMetaData>);
   static copyOf(source: UserPortafolio, mutator: (draft: MutableModel<UserPortafolio, UserPortafolioMetaData>) => MutableModel<UserPortafolio, UserPortafolioMetaData> | void): UserPortafolio;
 }
@@ -42,9 +43,8 @@ export declare class Symbol {
   readonly id: string;
   readonly symbol: string;
   readonly type: SymbolType | keyof typeof SymbolType;
-  readonly userportafolioID: string;
-  readonly createdAt?: string;
-  readonly updatedAt?: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
   constructor(init: ModelInit<Symbol, SymbolMetaData>);
   static copyOf(source: Symbol, mutator: (draft: MutableModel<Symbol, SymbolMetaData>) => MutableModel<Symbol, SymbolMetaData> | void): Symbol;
 }
@@ -54,8 +54,8 @@ export declare class CurrentPrice {
   readonly price: number;
   readonly updated: boolean;
   readonly symbol: Symbol;
-  readonly createdAt?: string;
-  readonly updatedAt?: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
   readonly currentPriceSymbolId: string;
   constructor(init: ModelInit<CurrentPrice, CurrentPriceMetaData>);
   static copyOf(source: CurrentPrice, mutator: (draft: MutableModel<CurrentPrice, CurrentPriceMetaData>) => MutableModel<CurrentPrice, CurrentPriceMetaData> | void): CurrentPrice;

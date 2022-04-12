@@ -12,14 +12,21 @@ export const onCreateUserPortafolio = /* GraphQL */ `
       action_date
       current_asset_price
       symbol {
-        nextToken
-        startedAt
+        id
+        symbol
+        type
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      userPortafolioSymbolId
     }
   }
 `;
@@ -33,14 +40,21 @@ export const onUpdateUserPortafolio = /* GraphQL */ `
       action_date
       current_asset_price
       symbol {
-        nextToken
-        startedAt
+        id
+        symbol
+        type
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      userPortafolioSymbolId
     }
   }
 `;
@@ -54,14 +68,21 @@ export const onDeleteUserPortafolio = /* GraphQL */ `
       action_date
       current_asset_price
       symbol {
-        nextToken
-        startedAt
+        id
+        symbol
+        type
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      userPortafolioSymbolId
     }
   }
 `;
@@ -75,7 +96,6 @@ export const onCreateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
-        userportafolioID
         createdAt
         updatedAt
         _version
@@ -101,7 +121,6 @@ export const onUpdateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
-        userportafolioID
         createdAt
         updatedAt
         _version
@@ -127,7 +146,6 @@ export const onDeleteCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
-        userportafolioID
         createdAt
         updatedAt
         _version
@@ -149,7 +167,6 @@ export const onCreateSymbol = /* GraphQL */ `
       id
       symbol
       type
-      userportafolioID
       createdAt
       updatedAt
       _version
@@ -164,7 +181,6 @@ export const onUpdateSymbol = /* GraphQL */ `
       id
       symbol
       type
-      userportafolioID
       createdAt
       updatedAt
       _version
@@ -179,7 +195,6 @@ export const onDeleteSymbol = /* GraphQL */ `
       id
       symbol
       type
-      userportafolioID
       createdAt
       updatedAt
       _version

@@ -1,39 +1,40 @@
-import { useEffect } from 'react';
-import gql from 'graphql-tag';
-
+import { useEffect, useState } from 'react';
 import { listSymbols } from '../../../graphql/queries';
-
-import client from '../../../amplify-config/amplify-aws-appsync.config';
-
-
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { API, Auth, DataStore, graphqlOperation } from 'aws-amplify'
+import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
+import { GraphQLResult } from '@aws-amplify/api-graphql';
 
 const RegisterPortafolioAction = () => {
   useEffect(() => {
-    /*client.query({
-      query: gql(listSymbols)
-    }).then((data) => {
-      console.log(data);
-    });*/
     getData();
-    
   }, []);
 
+  const [ symbols, setSymbols ] = useState([]);
+
   const getData = async () => {
-    const result = await API.graphql(graphqlOperation(listSymbols, {}, (await Auth.currentSession()).getAccessToken().getJwtToken()));
-    console.log(result); 
+    /*const result = await API.graphql(graphqlOperation(listSymbols, {}, (await Auth.currentSession()).getAccessToken().getJwtToken()));
+    console.log(result);
+    setSymbols(result.data.listSymbols.items);*/
+
+    const models = await DataStore.query(Symbol);
+    console.log(models);
+  }
+
+  const addPortafolioAction = async () => {
+    const data = await DataStore.save(
+      new UserPortafolio({
+        user: "juaalarconma@gmail.com",
+        action: PortafolioAction.BUY,
+        asset_quantity: 1,
+        action_date: '2022-03-15',
+        current_asset_price: 12,
+        symbol: symbols[0],
+        userPortafolioSymbolId: symbols[0].id
+    }));
   }
 
   return (
-    <form>
-      <div className="form-control">
-        <label htmlFor="user">User</label>
-        <input type="text" id="user"/>
-      </div>
-      <div className="form-actions">
-        <button>Submit</button>
-      </div>
-    </form>
+    <button onClick={addPortafolioAction}>Create Portafolio</button>
   );
 }
 

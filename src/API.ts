@@ -10,6 +10,7 @@ export type CreateUserPortafolioInput = {
   action_date: string,
   current_asset_price: number,
   _version?: number | null,
+  userPortafolioSymbolId: string,
 };
 
 export enum PortafolioAction {
@@ -27,6 +28,7 @@ export type ModelUserPortafolioConditionInput = {
   and?: Array< ModelUserPortafolioConditionInput | null > | null,
   or?: Array< ModelUserPortafolioConditionInput | null > | null,
   not?: ModelUserPortafolioConditionInput | null,
+  userPortafolioSymbolId?: ModelIDInput | null,
 };
 
 export type ModelStringInput = {
@@ -86,6 +88,22 @@ export type ModelFloatInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
 export type UserPortafolio = {
   __typename: "UserPortafolio",
   id: string,
@@ -94,19 +112,13 @@ export type UserPortafolio = {
   asset_quantity: number,
   action_date: string,
   current_asset_price: number,
-  symbol?: ModelSymbolConnection | null,
+  symbol: Symbol,
   createdAt: string,
   updatedAt: string,
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
-};
-
-export type ModelSymbolConnection = {
-  __typename: "ModelSymbolConnection",
-  items:  Array<Symbol | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
+  userPortafolioSymbolId: string,
 };
 
 export type Symbol = {
@@ -114,7 +126,6 @@ export type Symbol = {
   id: string,
   symbol: string,
   type: SymbolType,
-  userportafolioID?: string | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -136,6 +147,7 @@ export type UpdateUserPortafolioInput = {
   action_date?: string | null,
   current_asset_price?: number | null,
   _version?: number | null,
+  userPortafolioSymbolId?: string | null,
 };
 
 export type DeleteUserPortafolioInput = {
@@ -165,22 +177,6 @@ export type ModelBooleanInput = {
   eq?: boolean | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
 };
 
 export type CurrentPrice = {
@@ -214,14 +210,12 @@ export type CreateSymbolInput = {
   id?: string | null,
   symbol: string,
   type: SymbolType,
-  userportafolioID?: string | null,
   _version?: number | null,
 };
 
 export type ModelSymbolConditionInput = {
   symbol?: ModelStringInput | null,
   type?: ModelSymbolTypeInput | null,
-  userportafolioID?: ModelIDInput | null,
   and?: Array< ModelSymbolConditionInput | null > | null,
   or?: Array< ModelSymbolConditionInput | null > | null,
   not?: ModelSymbolConditionInput | null,
@@ -236,7 +230,6 @@ export type UpdateSymbolInput = {
   id: string,
   symbol?: string | null,
   type?: SymbolType | null,
-  userportafolioID?: string | null,
   _version?: number | null,
 };
 
@@ -255,6 +248,7 @@ export type ModelUserPortafolioFilterInput = {
   and?: Array< ModelUserPortafolioFilterInput | null > | null,
   or?: Array< ModelUserPortafolioFilterInput | null > | null,
   not?: ModelUserPortafolioFilterInput | null,
+  userPortafolioSymbolId?: ModelIDInput | null,
 };
 
 export type ModelUserPortafolioConnection = {
@@ -285,10 +279,16 @@ export type ModelSymbolFilterInput = {
   id?: ModelIDInput | null,
   symbol?: ModelStringInput | null,
   type?: ModelSymbolTypeInput | null,
-  userportafolioID?: ModelIDInput | null,
   and?: Array< ModelSymbolFilterInput | null > | null,
   or?: Array< ModelSymbolFilterInput | null > | null,
   not?: ModelSymbolFilterInput | null,
+};
+
+export type ModelSymbolConnection = {
+  __typename: "ModelSymbolConnection",
+  items:  Array<Symbol | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type CreateUserPortafolioMutationVariables = {
@@ -305,16 +305,23 @@ export type CreateUserPortafolioMutation = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -332,16 +339,23 @@ export type UpdateUserPortafolioMutation = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -359,16 +373,23 @@ export type DeleteUserPortafolioMutation = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -388,7 +409,6 @@ export type CreateCurrentPriceMutation = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -420,7 +440,6 @@ export type UpdateCurrentPriceMutation = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -452,7 +471,6 @@ export type DeleteCurrentPriceMutation = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -479,7 +497,6 @@ export type CreateSymbolMutation = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -499,7 +516,6 @@ export type UpdateSymbolMutation = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -519,7 +535,6 @@ export type DeleteSymbolMutation = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -541,16 +556,23 @@ export type GetUserPortafolioQuery = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -576,6 +598,7 @@ export type ListUserPortafoliosQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      userPortafolioSymbolId: string,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -605,6 +628,7 @@ export type SyncUserPortafoliosQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      userPortafolioSymbolId: string,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -626,7 +650,6 @@ export type GetCurrentPriceQuery = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -705,7 +728,6 @@ export type GetSymbolQuery = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -728,7 +750,6 @@ export type ListSymbolsQuery = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -755,7 +776,6 @@ export type SyncSymbolsQuery = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -776,16 +796,23 @@ export type OnCreateUserPortafolioSubscription = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -798,16 +825,23 @@ export type OnUpdateUserPortafolioSubscription = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -820,16 +854,23 @@ export type OnDeleteUserPortafolioSubscription = {
     asset_quantity: number,
     action_date: string,
     current_asset_price: number,
-    symbol?:  {
-      __typename: "ModelSymbolConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
+    symbol:  {
+      __typename: "Symbol",
+      id: string,
+      symbol: string,
+      type: SymbolType,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    userPortafolioSymbolId: string,
   } | null,
 };
 
@@ -844,7 +885,6 @@ export type OnCreateCurrentPriceSubscription = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -871,7 +911,6 @@ export type OnUpdateCurrentPriceSubscription = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -898,7 +937,6 @@ export type OnDeleteCurrentPriceSubscription = {
       id: string,
       symbol: string,
       type: SymbolType,
-      userportafolioID?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -920,7 +958,6 @@ export type OnCreateSymbolSubscription = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -935,7 +972,6 @@ export type OnUpdateSymbolSubscription = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -950,7 +986,6 @@ export type OnDeleteSymbolSubscription = {
     id: string,
     symbol: string,
     type: SymbolType,
-    userportafolioID?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

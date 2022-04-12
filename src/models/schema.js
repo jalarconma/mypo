@@ -36,7 +36,7 @@ export const schema = {
                 "action_date": {
                     "name": "action_date",
                     "isArray": false,
-                    "type": "String",
+                    "type": "AWSDate",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -49,16 +49,16 @@ export const schema = {
                 },
                 "symbol": {
                     "name": "symbol",
-                    "isArray": true,
+                    "isArray": false,
                     "type": {
                         "model": "Symbol"
                     },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userportafolioID"
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "userPortafolioSymbolId"
                     }
                 },
                 "createdAt": {
@@ -76,6 +76,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
+                },
+                "userPortafolioSymbolId": {
+                    "name": "userPortafolioSymbolId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -129,13 +136,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "userportafolioID": {
-                    "name": "userportafolioID",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -161,24 +161,12 @@ export const schema = {
                     "properties": {}
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byUserPortafolio",
-                        "fields": [
-                            "userportafolioID"
-                        ]
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
                             {
-                                "allow": "public",
+                                "allow": "private",
                                 "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
                                     "read"
                                 ]
                             }
@@ -292,5 +280,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "5c92072e60079fd3b1da9877e6a000fa"
+    "version": "4cb8c074261b159f0aa928dd61272cb8"
 };

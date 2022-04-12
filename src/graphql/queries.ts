@@ -12,14 +12,21 @@ export const getUserPortafolio = /* GraphQL */ `
       action_date
       current_asset_price
       symbol {
-        nextToken
-        startedAt
+        id
+        symbol
+        type
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      userPortafolioSymbolId
     }
   }
 `;
@@ -42,6 +49,7 @@ export const listUserPortafolios = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        userPortafolioSymbolId
       }
       nextToken
       startedAt
@@ -73,6 +81,7 @@ export const syncUserPortafolios = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        userPortafolioSymbolId
       }
       nextToken
       startedAt
@@ -89,7 +98,6 @@ export const getCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
-        userportafolioID
         createdAt
         updatedAt
         _version
@@ -163,7 +171,6 @@ export const getSymbol = /* GraphQL */ `
       id
       symbol
       type
-      userportafolioID
       createdAt
       updatedAt
       _version
@@ -183,7 +190,6 @@ export const listSymbols = /* GraphQL */ `
         id
         symbol
         type
-        userportafolioID
         createdAt
         updatedAt
         _version
@@ -212,7 +218,6 @@ export const syncSymbols = /* GraphQL */ `
         id
         symbol
         type
-        userportafolioID
         createdAt
         updatedAt
         _version
