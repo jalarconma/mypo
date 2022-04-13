@@ -6,18 +6,16 @@ import { GraphQLResult } from '@aws-amplify/api-graphql';
 
 const RegisterPortafolioAction = () => {
   useEffect(() => {
+    DataStore.clear();
     getData();
   }, []);
 
   const [ symbols, setSymbols ] = useState([]);
 
   const getData = async () => {
-    /*const result = await API.graphql(graphqlOperation(listSymbols, {}, (await Auth.currentSession()).getAccessToken().getJwtToken()));
-    console.log(result);
-    setSymbols(result.data.listSymbols.items);*/
-
     const models = await DataStore.query(Symbol);
     console.log(models);
+    setSymbols(models);
   }
 
   const addPortafolioAction = async () => {
@@ -31,6 +29,8 @@ const RegisterPortafolioAction = () => {
         symbol: symbols[0],
         userPortafolioSymbolId: symbols[0].id
     }));
+
+    console.log('portafolio', await DataStore.query(UserPortafolio));
   }
 
   return (

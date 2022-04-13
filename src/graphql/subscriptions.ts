@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateUserPortafolio = /* GraphQL */ `
-  subscription OnCreateUserPortafolio {
-    onCreateUserPortafolio {
+  subscription OnCreateUserPortafolio($user: String) {
+    onCreateUserPortafolio(user: $user) {
       id
       user
       action
@@ -31,8 +31,8 @@ export const onCreateUserPortafolio = /* GraphQL */ `
   }
 `;
 export const onUpdateUserPortafolio = /* GraphQL */ `
-  subscription OnUpdateUserPortafolio {
-    onUpdateUserPortafolio {
+  subscription OnUpdateUserPortafolio($user: String) {
+    onUpdateUserPortafolio(user: $user) {
       id
       user
       action
@@ -59,8 +59,8 @@ export const onUpdateUserPortafolio = /* GraphQL */ `
   }
 `;
 export const onDeleteUserPortafolio = /* GraphQL */ `
-  subscription OnDeleteUserPortafolio {
-    onDeleteUserPortafolio {
+  subscription OnDeleteUserPortafolio($user: String) {
+    onDeleteUserPortafolio(user: $user) {
       id
       user
       action

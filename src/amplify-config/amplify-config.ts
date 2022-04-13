@@ -1,3 +1,4 @@
+import { AuthModeStrategyType } from 'aws-amplify';
 import awsConfig from '../aws-exports';
 
 const isLocalhost = Boolean(
@@ -23,6 +24,9 @@ const [
 
 const updatedAwsConfig = {
   ...awsConfig,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH
+  },
   oauth: {
     ...awsConfig.oauth,
     redirectSignIn: isLocalhost ? localRedirectSignIn : devRedirectSignIn,

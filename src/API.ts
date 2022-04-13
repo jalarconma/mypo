@@ -787,6 +787,10 @@ export type SyncSymbolsQuery = {
   } | null,
 };
 
+export type OnCreateUserPortafolioSubscriptionVariables = {
+  user?: string | null,
+};
+
 export type OnCreateUserPortafolioSubscription = {
   onCreateUserPortafolio?:  {
     __typename: "UserPortafolio",
@@ -816,6 +820,10 @@ export type OnCreateUserPortafolioSubscription = {
   } | null,
 };
 
+export type OnUpdateUserPortafolioSubscriptionVariables = {
+  user?: string | null,
+};
+
 export type OnUpdateUserPortafolioSubscription = {
   onUpdateUserPortafolio?:  {
     __typename: "UserPortafolio",
@@ -843,6 +851,10 @@ export type OnUpdateUserPortafolioSubscription = {
     _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
+};
+
+export type OnDeleteUserPortafolioSubscriptionVariables = {
+  user?: string | null,
 };
 
 export type OnDeleteUserPortafolioSubscription = {
