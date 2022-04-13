@@ -6,11 +6,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { Amplify } from 'aws-amplify';
+import { Amplify, DataStore } from 'aws-amplify';
 import updatedAwsConfig from './amplify-config/amplify-config';
 import GlobalServices from './core/components/GlobalServices';
+import dataStoreConfigs from './amplify-config/datastore-config';
 
 Amplify.configure(updatedAwsConfig);
+DataStore.configure(dataStoreConfigs);
 
 const rootElement = document.getElementById("root");
 
