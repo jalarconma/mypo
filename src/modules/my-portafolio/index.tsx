@@ -1,8 +1,9 @@
 import React from 'react';
+import ProtectedRoute from '../../core/components/ProtectedRoute';
 import MyPortafolioPage from './pages/MyPortafolioPage';
 
 const MyPortafolio = () => (
-  <MyPortafolioPage />
+  <ProtectedRoute><MyPortafolioPage /></ProtectedRoute>
 );
 
 const module = {

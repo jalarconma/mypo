@@ -1,8 +1,9 @@
 import React from 'react';
+import ProtectedRoute from '../../core/components/ProtectedRoute';
 import ContactUsPage from './pages/ContactUsPage';
 
 const ContactUs = () => (
-  <ContactUsPage />
+  <ProtectedRoute><ContactUsPage /></ProtectedRoute>
 );
 
 const module = {

@@ -1,8 +1,9 @@
 import React from 'react';
+import ProtectedRoute from '../../core/components/ProtectedRoute';
 import SignOutPage from './pages/SignOutPage';
 
 const SignOut = () => (
-  <SignOutPage />
+  <ProtectedRoute><SignOutPage /></ProtectedRoute>
 );
 
 const module = {

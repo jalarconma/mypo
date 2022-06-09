@@ -1,8 +1,9 @@
 import React from 'react';
+import ProtectedRoute from '../../core/components/ProtectedRoute';
 import OverviewPage from './pages/OverviewPage';
 
 const Overview = () => (
-  <OverviewPage />
+  <ProtectedRoute><OverviewPage /></ProtectedRoute>
 );
 
 const module = {
