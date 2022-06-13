@@ -3,7 +3,7 @@ import RegisterPortafolioAction from "../components/RegisterPortafolioAction";
 const MyPortafolioPage = () => {
   return (
     <div>
-      My Portafolio Page!
+      <h2>My Portafolio</h2>
       <RegisterPortafolioAction />
     </div>
   )  

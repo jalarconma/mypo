@@ -1,4 +1,9 @@
+import styles from './RegisterPortafolioAction.module.scss';
+
 import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+
 import { listSymbols } from '../../../graphql/queries';
 import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-amplify'
 import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
@@ -61,7 +66,19 @@ const RegisterPortafolioAction = () => {
   }
 
   return (
-    <div>
+    <div className={styles['register-portafolio-action']}>
+         <Box
+      component="form"
+      sx={{
+        '& > :not(style)': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+      <TextField id="filled-basic" label="Filled" variant="filled" />
+      <TextField id="standard-basic" label="Standard" variant="standard" />
+    </Box>
       <button onClick={addPortafolioAction}>Create Portafolio</button>
       <button onClick={addAlternativePortafolioAction}>Create Portafolio With other User</button>
     </div>

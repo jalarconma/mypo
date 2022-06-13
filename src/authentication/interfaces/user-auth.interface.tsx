@@ -3,5 +3,6 @@ import { User } from "../models/user.model";
 
 export interface UserAuthService {
   isLoggedIn: boolean;
-  getUser(): Observable<User>;    
+  currentUser: User;    
+  getUser(): Observable<User>;
 }

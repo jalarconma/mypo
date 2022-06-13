@@ -1,20 +1,15 @@
 import { Auth } from "aws-amplify";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { firstValueFrom } from "rxjs";
+import { useUserAuthService } from "../../authentication/hooks/use-user-auth-service";
+import { UserAuthService } from "../../authentication/interfaces/user-auth.interface";
 
 const ProtectedRoute = ({ redirectPath = '/', children }) => {
-  useEffect(() => {
-    getData();
-  }, []);
 
-  const [ user, setUser ] = useState(null);
+  const userAuthService: UserAuthService = useUserAuthService();
 
-  const getData = async () => {
-    const user = await Auth.currentAuthenticatedUser();
-    setUser(user);
-  }
-
-  if (!user) {
+  if (!userAuthService.currentUser) {
     return <Navigate to={redirectPath} replace />;
   }
 
