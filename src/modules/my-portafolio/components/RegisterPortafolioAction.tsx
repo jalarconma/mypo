@@ -8,14 +8,25 @@ import { listSymbols } from '../../../graphql/queries';
 import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-amplify'
 import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Stack from '@mui/material/Stack';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const RegisterPortafolioAction = () => {
   useEffect(() => {
     getData();
   }, []);
 
-  const [ symbols, setSymbols ] = useState([]);
-  const [ user, setUser ] = useState(null);
+  const [symbols, setSymbols] = useState([]);
+  const [user, setUser] = useState(null);
+
+  const portafolioActions: PortafolioAction[] = [PortafolioAction.BUY, PortafolioAction.SELL];
 
   const getData = async () => {
     const models = await DataStore.query(Symbol);
@@ -24,7 +35,7 @@ const RegisterPortafolioAction = () => {
     console.log(models);
     setSymbols(models);
     setUser(user);
-    
+
     /*console.log('portafolio', await DataStore.query(UserPortafolio, (e) =>
     e.user('eq', user.attributes.email)));*/
 
@@ -41,7 +52,7 @@ const RegisterPortafolioAction = () => {
         current_asset_price: 12,
         symbol: symbols[0],
         userPortafolioSymbolId: symbols[0].id
-    }));
+      }));
 
     //await DataStore.clear();
 
@@ -58,7 +69,7 @@ const RegisterPortafolioAction = () => {
         current_asset_price: 12,
         symbol: symbols[0],
         userPortafolioSymbolId: symbols[0].id
-    }));
+      }));
 
     //await DataStore.clear();
 
@@ -67,18 +78,57 @@ const RegisterPortafolioAction = () => {
 
   return (
     <div className={styles['register-portafolio-action']}>
-         <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-      <TextField id="filled-basic" label="Filled" variant="filled" />
-      <TextField id="standard-basic" label="Standard" variant="standard" />
-    </Box>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          select
+          label="Select"
+          helperText="Please select your action"
+        >
+          {portafolioActions.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField label="asset quantity" variant="outlined" />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Stack spacing={3}>
+            <MobileDatePicker
+              label="Date mobile"
+              inputFormat="MM/dd/yyyy"
+              value={new Date()}
+              onChange={() => {}}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </Stack>
+        </LocalizationProvider>
+        <FormControl fullWidth sx={{ m: 1 }}>
+          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+            label="Amount"
+          />
+        </FormControl>
+        <TextField
+          select
+          label="Select"
+          helperText="Please select your symbol"
+        >
+          {symbols.map((option: Symbol) => (
+            <MenuItem key={option.id} value={option.symbol}>
+              {option.symbol}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
       <button onClick={addPortafolioAction}>Create Portafolio</button>
       <button onClick={addAlternativePortafolioAction}>Create Portafolio With other User</button>
     </div>
