@@ -1,7 +1,7 @@
 import styles from './RegisterPortafolioAction.module.scss';
 
 import { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
+import { Controller, useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 
 import { listSymbols } from '../../../graphql/queries';
@@ -9,20 +9,19 @@ import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-ampl
 import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import Button from '@mui/material/Button';
 
 const RegisterPortafolioAction = () => {
   useEffect(() => {
     getData();
   }, []);
 
+  const { handleSubmit, reset, control } = useForm();
   const [symbols, setSymbols] = useState([]);
   const [user, setUser] = useState(null);
 
@@ -41,6 +40,8 @@ const RegisterPortafolioAction = () => {
 
     console.log('portafolio', await DataStore.query(UserPortafolio));
   }
+
+  const onSubmit = (data: any) => console.log('submitted data: ', data);
 
   const addPortafolioAction = async () => {
     const data = await DataStore.save(
@@ -78,59 +79,99 @@ const RegisterPortafolioAction = () => {
 
   return (
     <div className={styles['register-portafolio-action']}>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          select
-          label="Select"
-          helperText="Please select your action"
-        >
-          {portafolioActions.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField label="asset quantity" variant="outlined" />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Stack spacing={3}>
-            <MobileDatePicker
-              label="Date mobile"
-              inputFormat="MM/dd/yyyy"
-              value={new Date()}
-              onChange={() => {}}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </Stack>
-        </LocalizationProvider>
-        <FormControl fullWidth sx={{ m: 1 }}>
-          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            label="Amount"
+      <form >
+        <Stack
+          direction={{ xs: 'column', sm: 'column', md: 'row' }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}>
+          <Controller
+            name={"action"}
+            control={control}
+            defaultValue={''}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                select
+                label="Select"
+                value={value}
+                onChange={onChange}
+                helperText="Please select your action"
+              >
+                {portafolioActions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
           />
-        </FormControl>
-        <TextField
-          select
-          label="Select"
-          helperText="Please select your symbol"
-        >
-          {symbols.map((option: Symbol) => (
-            <MenuItem key={option.id} value={option.symbol}>
-              {option.symbol}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Box>
-      <button onClick={addPortafolioAction}>Create Portafolio</button>
-      <button onClick={addAlternativePortafolioAction}>Create Portafolio With other User</button>
+          <Controller
+            name={"assetQuantity"}
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextField label="asset quantity" variant="outlined" defaultValue={value} />
+            )}
+          />
+          <Controller
+            name={"assetActionDate"}
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Stack spacing={3}>
+                  <MobileDatePicker
+                    label="Date mobile"
+                    inputFormat="MM/dd/yyyy"
+                    value={value}
+                    onChange={onChange}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+            )}
+          />
+          <Controller
+            name={"assetPrice"}
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                label="Price"
+                id="outlined-start-adornment"
+                sx={{ m: 1, width: '25ch' }}
+                defaultValue={value}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+              />
+            )}
+          />
+          <Controller
+            name={"assetSymbol"}
+            control={control}
+            defaultValue={''}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                select
+                label="Select"
+                value={value}
+                onChange={onChange}
+                helperText="Please select your symbol"
+              >
+                {symbols.map((option: Symbol) => (
+                  <MenuItem key={option.id} value={option.symbol}>
+                    {option.symbol}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </Stack>
+        <Stack
+          direction={{ xs: 'column', sm: 'column', md: 'row' }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          justifyContent="center"
+          alignItems="center">
+          <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+          <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
+        </Stack>
+      </form>
     </div>
   );
 }
