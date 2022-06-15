@@ -15,24 +15,37 @@ import Stack from '@mui/material/Stack';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Button from '@mui/material/Button';
+import FormInputNumber from '../../../shared/components/form-input-number/FormInputNumber';
+import FormSelectorUnique from '../../../shared/components/form-selector-unique/FormSelectorUnique';
+import FormDateSelector from '../../../shared/components/form-date-selector/FormDateSelector';
+import { FormSelectorOption } from '../../../core/models/form-selector-option.interface';
 
 const RegisterPortafolioAction = () => {
   useEffect(() => {
     getData();
   }, []);
 
-  const { handleSubmit, reset, control } = useForm();
-  const [symbols, setSymbols] = useState([]);
+  const { handleSubmit, reset, control, formState } = useForm({
+    defaultValues: {
+      action: '',
+      assetQuantity: 0,
+      assetActionDate: new Date(),
+      assetPrice: 0,
+      assetSymbol: ''
+    }
+  });
+  const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
   const [user, setUser] = useState(null);
 
-  const portafolioActions: PortafolioAction[] = [PortafolioAction.BUY, PortafolioAction.SELL];
+  const portafolioActions: FormSelectorOption[] = [
+    { id: PortafolioAction.BUY, label: PortafolioAction.BUY },
+    { id: PortafolioAction.SELL, label: PortafolioAction.SELL }
+  ];
 
   const getData = async () => {
-    const models = await DataStore.query(Symbol);
+    const symbols = await DataStore.query(Symbol);
     const user = await Auth.currentAuthenticatedUser();
-    console.log(user);
-    console.log(models);
-    setSymbols(models);
+    setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.symbol })));
     setUser(user);
 
     /*console.log('portafolio', await DataStore.query(UserPortafolio, (e) =>
@@ -44,7 +57,7 @@ const RegisterPortafolioAction = () => {
   const onSubmit = (data: any) => console.log('submitted data: ', data);
 
   const addPortafolioAction = async () => {
-    const data = await DataStore.save(
+    /*const data = await DataStore.save(
       new UserPortafolio({
         user: user.attributes.email,
         action: PortafolioAction.BUY,
@@ -53,7 +66,7 @@ const RegisterPortafolioAction = () => {
         current_asset_price: 12,
         symbol: symbols[0],
         userPortafolioSymbolId: symbols[0].id
-      }));
+      }));*/
 
     //await DataStore.clear();
 
@@ -61,7 +74,7 @@ const RegisterPortafolioAction = () => {
   }
 
   const addAlternativePortafolioAction = async () => {
-    const data = await DataStore.save(
+    /*const data = await DataStore.save(
       new UserPortafolio({
         user: 'test@test.com',
         action: PortafolioAction.BUY,
@@ -70,7 +83,7 @@ const RegisterPortafolioAction = () => {
         current_asset_price: 12,
         symbol: symbols[0],
         userPortafolioSymbolId: symbols[0].id
-      }));
+      }));*/
 
     //await DataStore.clear();
 
@@ -79,88 +92,46 @@ const RegisterPortafolioAction = () => {
 
   return (
     <div className={styles['register-portafolio-action']}>
+      <h3>Register an action</h3>
       <form >
         <Stack
           direction={{ xs: 'column', sm: 'column', md: 'row' }}
           spacing={{ xs: 1, sm: 2, md: 4 }}>
-          <Controller
-            name={"action"}
+          <FormSelectorUnique
             control={control}
-            defaultValue={''}
-            render={({ field: { onChange, value } }) => (
-              <TextField
-                select
-                label="Select"
-                value={value}
-                onChange={onChange}
-                helperText="Please select your action"
-              >
-                {portafolioActions.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
+            name="action"
+            label="Select action"
+            rules={{ required: true }}
+            options={portafolioActions}
+
           />
-          <Controller
-            name={"assetQuantity"}
+          <FormInputNumber
             control={control}
-            render={({ field: { onChange, value } }) => (
-              <TextField label="asset quantity" variant="outlined" defaultValue={value} />
-            )}
+            name="assetQuantity"
+            label="asset quantity"
+            rules={{ required: true }}
           />
-          <Controller
-            name={"assetActionDate"}
+          <FormDateSelector
             control={control}
-            render={({ field: { onChange, value } }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    label="Date mobile"
-                    inputFormat="MM/dd/yyyy"
-                    value={value}
-                    onChange={onChange}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
-            )}
+            name="assetActionDate"
+            label="Select action date"
+            rules={{ required: true }}
           />
-          <Controller
-            name={"assetPrice"}
+          <FormInputNumber
             control={control}
-            render={({ field: { onChange, value } }) => (
-              <TextField
-                label="Price"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: '25ch' }}
-                defaultValue={value}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                }}
-              />
-            )}
+            name="assetPrice"
+            label="Asset price"
+            rules={{ required: true }}
+            inputProps={{
+              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            }}
           />
-          <Controller
-            name={"assetSymbol"}
+          <FormSelectorUnique
+            name="assetSymbol"
             control={control}
-            defaultValue={''}
-            render={({ field: { onChange, value } }) => (
-              <TextField
-                select
-                label="Select"
-                value={value}
-                onChange={onChange}
-                helperText="Please select your symbol"
-              >
-                {symbols.map((option: Symbol) => (
-                  <MenuItem key={option.id} value={option.symbol}>
-                    {option.symbol}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
+            options={symbols}
+            label="Select symbol"
+            rules={{ required: true }}
           />
         </Stack>
         <Stack
@@ -168,8 +139,13 @@ const RegisterPortafolioAction = () => {
           spacing={{ xs: 1, sm: 2, md: 4 }}
           justifyContent="center"
           alignItems="center">
-          <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+          <Button onClick={handleSubmit(onSubmit)} disabled={!formState.isValid}>Submit</Button>
           <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
+          <span>{formState.errors.action?.message}</span>
+          <span>{formState.errors.assetActionDate?.message}</span>
+          <span>{formState.errors.assetPrice?.message}</span>
+          <span>{formState.errors.assetQuantity?.message}</span>
+          <span>{formState.errors.assetSymbol?.message}</span>
         </Stack>
       </form>
     </div>
