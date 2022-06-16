@@ -1,24 +1,20 @@
 import styles from './RegisterPortafolioAction.module.scss';
 
 import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
+import { useForm } from 'react-hook-form';
 
-import { listSymbols } from '../../../graphql/queries';
 import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-amplify'
-import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
-import MenuItem from '@mui/material/MenuItem';
+import { listSymbols } from '../../../graphql/queries';
 import InputAdornment from '@mui/material/InputAdornment';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import FormInputNumber from '../../../shared/components/form-input-number/FormInputNumber';
 import FormSelectorUnique from '../../../shared/components/form-selector-unique/FormSelectorUnique';
 import FormDateSelector from '../../../shared/components/form-date-selector/FormDateSelector';
 import { FormSelectorOption } from '../../../core/models/form-selector-option.interface';
+import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
 
 const RegisterPortafolioAction = () => {
   useEffect(() => {
@@ -95,57 +91,85 @@ const RegisterPortafolioAction = () => {
       <h3>Register an action</h3>
       <form >
         <Stack
-          direction={{ xs: 'column', sm: 'column', md: 'row' }}
-          spacing={{ xs: 1, sm: 2, md: 4 }}>
-          <FormSelectorUnique
-            control={control}
-            name="action"
-            label="Select action"
-            rules={{ required: true }}
-            options={portafolioActions}
-
-          />
-          <FormInputNumber
-            control={control}
-            name="assetQuantity"
-            label="asset quantity"
-            rules={{ required: true }}
-          />
-          <FormDateSelector
-            control={control}
-            name="assetActionDate"
-            label="Select action date"
-            rules={{ required: true }}
-          />
-          <FormInputNumber
-            control={control}
-            name="assetPrice"
-            label="Asset price"
-            rules={{ required: true }}
-            inputProps={{
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
-            }}
-          />
-          <FormSelectorUnique
-            name="assetSymbol"
-            control={control}
-            options={symbols}
-            label="Select symbol"
-            rules={{ required: true }}
-          />
-        </Stack>
-        <Stack
-          direction={{ xs: 'column', sm: 'column', md: 'row' }}
+          direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
           justifyContent="center"
-          alignItems="center">
+          padding={1}>
+          <Box
+            sx={{
+              minWidth: 200,
+            }}
+          >
+            <FormSelectorUnique
+              control={control}
+              name="action"
+              label="Select action"
+              rules={{ required: true }}
+              options={portafolioActions}
+
+            />
+          </Box>
+          <Box
+            sx={{
+              minWidth: 200,
+            }}
+          >
+            <FormInputNumber
+              control={control}
+              name="assetQuantity"
+              label="Asset quantity"
+              rules={{ required: true }}
+            />
+          </Box>
+          <Box
+            sx={{
+              minWidth: 100,
+            }}
+          >
+            <FormDateSelector
+              control={control}
+              name="assetActionDate"
+              label="Select action date"
+              rules={{ required: true }}
+            />
+          </Box>
+          <Box
+            sx={{
+              minWidth: 200,
+            }}
+          >
+            <FormInputNumber
+              control={control}
+              name="assetPrice"
+              label="Asset price"
+              rules={{ required: true }}
+              inputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              minWidth: 200,
+            }}
+          >
+            <FormSelectorUnique
+              name="assetSymbol"
+              control={control}
+              options={symbols}
+              label="Select symbol"
+              rules={{ required: true }}
+            />
+          </Box>
+        </Stack>
+        <Stack
+          direction={'row'}
+          spacing={2}
+          justifyContent="flex-end"
+          alignItems="center"
+          padding={1}>
           <Button onClick={handleSubmit(onSubmit)} disabled={!formState.isValid}>Submit</Button>
           <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
-          <span>{formState.errors.action?.message}</span>
-          <span>{formState.errors.assetActionDate?.message}</span>
-          <span>{formState.errors.assetPrice?.message}</span>
-          <span>{formState.errors.assetQuantity?.message}</span>
-          <span>{formState.errors.assetSymbol?.message}</span>
         </Stack>
       </form>
     </div>

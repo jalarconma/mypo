@@ -8,7 +8,7 @@ const FormInputNumber = ({control, name, label = '', rules = {}, inputProps = {}
       control={control}
       rules={rules}
       render={({ field: { onChange, value } }) => (
-        <TextField label={label} type="number" variant="outlined"
+        <TextField fullWidth label={label} type="number" variant="outlined"
           InputProps={inputProps} 
           onChange={onChange} value={value} />
       )}

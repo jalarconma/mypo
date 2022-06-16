@@ -19,7 +19,7 @@ const FormDateSelector = ({ control, name, label="", rules = {}, format="MM/dd/y
               inputFormat={format}
               value={value}
               onChange={onChange}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField fullWidth {...params} />}
             />
           </Stack>
         </LocalizationProvider>

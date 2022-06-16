@@ -11,6 +11,7 @@ const FormSelectorUnique = ({control, name, options, label = '', rules = {}}) =>
       render={({ field: { onChange, value } }) => (
         <TextField
           select
+          fullWidth 
           label={label}
           value={value}
           onChange={onChange}
