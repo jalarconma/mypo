@@ -14,12 +14,34 @@ import FormInputNumber from '../../../shared/components/form-input-number/FormIn
 import FormSelectorUnique from '../../../shared/components/form-selector-unique/FormSelectorUnique';
 import FormDateSelector from '../../../shared/components/form-date-selector/FormDateSelector';
 import { FormSelectorOption } from '../../../core/models/form-selector-option.interface';
-import { UserPortafolio, PortafolioAction, Symbol } from '../../../models';
+import { UserPortafolio, PortafolioAction, Symbol, SymbolType } from '../../../models';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import FormAutocompleteSelector from '../../../shared/components/form-autocomplete-selector/FormAutocompleteSelector';
 
 const RegisterPortafolioAction = () => {
+
+  const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
+  const [user, setUser] = useState(null);
+  const [assetType, setAssetType] = useState<SymbolType | ''>('');
+
+  const portafolioActions: FormSelectorOption[] = [
+    { id: PortafolioAction.BUY, label: PortafolioAction.BUY },
+    { id: PortafolioAction.SELL, label: PortafolioAction.SELL }
+  ];
+
+  const assetTypes: FormSelectorOption[] = [
+    { id: SymbolType.CRYPTO, label: SymbolType.CRYPTO },
+    { id: SymbolType.STOCK, label: SymbolType.STOCK }
+  ];
+
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    fetchSymbols();
+  }, [assetType])
 
   const { handleSubmit, reset, control, formState } = useForm({
     defaultValues: {
@@ -27,28 +49,45 @@ const RegisterPortafolioAction = () => {
       assetQuantity: 0,
       assetActionDate: new Date(),
       assetPrice: 0,
-      assetSymbol: ''
+      assetSymbol: {id: '', label: ''}
     }
   });
-  const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
-  const [user, setUser] = useState(null);
 
-  const portafolioActions: FormSelectorOption[] = [
-    { id: PortafolioAction.BUY, label: PortafolioAction.BUY },
-    { id: PortafolioAction.SELL, label: PortafolioAction.SELL }
-  ];
+  const fetchSymbols = async () => {
+
+    if (!assetType) {
+      return;
+    }
+
+    const symbols = await DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
+    setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.symbol })));
+  }
 
   const getData = async () => {
-    const symbols = await DataStore.query(Symbol);
     const user = await Auth.currentAuthenticatedUser();
-    setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.symbol })));
     setUser(user);
+
+    fetchSymbols();
 
     /*console.log('portafolio', await DataStore.query(UserPortafolio, (e) =>
     e.user('eq', user.attributes.email)));*/
 
     console.log('portafolio', await DataStore.query(UserPortafolio));
   }
+
+  const handleAssetTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    switch (event.target.value) {
+      case SymbolType.CRYPTO:
+        setAssetType(SymbolType.CRYPTO);
+        break;
+      case SymbolType.STOCK:
+        setAssetType(SymbolType.STOCK);
+        break;
+      default:
+        setAssetType('');
+        break;
+    }
+  };
 
   const onSubmit = (data: any) => console.log('submitted data: ', data);
 
@@ -97,7 +136,38 @@ const RegisterPortafolioAction = () => {
           padding={1}>
           <Box
             sx={{
-              minWidth: 200,
+              minWidth: '10%',
+            }}>
+            <TextField
+              select
+              fullWidth
+              label='Select asset type'
+              value={assetType}
+              onChange={handleAssetTypeChange}
+            >
+              {assetTypes.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+          <Box
+            sx={{
+              minWidth: '10%',
+            }}
+          >
+            <FormAutocompleteSelector
+              name="assetSymbol"
+              control={control}
+              options={symbols}
+              label="Select symbol"
+              rules={{ required: true }}
+            />
+          </Box>
+          <Box
+            sx={{
+              minWidth: '12%',
             }}
           >
             <FormSelectorUnique
@@ -111,7 +181,7 @@ const RegisterPortafolioAction = () => {
           </Box>
           <Box
             sx={{
-              minWidth: 200,
+              minWidth: '5%',
             }}
           >
             <FormInputNumber
@@ -123,7 +193,7 @@ const RegisterPortafolioAction = () => {
           </Box>
           <Box
             sx={{
-              minWidth: 100,
+              minWidth: '5%',
             }}
           >
             <FormDateSelector
@@ -135,7 +205,7 @@ const RegisterPortafolioAction = () => {
           </Box>
           <Box
             sx={{
-              minWidth: 200,
+              minWidth: '10%',
             }}
           >
             <FormInputNumber
@@ -148,19 +218,6 @@ const RegisterPortafolioAction = () => {
               }}
             />
           </Box>
-          <Box
-            sx={{
-              minWidth: 200,
-            }}
-          >
-            <FormSelectorUnique
-              name="assetSymbol"
-              control={control}
-              options={symbols}
-              label="Select symbol"
-              rules={{ required: true }}
-            />
-          </Box>
         </Stack>
         <Stack
           direction={'row'}
@@ -168,7 +225,7 @@ const RegisterPortafolioAction = () => {
           justifyContent="flex-end"
           alignItems="center"
           padding={1}>
-          <Button onClick={handleSubmit(onSubmit)} disabled={!formState.isValid}>Submit</Button>
+          <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
           <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
         </Stack>
       </form>
