@@ -14,7 +14,7 @@ const RegisterAssetAction = ({control, getValues, setValue}) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setModeAssetQuantity(event.target.checked);
-    setValue("dolarAmount", 0);
+    setValue("dollarAmount", 0);
     setValue("assetQuantity", 0);
   };
 
