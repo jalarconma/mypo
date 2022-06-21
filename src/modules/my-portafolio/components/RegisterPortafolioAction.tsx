@@ -1,7 +1,7 @@
 import styles from './RegisterPortafolioAction.module.scss';
 
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-amplify'
 import { GraphQLResult } from '@aws-amplify/api-graphql';
@@ -18,6 +18,7 @@ import { UserPortafolio, PortafolioAction, Symbol, SymbolType } from '../../../m
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormAutocompleteSelector from '../../../shared/components/form-autocomplete-selector/FormAutocompleteSelector';
+import RegisterAssetAction from './register-asset-action/RegisterAssetAction';
 
 const RegisterPortafolioAction = () => {
 
@@ -43,15 +44,22 @@ const RegisterPortafolioAction = () => {
     fetchSymbols();
   }, [assetType])
 
-  const { handleSubmit, reset, control, formState } = useForm({
+  const { handleSubmit, reset, control, getValues, setValue } = useForm({
     defaultValues: {
       action: '',
-      assetQuantity: 0,
       assetActionDate: new Date(),
+      assetSymbol: { id: '', label: '' },
+      assetQuantity: 0,
+      dollarAmount: 0,
       assetPrice: 0,
-      assetSymbol: {id: '', label: ''}
     }
   });
+
+  useWatch({
+    name: ["dollarAmount", "assetPrice", "assetQuantity"],
+    control
+  });
+
 
   const fetchSymbols = async () => {
 
@@ -184,18 +192,6 @@ const RegisterPortafolioAction = () => {
               minWidth: '5%',
             }}
           >
-            <FormInputNumber
-              control={control}
-              name="assetQuantity"
-              label="Asset quantity"
-              rules={{ required: true }}
-            />
-          </Box>
-          <Box
-            sx={{
-              minWidth: '5%',
-            }}
-          >
             <FormDateSelector
               control={control}
               name="assetActionDate"
@@ -211,7 +207,7 @@ const RegisterPortafolioAction = () => {
             <FormInputNumber
               control={control}
               name="assetPrice"
-              label="Asset price"
+              label="Asset price in USD"
               rules={{ required: true }}
               inputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -219,6 +215,7 @@ const RegisterPortafolioAction = () => {
             />
           </Box>
         </Stack>
+        <RegisterAssetAction control={control} getValues={getValues} setValue={setValue}/>
         <Stack
           direction={'row'}
           spacing={2}

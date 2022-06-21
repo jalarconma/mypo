@@ -12,7 +12,6 @@ const FormAutocompleteSelector = ({ control, name, options, label = '', rules = 
         <Autocomplete
           disablePortal
           options={options}
-          sx={{ width: 300 }}
           value={value}
           onChange={(event, data) => {
             onChange(data);
