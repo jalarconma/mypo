@@ -22,7 +22,7 @@ const ToggleSelectorUnique = ({ options, onChange, value, label = '' }) => {
   return (
     <Stack
       direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
-      spacing={{ xs: 1, sm: 2, md: 4 }}
+      spacing={1}
       justifyContent="center"
       alignItems={{ xs: 'flex-start', sm: 'flex-start', md: 'flex-start', lg: 'center' }}>
       <Typography variant="button" display="block" gutterBottom>

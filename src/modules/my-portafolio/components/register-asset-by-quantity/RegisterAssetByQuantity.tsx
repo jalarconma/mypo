@@ -2,15 +2,16 @@ import Box from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import React from "react";
 import FormInputNumber from "../../../../shared/components/form-input-number/FormInputNumber";
 
 const RegisterAssetByQuantity = ({ control, getValues }) => {
-  
+
   const calculateAssetPrice = (): number => {
     const assetQuantity = getValues('assetQuantity');
     const assetPrice = getValues('assetPrice');
 
-    if(!assetQuantity || !assetPrice) {
+    if (!assetQuantity || !assetPrice) {
       return 0;
     }
 
@@ -18,13 +19,10 @@ const RegisterAssetByQuantity = ({ control, getValues }) => {
   }
 
   return (
-    <Stack
-      direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
-      spacing={{ xs: 1, sm: 2, md: 4 }}
-      justifyContent="center">
+    <>
       <Box
         sx={{
-          minWidth: '5%',
+          minWidth: '20%',
         }}
       >
         <FormInputNumber
@@ -36,7 +34,7 @@ const RegisterAssetByQuantity = ({ control, getValues }) => {
       </Box>
       <Box
         sx={{
-          minWidth: '10%',
+          minWidth: '20%',
         }}
       >
         <TextField fullWidth type="number" variant="outlined"
@@ -45,7 +43,7 @@ const RegisterAssetByQuantity = ({ control, getValues }) => {
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
           }} />
       </Box>
-    </Stack>
+    </>
   );
 }
 

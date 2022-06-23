@@ -1,44 +1,42 @@
-import styles from './RegisterPortafolioAction.module.scss';
+import styles from './RegisterPortafolioAsset.module.scss';
 
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-amplify'
 import { GraphQLResult } from '@aws-amplify/api-graphql';
-import { listSymbols } from '../../../graphql/queries';
+import { listSymbols } from '../../../../graphql/queries';
 import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import FormInputNumber from '../../../shared/components/form-input-number/FormInputNumber';
-import FormSelectorUnique from '../../../shared/components/form-selector-unique/FormSelectorUnique';
-import FormDateSelector from '../../../shared/components/form-date-selector/FormDateSelector';
-import { FormSelectorOption } from '../../../core/models/form-selector-option.interface';
-import { UserPortafolio, PortafolioAction, Symbol, SymbolType } from '../../../models';
+import FormInputNumber from '../../../../shared/components/form-input-number/FormInputNumber';
+import FormSelectorUnique from '../../../../shared/components/form-selector-unique/FormSelectorUnique';
+import FormDateSelector from '../../../../shared/components/form-date-selector/FormDateSelector';
+import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
+import { UserPortafolio, PortafolioAction, Symbol, SymbolType } from '../../../../models';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import FormAutocompleteSelector from '../../../shared/components/form-autocomplete-selector/FormAutocompleteSelector';
-import RegisterAssetAction from './register-asset-action/RegisterAssetAction';
-import FormToggleSelectorUnique from '../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
-import { FormToggleSelectorOptions } from '../../../shared/interfaces/FormToggleSelectorOptions';
+import FormAutocompleteSelector from '../../../../shared/components/form-autocomplete-selector/FormAutocompleteSelector';
+import RegisterAssetAction from '../register-asset-action/RegisterAssetAction';
+import FormToggleSelectorUnique from '../../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
+import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
 
-const RegisterPortafolioAction = () => {
+const RegisterPortafolioAsset = () => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
   const [user, setUser] = useState(null);
   const [assetType, setAssetType] = useState<SymbolType | ''>('');
 
-  const portafolioToggleActions: FormToggleSelectorOptions[] = [
+  const portafolioToggleActions: ToggleSelectorOption[] = [
     { value: PortafolioAction.BUY, label: PortafolioAction.BUY, selectionColor: 'success' },
-    { value: PortafolioAction.SELL, label: PortafolioAction.SELL, selectionColor: 'error'  }
+    { value: PortafolioAction.SELL, label: PortafolioAction.SELL, selectionColor: 'error' }
   ];
 
   const assetTypes: FormSelectorOption[] = [
     { id: SymbolType.CRYPTO, label: SymbolType.CRYPTO },
     { id: SymbolType.STOCK, label: SymbolType.STOCK }
   ];
-
-
 
   useEffect(() => {
     getData();
@@ -138,87 +136,98 @@ const RegisterPortafolioAction = () => {
   }
 
   return (
-    <div className={styles['register-portafolio-action']}>
+    <div className={styles['register-portafolio-asset']}>
       <h3>Register an action</h3>
       <form >
         <Stack
-          direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
-          spacing={{ xs: 1, sm: 2, md: 4 }}
+          spacing={4}
           justifyContent="center"
           padding={1}>
-          <Box
-            sx={{
-              minWidth: '10%',
-            }}>
-            <TextField
-              select
-              fullWidth
-              label='Select asset type'
-              value={assetType}
-              onChange={handleAssetTypeChange}
-            >
-              {assetTypes.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Box>
-          <Box
-            sx={{
-              minWidth: '10%',
-            }}
+          <Stack
+            direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
+            justifyContent="space-between"
+            spacing={2}
           >
-            <FormAutocompleteSelector
-              name="assetSymbol"
-              control={control}
-              options={symbols}
-              label="Select symbol"
-              rules={{ required: true }}
-            />
-          </Box>
-          <Box
-            sx={{
-              minWidth: '12%',
-            }}
-          >
-            <FormToggleSelectorUnique
-              control={control}
-              name="action"
-              label='Action'
-              rules={{ required: true }}
-              options={portafolioToggleActions}
-            />
-          </Box>
-          <Box
-            sx={{
-              minWidth: '5%',
-            }}
-          >
-            <FormDateSelector
-              control={control}
-              name="assetActionDate"
-              label="Select action date"
-              rules={{ required: true }}
-            />
-          </Box>
-          <Box
-            sx={{
-              minWidth: '10%',
-            }}
-          >
-            <FormInputNumber
-              control={control}
-              name="assetPrice"
-              label="Asset price in USD"
-              rules={{ required: true }}
-              inputProps={{
-                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            <Box
+              sx={{
+                minWidth: '20%',
+              }}>
+              <TextField
+                select
+                fullWidth
+                label='Select asset type'
+                value={assetType}
+                onChange={handleAssetTypeChange}
+              >
+                {assetTypes.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Box>
+            <Box
+              sx={{
+                minWidth: '20%',
               }}
-            />
-          </Box>
+            >
+              <FormAutocompleteSelector
+                name="assetSymbol"
+                control={control}
+                options={symbols}
+                label="Select symbol"
+                rules={{ required: true }}
+              />
+            </Box>
+            <Box
+              sx={{
+                minWidth: '20%',
+              }}
+            >
+              <FormToggleSelectorUnique
+                control={control}
+                name="action"
+                label='Action'
+                rules={{ required: true }}
+                options={portafolioToggleActions}
+              />
+            </Box>
+          </Stack>
+          <Stack
+            direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
+            justifyContent="space-between"
+            spacing={2}
+          >
+            <Box
+              sx={{
+                minWidth: '20%',
+              }}
+            >
+              <FormDateSelector
+                control={control}
+                name="assetActionDate"
+                label="Select action date"
+                rules={{ required: true }}
+              />
+            </Box>
+            <Box
+              sx={{
+                minWidth: '20%',
+              }}
+            >
+              <FormInputNumber
+                control={control}
+                name="assetPrice"
+                label="Asset price in USD"
+                rules={{ required: true }}
+                inputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+              />
+            </Box>
+          </Stack>
+          <RegisterAssetAction control={control} getValues={getValues} setValue={setValue} />
         </Stack>
-        <RegisterAssetAction control={control} getValues={getValues} setValue={setValue} />
         <Stack
           direction={'row'}
           spacing={2}
@@ -233,4 +242,4 @@ const RegisterPortafolioAction = () => {
   );
 }
 
-export default RegisterPortafolioAction;
+export default RegisterPortafolioAsset;

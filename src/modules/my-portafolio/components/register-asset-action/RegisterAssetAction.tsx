@@ -8,22 +8,23 @@ import RegisterAssetByQuantity from '../register-asset-by-quantity/RegisterAsset
 import RegisterActionByDolarCost from '../register-asset-by-dolar-cost/RegisterActionByDolarCost';
 import ToggleSelectorUnique from '../../../../shared/components/toggle-selector-unique/ToggleSelectorUnique';
 import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
+import Box from '@mui/material/Box';
 
-const RegisterAssetAction = ({control, getValues, setValue}) => {
+const RegisterAssetAction = ({ control, getValues, setValue }) => {
 
   const modes: ToggleSelectorOption[] = [
-    { label: 'Asset quantity', value: 'assetQuantity', selectionColor: 'primary'},
-    { label: 'Dollar amout', value: 'dollarAmount', selectionColor: 'primary'}
+    { label: 'Asset quantity', value: 'assetQuantity', selectionColor: 'primary' },
+    { label: 'Dollar amout', value: 'dollarAmount', selectionColor: 'primary' }
   ];
 
   const [mode, setMode] = useState<ToggleSelectorOption>(modes[0]);
 
   const getModeForm = () => {
-    switch(mode.value) {
+    switch (mode.value) {
       case modes[0].value:
-        return <RegisterAssetByQuantity control={control} getValues={getValues}/>
+        return <RegisterAssetByQuantity control={control} getValues={getValues} />
       case modes[1].value:
-        return <RegisterActionByDolarCost control={control} getValues={getValues}/>
+        return <RegisterActionByDolarCost control={control} getValues={getValues} />
       default:
         return null;
     }
@@ -33,10 +34,10 @@ const RegisterAssetAction = ({control, getValues, setValue}) => {
     console.log('value in mode: ', value);
     const selectedMode = modes.find(mode => mode.value === value);
 
-    if(selectedMode) {
+    if (selectedMode) {
       setMode(selectedMode);
     }
-    
+
     setValue("dollarAmount", 0);
     setValue("assetQuantity", 0);
   };
@@ -44,11 +45,16 @@ const RegisterAssetAction = ({control, getValues, setValue}) => {
   return (
     <Stack
       direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
-      spacing={{ xs: 1, sm: 2, md: 4 }}
-      justifyContent="center"
-      padding={1}>
-      <ToggleSelectorUnique options={modes} onChange={handleChange} value={mode.value} label='Mode'/>
-      { getModeForm() }
+      justifyContent="space-between"
+      spacing={2}>
+      <Box
+        sx={{
+          minWidth: '40%',
+        }}
+      >
+        <ToggleSelectorUnique options={modes} onChange={handleChange} value={mode.value} label='Mode' />
+      </Box>
+      {getModeForm()}
     </Stack>
   );
 }

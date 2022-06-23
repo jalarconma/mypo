@@ -18,13 +18,10 @@ const RegisterActionByDolarCost = ({ control, getValues }) => {
   }
 
   return (
-    <Stack
-      direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
-      spacing={{ xs: 1, sm: 2, md: 4 }}
-      justifyContent="center">
+    <>
       <Box
         sx={{
-          minWidth: '5%',
+          minWidth: '20%',
         }}
       >
         <FormInputNumber
@@ -39,13 +36,13 @@ const RegisterActionByDolarCost = ({ control, getValues }) => {
       </Box>
       <Box
         sx={{
-          minWidth: '10%',
+          minWidth: '20%',
         }}
       >
         <TextField fullWidth type="number" variant="outlined"
           name="estimatedAssetQuantity" label="Estimated asset quantity" value={calculateAssetQuantity()} />
       </Box>
-    </Stack>
+    </>
   );
 }
 
