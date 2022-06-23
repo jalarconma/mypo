@@ -21,8 +21,7 @@ const RegisterActionByDolarCost = ({ control, getValues }) => {
     <Stack
       direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
       spacing={{ xs: 1, sm: 2, md: 4 }}
-      justifyContent="center"
-      padding={1}>
+      justifyContent="center">
       <Box
         sx={{
           minWidth: '5%',

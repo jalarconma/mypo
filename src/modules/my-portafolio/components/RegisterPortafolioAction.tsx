@@ -19,6 +19,8 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormAutocompleteSelector from '../../../shared/components/form-autocomplete-selector/FormAutocompleteSelector';
 import RegisterAssetAction from './register-asset-action/RegisterAssetAction';
+import FormToggleSelectorUnique from '../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
+import { FormToggleSelectorOptions } from '../../../shared/interfaces/FormToggleSelectorOptions';
 
 const RegisterPortafolioAction = () => {
 
@@ -26,15 +28,17 @@ const RegisterPortafolioAction = () => {
   const [user, setUser] = useState(null);
   const [assetType, setAssetType] = useState<SymbolType | ''>('');
 
-  const portafolioActions: FormSelectorOption[] = [
-    { id: PortafolioAction.BUY, label: PortafolioAction.BUY },
-    { id: PortafolioAction.SELL, label: PortafolioAction.SELL }
+  const portafolioToggleActions: FormToggleSelectorOptions[] = [
+    { value: PortafolioAction.BUY, label: PortafolioAction.BUY, selectionColor: 'success' },
+    { value: PortafolioAction.SELL, label: PortafolioAction.SELL, selectionColor: 'error'  }
   ];
 
   const assetTypes: FormSelectorOption[] = [
     { id: SymbolType.CRYPTO, label: SymbolType.CRYPTO },
     { id: SymbolType.STOCK, label: SymbolType.STOCK }
   ];
+
+
 
   useEffect(() => {
     getData();
@@ -178,13 +182,12 @@ const RegisterPortafolioAction = () => {
               minWidth: '12%',
             }}
           >
-            <FormSelectorUnique
+            <FormToggleSelectorUnique
               control={control}
               name="action"
-              label="Select action"
+              label='Action'
               rules={{ required: true }}
-              options={portafolioActions}
-
+              options={portafolioToggleActions}
             />
           </Box>
           <Box
@@ -215,7 +218,7 @@ const RegisterPortafolioAction = () => {
             />
           </Box>
         </Stack>
-        <RegisterAssetAction control={control} getValues={getValues} setValue={setValue}/>
+        <RegisterAssetAction control={control} getValues={getValues} setValue={setValue} />
         <Stack
           direction={'row'}
           spacing={2}
