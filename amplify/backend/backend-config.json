@@ -34,6 +34,20 @@
           ]
         }
       ]
+    },
+    "myporest": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "getAssetPriceByDate",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "function": {
@@ -73,6 +87,12 @@
           ]
         }
       ]
+    },
+    "getAssetPriceByDate": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "storage": {},

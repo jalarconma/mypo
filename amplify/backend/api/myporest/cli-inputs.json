@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "paths": {
+    "/symbols/{symbol}/price/{date}": {
+      "name": "/symbols/{symbol}/price/{date}",
+      "lambdaFunction": "getAssetPriceByDate",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    }
+  }
+}
