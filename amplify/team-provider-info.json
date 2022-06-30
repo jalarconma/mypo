@@ -31,7 +31,7 @@
         "getAssetPriceByDate": {
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/getAssetPriceByDate-79624462434142626e59-build.zip"
+          "s3Key": "amplify-builds/getAssetPriceByDate-636a65685335304e7677-build.zip"
         }
       },
       "auth": {

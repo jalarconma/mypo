@@ -21,6 +21,7 @@ import FormAutocompleteSelector from '../../../../shared/components/form-autocom
 import RegisterAssetAction from '../register-asset-action/RegisterAssetAction';
 import FormToggleSelectorUnique from '../../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
 import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
+import { StringUtils } from '../../../../shared/utils/string-utils';
 
 const RegisterPortafolioAsset = () => {
 
@@ -38,6 +39,22 @@ const RegisterPortafolioAsset = () => {
     { id: SymbolType.STOCK, label: SymbolType.STOCK }
   ];
 
+  const { handleSubmit, reset, control, getValues, setValue } = useForm({
+    defaultValues: {
+      action: '',
+      assetActionDate: null,
+      assetSymbol: { id: '', label: '' },
+      assetQuantity: 0,
+      dollarAmount: 0,
+      assetPrice: 0,
+    }
+  });
+
+  const [ assetSymbol, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
+    name: ["assetSymbol", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
+    control
+  });
+
   useEffect(() => {
     getData();
   }, []);
@@ -46,22 +63,26 @@ const RegisterPortafolioAsset = () => {
     fetchSymbols();
   }, [assetType])
 
-  const { handleSubmit, reset, control, getValues, setValue } = useForm({
-    defaultValues: {
-      action: '',
-      assetActionDate: new Date(),
-      assetSymbol: { id: '', label: '' },
-      assetQuantity: 0,
-      dollarAmount: 0,
-      assetPrice: 0,
+  useEffect(() => {
+    fetchPrice();
+  }, [assetActionDate]);
+
+  const fetchPrice = async () => {
+
+    if(!assetType.length || !assetActionDate || !assetSymbol.id.length) {
+      return;
     }
-  });
 
-  useWatch({
-    name: ["dollarAmount", "assetPrice", "assetQuantity"],
-    control
-  });
+    const price = await API.get('myporest', '/prices/by-date', {
+      'queryStringParameters': {
+        "assetType": assetType,
+        "date": StringUtils.dateToString(assetActionDate),
+        "symbol": assetSymbol.id
+      }
+    });
 
+    setValue("assetPrice", price);
+  }
 
   const fetchSymbols = async () => {
 

@@ -60,16 +60,41 @@ async function getFinnHubApiKey() {
   return request.Parameter.Value;
 }
 
-async function getPrice(inputDate) {
-  /*const finnHubApiKey = await getFinnHubApiKey();
-  const result = await getRequest(`https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=${finnHubApiKey}`);
+function getCurrentUnixDate(date = new Date()) {
+  return Math.floor(new Date(date).getTime()/1000) + new Date(date).getTimezoneOffset();
+}
 
-  console.log('result data ok... filtering....');
+async function getCryptoPrice(priceDate, symbol) {
+  const finnHubApiKey = await getFinnHubApiKey();
+  const unixDateFrom = getCurrentUnixDate(priceDate) - 800;
+  const unixDateTo = getCurrentUnixDate(priceDate);
+  const requestUrl = `https://finnhub.io/api/v1/crypto/candle?symbol=${symbol}&resolution=1&from=${unixDateFrom}&to=${unixDateTo}&token=${finnHubApiKey}`;
+  const result = await getRequest(requestUrl);
+  
+  const { s: status, c: prices} = result;
+  
+  if(status !== 'ok') {
+    console.log(`no price data to ${priceDate} ${symbol}`);
+    return 0;
+  }
+  
+  return prices[prices.length - 1];
+}
 
-  const data = result.filter(symbolData => symbolData.symbol.includes('USDT'));
-  const symbols = data.map(symbolData => ({ id: symbolData.symbol, symbol: symbolData.symbol, type: 'CRYPTO' }));
+async function getStockPrice(priceDate, symbol) {
+  return 0;
+}
 
-  return symbols;*/
+async function getPrice(assetType, priceDate, symbol) {
+  
+  if(assetType === 'CRYPTO') {
+    return await getCryptoPrice(priceDate, symbol);
+  } else if (assetType === 'STOCK') {
+    return await getStockPrice(priceDate, symbol);
+  }
+  
+  console.log(`no price data to asset type ${assetType} `);
+  return 0;
 }
 
 /**
@@ -77,8 +102,20 @@ async function getPrice(inputDate) {
 */
 exports.handler = async (event) => {
   try {
-    const price = await getPrice();
-    return { body: 'Successfully created crypto symbols!' };
+    const { assetType, date, symbol } = event.queryStringParameters;
+    const price = await getPrice(assetType, date, symbol);
+    console.log(`${assetType} ${symbol} to ${date} the price is: ${price}`);
+    
+    let res =  {
+      statusCode: 200,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' // replace with hostname of frontend (CloudFront)
+      },
+      body: JSON.stringify(price)
+    };
+    
+    return res;
   }
   catch (err) {
     return { error: err };

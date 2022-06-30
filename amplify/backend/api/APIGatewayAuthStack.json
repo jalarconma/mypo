@@ -64,7 +64,7 @@
                           }
                         ]
                       },
-                      "/GET/symbols/*/price/*/*"
+                      "/GET/prices/by-date/*"
                     ]
                   ]
                 },
@@ -94,7 +94,7 @@
                           }
                         ]
                       },
-                      "/GET/symbols/*/price/*"
+                      "/GET/prices/by-date"
                     ]
                   ]
                 }

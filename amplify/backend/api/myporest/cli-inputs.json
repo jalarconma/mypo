@@ -1,8 +1,8 @@
 {
   "version": 1,
   "paths": {
-    "/symbols/{symbol}/price/{date}": {
-      "name": "/symbols/{symbol}/price/{date}",
+    "/prices/by-date": {
+      "name": "/prices/by-date",
       "lambdaFunction": "getAssetPriceByDate",
       "permissions": {
         "setting": "private",
