@@ -15,6 +15,8 @@ export const getUserPortafolio = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -98,6 +100,8 @@ export const getCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -171,6 +175,8 @@ export const getSymbol = /* GraphQL */ `
       id
       symbol
       type
+      displaySymbol
+      description
       createdAt
       updatedAt
       _version
@@ -190,6 +196,8 @@ export const listSymbols = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -218,6 +226,8 @@ export const syncSymbols = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version

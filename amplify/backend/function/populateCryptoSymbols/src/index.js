@@ -73,12 +73,20 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
  
  async function getSymbols() {
    const finnHubApiKey = await getFinnHubApiKey();
-   const result = await getRequest(`https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=${finnHubApiKey}`);
+   const result = await getRequest(`https://finnhub.io/api/v1/crypto/symbol?exchange=COINBASE&token=${finnHubApiKey}`);
  
    console.log('result data ok... filtering....');
  
-   const data = result.filter(symbolData => symbolData.symbol.includes('USDT'));
-   const symbols = data.map(symbolData => ({ id: symbolData.symbol, symbol: symbolData.symbol, type: 'CRYPTO' }));
+   const data = result.filter(symbolData => symbolData.symbol.includes('USD'));
+   const symbols = data.map(symbolData => (
+       { 
+           id: symbolData.symbol, 
+           symbol: symbolData.symbol, 
+           type: 'CRYPTO',
+           displaySymbol: symbolData.displaySymbol,
+           description: symbolData.description
+        }
+    ));
  
    return symbols;
  }

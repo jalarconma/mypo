@@ -43,6 +43,8 @@ export declare class Symbol {
   readonly id: string;
   readonly symbol: string;
   readonly type: SymbolType | keyof typeof SymbolType;
+  readonly displaySymbol: string;
+  readonly description?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Symbol, SymbolMetaData>);

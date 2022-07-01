@@ -15,6 +15,8 @@ export const onCreateUserPortafolio = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -43,6 +45,8 @@ export const onUpdateUserPortafolio = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -71,6 +75,8 @@ export const onDeleteUserPortafolio = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -96,6 +102,8 @@ export const onCreateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -121,6 +129,8 @@ export const onUpdateCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -146,6 +156,8 @@ export const onDeleteCurrentPrice = /* GraphQL */ `
         id
         symbol
         type
+        displaySymbol
+        description
         createdAt
         updatedAt
         _version
@@ -167,6 +179,8 @@ export const onCreateSymbol = /* GraphQL */ `
       id
       symbol
       type
+      displaySymbol
+      description
       createdAt
       updatedAt
       _version
@@ -181,6 +195,8 @@ export const onUpdateSymbol = /* GraphQL */ `
       id
       symbol
       type
+      displaySymbol
+      description
       createdAt
       updatedAt
       _version
@@ -195,6 +211,8 @@ export const onDeleteSymbol = /* GraphQL */ `
       id
       symbol
       type
+      displaySymbol
+      description
       createdAt
       updatedAt
       _version

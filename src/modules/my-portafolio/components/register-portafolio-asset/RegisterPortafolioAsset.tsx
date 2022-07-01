@@ -91,7 +91,7 @@ const RegisterPortafolioAsset = () => {
     }
 
     const symbols = await DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
-    setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.symbol })));
+    setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.displaySymbol })));
   }
 
   const getData = async () => {
