@@ -6,12 +6,18 @@
   color: white;
 
   .App-header{
-    height: 10vh;
+    height: 10%;
+    //position: sticky;
+    //top: 0;
   }
 
   .App-content {
-    height: 90vh;
+    height: 80%;
     margin: 0 15px 0 15px;
+  }
+
+  .App-footer {
+    height: 10%;
   }
 }
 

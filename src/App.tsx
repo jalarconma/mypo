@@ -11,6 +11,11 @@ function App() {
       <div className='App-content'>
         <AppRouting />
       </div>
+      <div className='App-footer'>
+        <div>
+          <h4>Developed by Julian Alarcon TM</h4>
+        </div>
+      </div>
     </div>
   );
 }
