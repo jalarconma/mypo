@@ -1,4 +1,4 @@
 export interface FormSelectorOption {
-  id: string,
-  label: string
+  id: string;
+  label: string;
 }

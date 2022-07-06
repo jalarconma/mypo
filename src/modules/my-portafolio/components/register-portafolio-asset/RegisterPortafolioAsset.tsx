@@ -3,15 +3,12 @@ import styles from './RegisterPortafolioAsset.module.scss';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
-import { API, Auth, DataStore, graphqlOperation, syncExpression } from 'aws-amplify'
-import { GraphQLResult } from '@aws-amplify/api-graphql';
-import { listSymbols } from '../../../../graphql/queries';
+import { API, Auth, DataStore } from 'aws-amplify'
 import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormInputNumber from '../../../../shared/components/form-input-number/FormInputNumber';
-import FormSelectorUnique from '../../../../shared/components/form-selector-unique/FormSelectorUnique';
 import FormDateSelector from '../../../../shared/components/form-date-selector/FormDateSelector';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
 import { UserPortafolio, PortafolioAction, Symbol, SymbolType } from '../../../../models';
@@ -22,12 +19,13 @@ import RegisterAssetAction from '../register-asset-action/RegisterAssetAction';
 import FormToggleSelectorUnique from '../../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
 import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
 import { StringUtils } from '../../../../shared/utils/string-utils';
+import { RegisterPortafolioForm } from '../../interfaces/register-portafolio-form';
 
 const RegisterPortafolioAsset = () => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
   const [user, setUser] = useState(null);
-  const [assetType, setAssetType] = useState<SymbolType | ''>('');
+  const [assetType, setAssetType] = useState<SymbolType>(SymbolType.CRYPTO);
 
   const portafolioToggleActions: ToggleSelectorOption[] = [
     { value: PortafolioAction.BUY, label: PortafolioAction.BUY, selectionColor: 'success' },
@@ -39,18 +37,19 @@ const RegisterPortafolioAsset = () => {
     { id: SymbolType.STOCK, label: SymbolType.STOCK }
   ];
 
-  const { handleSubmit, reset, control, getValues, setValue } = useForm({
+  const { handleSubmit, reset, control, getValues, setValue, formState } = useForm<RegisterPortafolioForm>({
+    mode: 'onChange',
     defaultValues: {
-      action: '',
+      action: { value: '', label: '', selectionColor: '' },
       assetActionDate: null,
-      assetSymbol: { id: '', label: '' },
+      assetSymbol: {id: '', label: ''},
       assetQuantity: 0,
       dollarAmount: 0,
       assetPrice: 0,
     }
   });
 
-  const [ assetSymbol, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
+  const [assetSymbol, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
     name: ["assetSymbol", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
     control
   });
@@ -60,16 +59,17 @@ const RegisterPortafolioAsset = () => {
   }, []);
 
   useEffect(() => {
+    setValue('assetSymbol', {id: '', label: ''})
     fetchSymbols();
   }, [assetType])
 
   useEffect(() => {
     fetchPrice();
-  }, [assetActionDate]);
+  }, [assetActionDate, assetSymbol]);
 
   const fetchPrice = async () => {
 
-    if(!assetType.length || !assetActionDate || !assetSymbol.id.length) {
+    if (!assetType?.length || !assetActionDate || !assetSymbol?.id.length) {
       return;
     }
 
@@ -115,7 +115,7 @@ const RegisterPortafolioAsset = () => {
         setAssetType(SymbolType.STOCK);
         break;
       default:
-        setAssetType('');
+        setAssetType(SymbolType.CRYPTO);
         break;
     }
   };
@@ -126,23 +126,6 @@ const RegisterPortafolioAsset = () => {
     /*const data = await DataStore.save(
       new UserPortafolio({
         user: user.attributes.email,
-        action: PortafolioAction.BUY,
-        asset_quantity: 1,
-        action_date: '2022-03-15',
-        current_asset_price: 12,
-        symbol: symbols[0],
-        userPortafolioSymbolId: symbols[0].id
-      }));*/
-
-    //await DataStore.clear();
-
-    console.log('portafolio', await DataStore.query(UserPortafolio));
-  }
-
-  const addAlternativePortafolioAction = async () => {
-    /*const data = await DataStore.save(
-      new UserPortafolio({
-        user: 'test@test.com',
         action: PortafolioAction.BUY,
         asset_quantity: 1,
         action_date: '2022-03-15',
@@ -179,6 +162,8 @@ const RegisterPortafolioAsset = () => {
                 label='Select asset type'
                 value={assetType}
                 onChange={handleAssetTypeChange}
+                error={assetType === undefined ? true : false}
+                helperText={assetType === undefined ? 'The asset type is required': ''}
               >
                 {assetTypes.map((option) => (
                   <MenuItem key={option.id} value={option.id}>
@@ -197,7 +182,7 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 options={symbols}
                 label="Select symbol"
-                rules={{ required: true }}
+                rules={{ validate: (symbol: FormSelectorOption) => symbol.id !== '' ? true : 'the symbol is required'  }}
               />
             </Box>
             <Box
@@ -209,7 +194,7 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 name="action"
                 label='Action'
-                rules={{ required: true }}
+                rules={{ validate: (symbol: ToggleSelectorOption) => symbol.value !== '' ? true : 'the action is required'  }}
                 options={portafolioToggleActions}
               />
             </Box>
@@ -228,7 +213,7 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 name="assetActionDate"
                 label="Select action date"
-                rules={{ required: true }}
+                rules={{ required: 'The action date is required' }}
               />
             </Box>
             <Box
@@ -240,9 +225,9 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 name="assetPrice"
                 label="Asset price in USD"
-                rules={{ required: true }}
+                rules={{validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'}}
                 inputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
               />
             </Box>

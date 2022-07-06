@@ -28,7 +28,7 @@ const RegisterActionByDolarCost = ({ control, getValues }) => {
           control={control}
           name="dollarAmount"
           label="Dollar amount"
-          rules={{ required: true }}
+          rules={{validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'}}
           inputProps={{
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
           }}

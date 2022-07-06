@@ -7,10 +7,10 @@ const FormInputNumber = ({control, name, label = '', rules = {}, inputProps = {}
       name={name}
       control={control}
       rules={rules}
-      render={({ field: { onChange, value } }) => (
-        <TextField fullWidth label={label} type="number" variant="outlined"
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <TextField error={!!error} fullWidth label={label} type="number" variant="outlined"
           InputProps={inputProps} 
-          onChange={onChange} value={value} />
+          onChange={onChange} value={value} helperText={error?.message}/>
       )}
     />
   );

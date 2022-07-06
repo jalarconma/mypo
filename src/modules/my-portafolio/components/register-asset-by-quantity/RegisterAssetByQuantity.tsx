@@ -29,7 +29,7 @@ const RegisterAssetByQuantity = ({ control, getValues }) => {
           control={control}
           name="assetQuantity"
           label="Asset quantity"
-          rules={{ required: true }}
+          rules={{validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'}}
         />
       </Box>
       <Box

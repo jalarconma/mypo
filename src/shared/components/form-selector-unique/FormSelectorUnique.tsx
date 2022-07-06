@@ -8,8 +8,10 @@ const FormSelectorUnique = ({control, name, options, label = '', rules = {}}) =>
       name={name}
       control={control}
       rules={rules}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
+          error={!!error}
+          helperText={error?.message}
           select
           fullWidth 
           label={label}

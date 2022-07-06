@@ -8,7 +8,7 @@ const FormAutocompleteSelector = ({ control, name, options, label = '', rules = 
       name={name}
       control={control}
       rules={rules}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <Autocomplete
           disablePortal
           options={options}
@@ -18,7 +18,7 @@ const FormAutocompleteSelector = ({ control, name, options, label = '', rules = 
             return data;
           }}
           isOptionEqualToValue={(option, value) => option.id === value.id}
-          renderInput={(params) => <TextField {...params} label={label} />}
+          renderInput={(params) => <TextField error={!!error} helperText={error?.message} {...params} label={label} />}
         />
       )}
     />
