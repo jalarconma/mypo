@@ -1,5 +1,6 @@
 enum ProvidedServices {
-  UserAuthServiceImpl   
+  UserAuthServiceImpl,  
+  RegisterPortafolioServiceImpl 
 }
 
 export default ProvidedServices;

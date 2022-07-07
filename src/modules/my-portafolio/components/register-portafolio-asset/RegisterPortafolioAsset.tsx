@@ -3,7 +3,6 @@ import styles from './RegisterPortafolioAsset.module.scss';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
-import { API, Auth, DataStore } from 'aws-amplify'
 import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -11,33 +10,27 @@ import Box from '@mui/material/Box';
 import FormInputNumber from '../../../../shared/components/form-input-number/FormInputNumber';
 import FormDateSelector from '../../../../shared/components/form-date-selector/FormDateSelector';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
-import { UserPortafolio, PortafolioAction, Symbol, SymbolType } from '../../../../models';
+import { UserPortafolio, SymbolType } from '../../../../models';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormAutocompleteSelector from '../../../../shared/components/form-autocomplete-selector/FormAutocompleteSelector';
 import RegisterAssetAction from '../register-asset-action/RegisterAssetAction';
 import FormToggleSelectorUnique from '../../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
 import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
-import { StringUtils } from '../../../../shared/utils/string-utils';
 import { RegisterPortafolioForm } from '../../interfaces/register-portafolio-form';
+import { ASSET_TYPES, PORTAFOLIO_TOGGLE_ACTIONS } from '../../constants/register-portafolio-asset';
+import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
+import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
+import { UserAuthService } from '../../../../authentication/interfaces/user-auth.interface';
+import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
+import { User } from '../../../../authentication/models/user.model';
 
 const RegisterPortafolioAsset = () => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
-  const [user, setUser] = useState(null);
   const [assetType, setAssetType] = useState<SymbolType>(SymbolType.CRYPTO);
 
-  const portafolioToggleActions: ToggleSelectorOption[] = [
-    { value: PortafolioAction.BUY, label: PortafolioAction.BUY, selectionColor: 'success' },
-    { value: PortafolioAction.SELL, label: PortafolioAction.SELL, selectionColor: 'error' }
-  ];
-
-  const assetTypes: FormSelectorOption[] = [
-    { id: SymbolType.CRYPTO, label: SymbolType.CRYPTO },
-    { id: SymbolType.STOCK, label: SymbolType.STOCK }
-  ];
-
-  const { handleSubmit, reset, control, getValues, setValue, formState } = useForm<RegisterPortafolioForm>({
+  const { handleSubmit, reset, control, getValues, setValue } = useForm<RegisterPortafolioForm>({
     mode: 'onChange',
     defaultValues: {
       action: { value: '', label: '', selectionColor: '' },
@@ -48,6 +41,9 @@ const RegisterPortafolioAsset = () => {
       assetPrice: 0,
     }
   });
+
+  const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
+  const userAuthService: UserAuthService = useUserAuthService();
 
   const [assetSymbol, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
     name: ["assetSymbol", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
@@ -73,13 +69,7 @@ const RegisterPortafolioAsset = () => {
       return;
     }
 
-    const price = await API.get('myporest', '/prices/by-date', {
-      'queryStringParameters': {
-        "assetType": assetType,
-        "date": StringUtils.dateToString(assetActionDate),
-        "symbol": assetSymbol.id
-      }
-    });
+    const price = await registerPortafolioService.getPrice(assetType, assetActionDate, assetSymbol.id);
 
     setValue("assetPrice", price);
   }
@@ -90,20 +80,17 @@ const RegisterPortafolioAsset = () => {
       return;
     }
 
-    const symbols = await DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
+    const symbols = await registerPortafolioService.getSymbols(assetType);
     setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.displaySymbol })));
   }
 
   const getData = async () => {
-    const user = await Auth.currentAuthenticatedUser();
-    setUser(user);
-
     fetchSymbols();
 
     /*console.log('portafolio', await DataStore.query(UserPortafolio, (e) =>
     e.user('eq', user.attributes.email)));*/
 
-    console.log('portafolio', await DataStore.query(UserPortafolio));
+    //console.log('portafolio', await DataStore.query(UserPortafolio));
   }
 
   const handleAssetTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +123,7 @@ const RegisterPortafolioAsset = () => {
 
     //await DataStore.clear();
 
-    console.log('portafolio', await DataStore.query(UserPortafolio));
+    //console.log('portafolio', await DataStore.query(UserPortafolio));
   }
 
   return (
@@ -165,7 +152,7 @@ const RegisterPortafolioAsset = () => {
                 error={assetType === undefined ? true : false}
                 helperText={assetType === undefined ? 'The asset type is required': ''}
               >
-                {assetTypes.map((option) => (
+                {ASSET_TYPES.map((option) => (
                   <MenuItem key={option.id} value={option.id}>
                     {option.label}
                   </MenuItem>
@@ -195,7 +182,7 @@ const RegisterPortafolioAsset = () => {
                 name="action"
                 label='Action'
                 rules={{ validate: (symbol: ToggleSelectorOption) => symbol.value !== '' ? true : 'the action is required'  }}
-                options={portafolioToggleActions}
+                options={PORTAFOLIO_TOGGLE_ACTIONS}
               />
             </Box>
           </Stack>

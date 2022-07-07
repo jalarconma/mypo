@@ -1,7 +1,7 @@
-import { Auth, DataStore, Hub } from 'aws-amplify';
-import { createContext, FC, useEffect, useState } from 'react';
+import { Auth, Hub } from 'aws-amplify';
+import { FC, useEffect, useState } from 'react';
 
-import { firstValueFrom, from, Observable } from 'rxjs'
+import { firstValueFrom, from, map, Observable } from 'rxjs'
 import { syncDataStore } from '../../amplify-config/datastore-config';
 import ServicesContextualizer from '../../core/contextualizers/services.contextualizer';
 import ProvidedServices from '../../core/enums/provided-services.enum';
@@ -11,14 +11,16 @@ import { User } from '../models/user.model';
 export const UserAuthContext = ServicesContextualizer.createContext(ProvidedServices.UserAuthServiceImpl);
 
 const UserAuthServiceImpl: FC = ({children}) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const userService: UserAuthService = {
     isLoggedIn,
     currentUser,
     getUser(): Observable<User> {
-      return from(Auth.currentUserInfo());
+      return from(Auth.currentUserInfo()).pipe(
+        map(user => user ? user.attributes : null)
+      );
     }
   }
 
