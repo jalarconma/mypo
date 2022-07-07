@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { Controller } from "react-hook-form";
 
-const FormDateSelector = ({ control, name, label = "", rules = {}, format = "MM/dd/yyyy" }) => {
+const FormDateSelector = ({ control, name, label = "", rules = {}, format = "dd/MM/yyyy" }) => {
   return (
     <Controller
       name={name}

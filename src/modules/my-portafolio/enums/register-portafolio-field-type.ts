@@ -2,5 +2,7 @@ export enum RegisterPortafolioFieldType {
     DATE = 'DATE',
     TEXT = 'TEXT',
     NUMERIC = 'NUMERIC',
-    TOGGLE = 'TOGGLE'
+    TOGGLE = 'TOGGLE',
+    SELECTOR_UNIQUE = 'SELECTOR_UNIQUE',
+    AUTOCOMPLETE_SELECTOR = 'AUTOCOMPLETE_SELECTOR'
 }

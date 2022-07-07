@@ -6,5 +6,8 @@ export interface RegisterPortafolioAssetField {
   name: string;
   type: RegisterPortafolioFieldType;
   rules?: any
-  inputProps?: Partial<OutlinedInputProps> | undefined;
+  inputProps?: any;
+  format?: string;
+  options?: any[];
+  hidden?: boolean
 }

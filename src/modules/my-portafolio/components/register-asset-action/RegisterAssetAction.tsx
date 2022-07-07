@@ -9,21 +9,18 @@ import RegisterActionByDolarCost from '../register-asset-by-dolar-cost/RegisterA
 import ToggleSelectorUnique from '../../../../shared/components/toggle-selector-unique/ToggleSelectorUnique';
 import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
 import Box from '@mui/material/Box';
+import { REGISTER_PORTAFOLIO_MODES } from '../../constants/register-portafolio-asset..constant';
 
 const RegisterAssetAction = ({ control, getValues, setValue }) => {
 
-  const modes: ToggleSelectorOption[] = [
-    { label: 'Asset quantity', value: 'assetQuantity', selectionColor: 'primary' },
-    { label: 'Dollar amout', value: 'dollarAmount', selectionColor: 'primary' }
-  ];
 
-  const [mode, setMode] = useState<ToggleSelectorOption>(modes[0]);
+  const [mode, setMode] = useState<ToggleSelectorOption>(REGISTER_PORTAFOLIO_MODES[0]);
 
   const getModeForm = () => {
     switch (mode.value) {
-      case modes[0].value:
+      case REGISTER_PORTAFOLIO_MODES[0].value:
         return <RegisterAssetByQuantity control={control} getValues={getValues} />
-      case modes[1].value:
+      case REGISTER_PORTAFOLIO_MODES[1].value:
         return <RegisterActionByDolarCost control={control} getValues={getValues} />
       default:
         return null;
@@ -32,7 +29,7 @@ const RegisterAssetAction = ({ control, getValues, setValue }) => {
 
   const handleChange = (value: string) => {
     console.log('value in mode: ', value);
-    const selectedMode = modes.find(mode => mode.value === value);
+    const selectedMode = REGISTER_PORTAFOLIO_MODES.find(mode => mode.value === value);
 
     if (selectedMode) {
       setMode(selectedMode);
@@ -52,7 +49,7 @@ const RegisterAssetAction = ({ control, getValues, setValue }) => {
           minWidth: '40%',
         }}
       >
-        <ToggleSelectorUnique options={modes} onChange={handleChange} value={mode.value} label='Mode' />
+        <ToggleSelectorUnique options={REGISTER_PORTAFOLIO_MODES} onChange={handleChange} value={mode.value} label='Mode' />
       </Box>
       {getModeForm()}
     </Stack>

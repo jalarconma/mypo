@@ -18,24 +18,27 @@ import RegisterAssetAction from '../register-asset-action/RegisterAssetAction';
 import FormToggleSelectorUnique from '../../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique';
 import { ToggleSelectorOption } from '../../../../shared/interfaces/ToggleSelectorOption';
 import { RegisterPortafolioForm } from '../../interfaces/register-portafolio-form';
-import { ASSET_TYPES, PORTAFOLIO_TOGGLE_ACTIONS } from '../../constants/register-portafolio-asset';
+import { ASSET_TYPES, PORTAFOLIO_TOGGLE_ACTIONS, REGISTER_PORTAFOLIO_ASSET_FIELDS, REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
 import { UserAuthService } from '../../../../authentication/interfaces/user-auth.interface';
 import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
 import { User } from '../../../../authentication/models/user.model';
+import Grid from '@mui/material/Grid';
+import FormFiedlItem from '../form-field-item/FormFieldItem';
 
 const RegisterPortafolioAsset = () => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
-  const [assetType, setAssetType] = useState<SymbolType>(SymbolType.CRYPTO);
 
   const { handleSubmit, reset, control, getValues, setValue } = useForm<RegisterPortafolioForm>({
     mode: 'onChange',
     defaultValues: {
+      assetType: { id: '', label: '' },
       action: { value: '', label: '', selectionColor: '' },
       assetActionDate: null,
-      assetSymbol: {id: '', label: ''},
+      assetSymbol: { id: '', label: '' },
+      mode: { value: '', label: '', selectionColor: '' },
       assetQuantity: 0,
       dollarAmount: 0,
       assetPrice: 0,
@@ -45,8 +48,8 @@ const RegisterPortafolioAsset = () => {
   const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
   const userAuthService: UserAuthService = useUserAuthService();
 
-  const [assetSymbol, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
-    name: ["assetSymbol", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
+  const [assetType, assetSymbol, mode, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
+    name: ["assetType", "assetSymbol", "mode", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
     control
   });
 
@@ -55,7 +58,14 @@ const RegisterPortafolioAsset = () => {
   }, []);
 
   useEffect(() => {
-    setValue('assetSymbol', {id: '', label: ''})
+    console.log('value in mode: ', mode);
+    setValue("dollarAmount", 0);
+    setValue("assetQuantity", 0);
+
+  }, [mode])
+
+  useEffect(() => {
+    setValue('assetSymbol', { id: '', label: '' })
     fetchSymbols();
   }, [assetType])
 
@@ -63,49 +73,57 @@ const RegisterPortafolioAsset = () => {
     fetchPrice();
   }, [assetActionDate, assetSymbol]);
 
-  const fetchPrice = async () => {
+  const fields = REGISTER_PORTAFOLIO_ASSET_FIELDS.map(field => {
+    const modeValue = ((mode as unknown) as string);
+    if (field.name === REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetSymbol) {
+      field.options = symbols;
+    }
 
-    if (!assetType?.length || !assetActionDate || !assetSymbol?.id.length) {
+    if (field.name === REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity) {
+      field.hidden = modeValue !== REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity;
+    }
+
+    if (field.name === REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.EstimatedAssetPrice) {
+      field.hidden = modeValue !== REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity;
+    }
+
+    if (field.name === REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.DollarAmount) {
+      field.hidden = modeValue !== REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.DollarAmount;
+    }
+
+    if (field.name === REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.EstimatedAssetQuantity) {
+      field.hidden = modeValue !== REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.DollarAmount;
+    }
+
+    return field;
+  });
+
+  const fetchPrice = async () => {
+    const assetTypeValue = (assetType as unknown as string);
+
+    if (!assetTypeValue?.length || !assetActionDate || !assetSymbol?.id.length) {
       return;
     }
 
-    const price = await registerPortafolioService.getPrice(assetType, assetActionDate, assetSymbol.id);
+    const price = await registerPortafolioService.getPrice(SymbolType[assetTypeValue], assetActionDate, assetSymbol.id);
 
     setValue("assetPrice", price);
   }
 
   const fetchSymbols = async () => {
+    const assetTypeValue = (assetType as unknown as string);
 
-    if (!assetType) {
+    if (!assetTypeValue?.length) {
       return;
     }
 
-    const symbols = await registerPortafolioService.getSymbols(assetType);
+    const symbols = await registerPortafolioService.getSymbols(SymbolType[assetTypeValue]);
     setSymbols(symbols.map(symbol => ({ id: symbol.id, label: symbol.displaySymbol })));
   }
 
   const getData = async () => {
     fetchSymbols();
-
-    /*console.log('portafolio', await DataStore.query(UserPortafolio, (e) =>
-    e.user('eq', user.attributes.email)));*/
-
-    //console.log('portafolio', await DataStore.query(UserPortafolio));
   }
-
-  const handleAssetTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    switch (event.target.value) {
-      case SymbolType.CRYPTO:
-        setAssetType(SymbolType.CRYPTO);
-        break;
-      case SymbolType.STOCK:
-        setAssetType(SymbolType.STOCK);
-        break;
-      default:
-        setAssetType(SymbolType.CRYPTO);
-        break;
-    }
-  };
 
   const onSubmit = (data: any) => console.log('submitted data: ', data);
 
@@ -122,15 +140,26 @@ const RegisterPortafolioAsset = () => {
       }));*/
 
     //await DataStore.clear();
-
-    //console.log('portafolio', await DataStore.query(UserPortafolio));
   }
 
   return (
     <div className={styles['register-portafolio-asset']}>
       <h3>Register an action</h3>
       <form >
-        <Stack
+        <Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
+          {fields.map((item, index) => (
+
+            item.hidden ? null :
+              <Grid item xs={2} sm={4} md={4} key={index}>
+                <FormFiedlItem
+                  type={item.type} control={control}
+                  name={item.name} label={item.label} options={item.options}
+                  format={item.format} rules={item.rules} inputProps={item.inputProps} />
+              </Grid>
+
+          ))}
+        </Grid>
+        {/* <Stack
           spacing={4}
           justifyContent="center"
           padding={1}>
@@ -150,7 +179,7 @@ const RegisterPortafolioAsset = () => {
                 value={assetType}
                 onChange={handleAssetTypeChange}
                 error={assetType === undefined ? true : false}
-                helperText={assetType === undefined ? 'The asset type is required': ''}
+                helperText={assetType === undefined ? 'The asset type is required' : ''}
               >
                 {ASSET_TYPES.map((option) => (
                   <MenuItem key={option.id} value={option.id}>
@@ -169,7 +198,7 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 options={symbols}
                 label="Select symbol"
-                rules={{ validate: (symbol: FormSelectorOption) => symbol.id !== '' ? true : 'the symbol is required'  }}
+                rules={{ validate: (symbol: FormSelectorOption) => symbol.id !== '' ? true : 'the symbol is required' }}
               />
             </Box>
             <Box
@@ -181,7 +210,7 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 name="action"
                 label='Action'
-                rules={{ validate: (symbol: ToggleSelectorOption) => symbol.value !== '' ? true : 'the action is required'  }}
+                rules={{ validate: (symbol: ToggleSelectorOption) => symbol.value !== '' ? true : 'the action is required' }}
                 options={PORTAFOLIO_TOGGLE_ACTIONS}
               />
             </Box>
@@ -212,7 +241,7 @@ const RegisterPortafolioAsset = () => {
                 control={control}
                 name="assetPrice"
                 label="Asset price in USD"
-                rules={{validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'}}
+                rules={{ validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required' }}
                 inputProps={{
                   startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
@@ -220,7 +249,7 @@ const RegisterPortafolioAsset = () => {
             </Box>
           </Stack>
           <RegisterAssetAction control={control} getValues={getValues} setValue={setValue} />
-        </Stack>
+        </Stack> */}
         <Stack
           direction={'row'}
           spacing={2}

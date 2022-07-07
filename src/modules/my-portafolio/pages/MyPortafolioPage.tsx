@@ -5,10 +5,6 @@ const MyPortafolioPage = () => {
     <div>
       <h2>My Portafolio</h2>
       <RegisterPortafolioAsset />
-      <RegisterPortafolioAsset />
-      <RegisterPortafolioAsset />
-      <RegisterPortafolioAsset />
-      <RegisterPortafolioAsset />
     </div>
   )  
 };
