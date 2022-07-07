@@ -13,10 +13,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
-import { loggedInModules, loggedOutModules } from '../../modules';
+import { loggedInModules, loggedOutModules } from '../../../modules';
 
-import { UserAuthService } from '../../authentication/interfaces/user-auth.interface';
-import { useUserAuthService } from '../../authentication/hooks/use-user-auth-service';
+import { UserAuthService } from '../../../authentication/interfaces/user-auth.interface';
+import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -52,7 +52,7 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

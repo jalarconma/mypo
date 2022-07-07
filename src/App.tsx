@@ -1,22 +1,20 @@
 import './App.scss';
 import AppRouting from './AppRouting';
-import Header from './shared/components/Header';
+import Header from './shared/components/header/Header';
 
 function App() {
   return (
-    <div className="App">
-      <div className='App-header'>
+    <>
+      <main className="App">
         <Header />
-      </div>
-      <div className='App-content'>
-        <AppRouting />
-      </div>
-      <div className='App-footer'>
-        <div>
-          <h4>Developed by Julian Alarcon TM</h4>
+        <div className='App-content'>
+          <AppRouting />
         </div>
-      </div>
-    </div>
+      </main>
+      <footer className='App-footer'>
+        <h4>Developed by Julian Alarcon TM</h4>
+      </footer>
+    </>
   );
 }
 

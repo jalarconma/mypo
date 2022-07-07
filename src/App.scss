@@ -1,23 +1,11 @@
 .App {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #282c34;
   color: white;
 
-  .App-header{
-    height: 10%;
-    //position: sticky;
-    //top: 0;
-  }
-
   .App-content {
-    height: 80%;
     margin: 0 15px 0 15px;
-  }
-
-  .App-footer {
-    height: 10%;
   }
 }
 
