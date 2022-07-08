@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 
 import ServicesContextualizer from '../contextualizers/services.contextualizer';
 import ProvidedServices from '../enums/provided-services.enum';
-import { SymbolType, Symbol } from '../../models';
+import { SymbolType, Symbol, UserPortafolio } from '../../models';
 import { RegisterPortafolioService } from '../interfaces/register-portafolio.service';
 import { StringUtils } from '../../shared/utils/string-utils';
 import { FormSelectorOption } from '../models/form-selector-option.interface';
@@ -24,6 +24,9 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
           "symbol": assetSymbol
         }
       });
+    },
+    addAssetToPortafolio(asset: UserPortafolio): Promise<UserPortafolio> {
+      return DataStore.save(asset);
     }
   }
 

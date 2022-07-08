@@ -6,7 +6,7 @@ import FormSelectorUnique from "../../../../shared/components/form-selector-uniq
 import FormToggleSelectorUnique from "../../../../shared/components/form-toggle-selector-unique/FormToggleSelectorUnique";
 import { RegisterPortafolioFieldType } from "../../enums/register-portafolio-field-type";
 
-const FormFiedlItem = ({ type, control, name, label = '', options = new Array<any>(), format = 'dd/MM/yyyy', rules = {}, inputProps = {} }) => {
+const FormFieldItem = ({ type, control, name, label = '', options = new Array<any>(), format = 'dd/MM/yyyy', rules = {}, inputProps = {} }) => {
 
   const getFieldByType = () => {
     switch (type) {
@@ -52,4 +52,4 @@ const FormFiedlItem = ({ type, control, name, label = '', options = new Array<an
   return (getFieldByType());
 }
 
-export default FormFiedlItem;
+export default FormFieldItem;

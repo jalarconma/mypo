@@ -1,8 +1,20 @@
 export class StringUtils {
 
-  static dateToString(date: Date): string | null {
+  static dateToString(date: Date | null): string | null {
     if(!date) {
       return null;
+    }
+
+    const day = StringUtils.formatNumberTo2Digits(date.getDate());
+    const month = StringUtils.formatNumberTo2Digits(date.getMonth() + 1);
+    const year = StringUtils.formatNumberTo2Digits(date.getFullYear());
+
+    return `${year}-${month}-${day}`;
+  }
+
+  static dateToValidString(date: Date | null): string {
+    if(!date) {
+      return '';
     }
 
     const day = StringUtils.formatNumberTo2Digits(date.getDate());
