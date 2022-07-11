@@ -18,7 +18,7 @@ enum SymbolType {
   STOCK
 }
 
-type CurrentPrice @model @auth(rules: [{allow: public}]) {
+type CurrentPrice @model @auth(rules: [{allow: public}, {allow: private, operations: [read]}]) {
   id: ID!
   price: Float!
   updated: Boolean!

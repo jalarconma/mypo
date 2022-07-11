@@ -22,6 +22,7 @@ import { StringUtils } from '../../../../shared/utils/string-utils';
 const RegisterPortafolioAsset = () => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
+  const [fullSymbols, setFullSymbols] = useState<Symbol[]>([]);
 
   const { handleSubmit, reset, control, getValues, setValue } = useForm<RegisterPortafolioForm>({
     mode: 'onChange',
@@ -71,7 +72,6 @@ const RegisterPortafolioAsset = () => {
   }, [assetActionDate, assetSymbol]);
 
   const fields = RegisterPortafolioFieldsFactory.getRegisterFields(mode, symbols);
-  let fullSymbolsValue: Symbol[] = [];
 
   const fetchPrice = async () => {
     if (!assetType?.length || !assetActionDate || !assetSymbol?.id.length) {
@@ -90,9 +90,9 @@ const RegisterPortafolioAsset = () => {
     }
 
     const symbols = await registerPortafolioService.getSymbols(SymbolType[assetType]);
-    fullSymbolsValue = symbols;
     const mappedSymbols = symbols.map(symbol => ({ id: symbol.id, label: symbol.displaySymbol}));
     mappedSymbols.unshift(EMPTY_SYMBOL_SELECTOR);
+    setFullSymbols(symbols);
     setSymbols(mappedSymbols);
   }
 
@@ -119,14 +119,17 @@ const RegisterPortafolioAsset = () => {
   }
 
   const onSubmit = (data: RegisterPortafolioForm) => {
-    console.log('submitted data: ', data);
+    console.log('to submit data: ', data);
 
     if(!userAuthService.currentUser) {
       return ;
     }
 
-    let fullSymbolValue = fullSymbolsValue.find(symbol => symbol.symbol === data.assetSymbol.id);
-    fullSymbolValue = fullSymbolValue ? fullSymbolValue : RegisterPortafolioFieldsFactory.getEmptySymbol();
+    let fullSymbolValue = fullSymbols.find(symbol => symbol.symbol === data.assetSymbol.id);
+
+    if(!fullSymbolValue) {
+      return;
+    }
 
     const assetToAdd = new UserPortafolio({
       user: userAuthService.currentUser.email,

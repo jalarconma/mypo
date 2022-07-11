@@ -49,7 +49,7 @@ const UserAuthServiceImpl: FC = ({children}) => {
           break;
         case 'signOut':
           console.log('user is logged out');
-          await syncDataStore();
+          //await syncDataStore();
           setIsLoggedIn(false);
           setCurrentUser(null);
           break;
@@ -57,7 +57,7 @@ const UserAuthServiceImpl: FC = ({children}) => {
         case 'cognitoHostedUI_failure':
           setIsLoggedIn(false);
           setCurrentUser(null);
-          await syncDataStore();
+          //await syncDataStore();
           console.log('Sign in failure', data);
           break;
         default:

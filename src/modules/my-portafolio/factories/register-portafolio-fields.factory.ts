@@ -45,12 +45,4 @@ export class RegisterPortafolioFieldsFactory {
 
     return 0;
   }
-
-  static getEmptySymbol(): Symbol {
-    return new Symbol({
-        symbol: '',
-        displaySymbol: '',
-        type: SymbolType.CRYPTO
-    })
-  }
 }
