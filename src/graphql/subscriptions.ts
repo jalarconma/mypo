@@ -3,10 +3,11 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateUserPortafolio = /* GraphQL */ `
-  subscription OnCreateUserPortafolio($user: String) {
-    onCreateUserPortafolio(user: $user) {
+  subscription OnCreateUserPortafolio($owner: String) {
+    onCreateUserPortafolio(owner: $owner) {
       id
       user
+      owner
       action
       asset_quantity
       action_date
@@ -33,10 +34,11 @@ export const onCreateUserPortafolio = /* GraphQL */ `
   }
 `;
 export const onUpdateUserPortafolio = /* GraphQL */ `
-  subscription OnUpdateUserPortafolio($user: String) {
-    onUpdateUserPortafolio(user: $user) {
+  subscription OnUpdateUserPortafolio($owner: String) {
+    onUpdateUserPortafolio(owner: $owner) {
       id
       user
+      owner
       action
       asset_quantity
       action_date
@@ -63,10 +65,11 @@ export const onUpdateUserPortafolio = /* GraphQL */ `
   }
 `;
 export const onDeleteUserPortafolio = /* GraphQL */ `
-  subscription OnDeleteUserPortafolio($user: String) {
-    onDeleteUserPortafolio(user: $user) {
+  subscription OnDeleteUserPortafolio($owner: String) {
+    onDeleteUserPortafolio(owner: $owner) {
       id
       user
+      owner
       action
       asset_quantity
       action_date

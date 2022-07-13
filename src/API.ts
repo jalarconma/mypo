@@ -5,6 +5,7 @@
 export type CreateUserPortafolioInput = {
   id?: string | null,
   user: string,
+  owner: string,
   action: PortafolioAction,
   asset_quantity: number,
   action_date: string,
@@ -21,6 +22,7 @@ export enum PortafolioAction {
 
 export type ModelUserPortafolioConditionInput = {
   user?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   action?: ModelPortafolioActionInput | null,
   asset_quantity?: ModelFloatInput | null,
   action_date?: ModelStringInput | null,
@@ -108,6 +110,7 @@ export type UserPortafolio = {
   __typename: "UserPortafolio",
   id: string,
   user: string,
+  owner: string,
   action: PortafolioAction,
   asset_quantity: number,
   action_date: string,
@@ -144,6 +147,7 @@ export enum SymbolType {
 export type UpdateUserPortafolioInput = {
   id: string,
   user?: string | null,
+  owner?: string | null,
   action?: PortafolioAction | null,
   asset_quantity?: number | null,
   action_date?: string | null,
@@ -249,6 +253,7 @@ export type DeleteSymbolInput = {
 export type ModelUserPortafolioFilterInput = {
   id?: ModelIDInput | null,
   user?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   action?: ModelPortafolioActionInput | null,
   asset_quantity?: ModelFloatInput | null,
   action_date?: ModelStringInput | null,
@@ -311,6 +316,7 @@ export type CreateUserPortafolioMutation = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,
@@ -347,6 +353,7 @@ export type UpdateUserPortafolioMutation = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,
@@ -383,6 +390,7 @@ export type DeleteUserPortafolioMutation = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,
@@ -580,6 +588,7 @@ export type GetUserPortafolioQuery = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,
@@ -619,6 +628,7 @@ export type ListUserPortafoliosQuery = {
       __typename: "UserPortafolio",
       id: string,
       user: string,
+      owner: string,
       action: PortafolioAction,
       asset_quantity: number,
       action_date: string,
@@ -649,6 +659,7 @@ export type SyncUserPortafoliosQuery = {
       __typename: "UserPortafolio",
       id: string,
       user: string,
+      owner: string,
       action: PortafolioAction,
       asset_quantity: number,
       action_date: string,
@@ -826,7 +837,7 @@ export type SyncSymbolsQuery = {
 };
 
 export type OnCreateUserPortafolioSubscriptionVariables = {
-  user?: string | null,
+  owner?: string | null,
 };
 
 export type OnCreateUserPortafolioSubscription = {
@@ -834,6 +845,7 @@ export type OnCreateUserPortafolioSubscription = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,
@@ -861,7 +873,7 @@ export type OnCreateUserPortafolioSubscription = {
 };
 
 export type OnUpdateUserPortafolioSubscriptionVariables = {
-  user?: string | null,
+  owner?: string | null,
 };
 
 export type OnUpdateUserPortafolioSubscription = {
@@ -869,6 +881,7 @@ export type OnUpdateUserPortafolioSubscription = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,
@@ -896,7 +909,7 @@ export type OnUpdateUserPortafolioSubscription = {
 };
 
 export type OnDeleteUserPortafolioSubscriptionVariables = {
-  user?: string | null,
+  owner?: string | null,
 };
 
 export type OnDeleteUserPortafolioSubscription = {
@@ -904,6 +917,7 @@ export type OnDeleteUserPortafolioSubscription = {
     __typename: "UserPortafolio",
     id: string,
     user: string,
+    owner: string,
     action: PortafolioAction,
     asset_quantity: number,
     action_date: string,

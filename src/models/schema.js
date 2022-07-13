@@ -17,6 +17,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "owner": {
+                    "name": "owner",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "action": {
                     "name": "action",
                     "isArray": false,
@@ -104,29 +111,15 @@ export const schema = {
                             },
                             {
                                 "provider": "userPools",
-                                "ownerField": "user",
+                                "ownerField": "owner",
                                 "allow": "owner",
-                                "identityClaim": "cognito:username",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "admins"
-                                ],
                                 "operations": [
                                     "read",
                                     "create",
                                     "update",
                                     "delete"
-                                ]
+                                ],
+                                "identityClaim": "cognito:username"
                             }
                         ]
                     }
@@ -323,5 +316,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "3ed981d8cd642b1370d965939525e8c0"
+    "version": "b7fc9d5417718aae270839cebcc7bf70"
 };

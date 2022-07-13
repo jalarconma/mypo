@@ -7,6 +7,7 @@ export const getUserPortafolio = /* GraphQL */ `
     getUserPortafolio(id: $id) {
       id
       user
+      owner
       action
       asset_quantity
       action_date
@@ -42,6 +43,7 @@ export const listUserPortafolios = /* GraphQL */ `
       items {
         id
         user
+        owner
         action
         asset_quantity
         action_date
@@ -74,6 +76,7 @@ export const syncUserPortafolios = /* GraphQL */ `
       items {
         id
         user
+        owner
         action
         asset_quantity
         action_date

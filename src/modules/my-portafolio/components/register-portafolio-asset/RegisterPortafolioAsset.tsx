@@ -18,11 +18,12 @@ import { useUserAuthService } from '../../../../authentication/hooks/use-user-au
 import FormFieldItem from '../form-field-item/FormFieldItem';
 import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
 import { StringUtils } from '../../../../shared/utils/string-utils';
+import React from 'react';
+import { CreateUserPortafolioInput } from '../../../../API';
 
 const RegisterPortafolioAsset = () => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
-  const [fullSymbols, setFullSymbols] = useState<Symbol[]>([]);
 
   const { handleSubmit, reset, control, getValues, setValue } = useForm<RegisterPortafolioForm>({
     mode: 'onChange',
@@ -92,7 +93,6 @@ const RegisterPortafolioAsset = () => {
     const symbols = await registerPortafolioService.getSymbols(SymbolType[assetType]);
     const mappedSymbols = symbols.map(symbol => ({ id: symbol.id, label: symbol.displaySymbol}));
     mappedSymbols.unshift(EMPTY_SYMBOL_SELECTOR);
-    setFullSymbols(symbols);
     setSymbols(mappedSymbols);
   }
 
@@ -125,21 +125,15 @@ const RegisterPortafolioAsset = () => {
       return ;
     }
 
-    let fullSymbolValue = fullSymbols.find(symbol => symbol.symbol === data.assetSymbol.id);
-
-    if(!fullSymbolValue) {
-      return;
-    }
-
-    const assetToAdd = new UserPortafolio({
+    const assetToAdd: CreateUserPortafolioInput = {
       user: userAuthService.currentUser.email,
+      owner: userAuthService.currentUser.username,
       action: PortafolioAction[data.action],
       asset_quantity: RegisterPortafolioFieldsFactory.getAssetQuantity(data),
       action_date: StringUtils.dateToValidString(data.assetActionDate),
       current_asset_price: data.assetPrice,
-      symbol: fullSymbolValue,
-      userPortafolioSymbolId: fullSymbolValue.id
-    });
+      userPortafolioSymbolId: data.assetSymbol.id
+    };
 
     registerPortafolioService.addAssetToPortafolio(assetToAdd);
   }

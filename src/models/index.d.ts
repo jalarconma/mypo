@@ -27,6 +27,7 @@ type CurrentPriceMetaData = {
 export declare class UserPortafolio {
   readonly id: string;
   readonly user: string;
+  readonly owner: string;
   readonly action: PortafolioAction | keyof typeof PortafolioAction;
   readonly asset_quantity: number;
   readonly action_date: string;

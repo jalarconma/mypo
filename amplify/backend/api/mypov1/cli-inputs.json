@@ -3,7 +3,7 @@
   "serviceConfiguration": {
     "apiName": "mypov1",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "/tmp/amplify-4058a7b3-3335-40dc-93f1-459d1d76eac5/amplify/backend/api/mypov1/schema.graphql",
+    "gqlSchemaPath": "/tmp/amplify-42dd04d1-b48a-4ced-987d-681f6bd052ad/amplify/backend/api/mypov1/schema.graphql",
     "defaultAuthType": {
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authmypo11c19568"

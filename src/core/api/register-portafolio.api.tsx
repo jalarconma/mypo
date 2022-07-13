@@ -1,12 +1,16 @@
 import { API, DataStore } from 'aws-amplify';
-import { FC, useState } from 'react';
+import { GraphQLResult } from '@aws-amplify/api-graphql'
+import React, { FC } from 'react';
 
 import ServicesContextualizer from '../contextualizers/services.contextualizer';
 import ProvidedServices from '../enums/provided-services.enum';
 import { SymbolType, Symbol, UserPortafolio } from '../../models';
 import { RegisterPortafolioService } from '../interfaces/register-portafolio.service';
 import { StringUtils } from '../../shared/utils/string-utils';
-import { FormSelectorOption } from '../models/form-selector-option.interface';
+
+import { createUserPortafolio } from '../../graphql/mutations';
+import { graphqlQueryWrapper } from '../utils/graphql-query-wrapper';
+import { CreateUserPortafolioInput } from '../../API';
 
 export const RegisterPortafolioContext = ServicesContextualizer.createContext(ProvidedServices.RegisterPortafolioServiceImpl);
 
@@ -25,8 +29,8 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
         }
       });
     },
-    addAssetToPortafolio(asset: UserPortafolio): Promise<UserPortafolio> {
-      return DataStore.save(asset);
+    addAssetToPortafolio(asset: CreateUserPortafolioInput): Promise<GraphQLResult<any>> {
+      return graphqlQueryWrapper({ query: createUserPortafolio, variables: { input: asset}})
     }
   }
 

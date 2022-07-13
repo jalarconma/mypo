@@ -1,5 +1,5 @@
 import { Auth, Hub } from 'aws-amplify';
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { firstValueFrom, from, map, Observable } from 'rxjs'
 import { syncDataStore } from '../../amplify-config/datastore-config';
@@ -19,7 +19,7 @@ const UserAuthServiceImpl: FC = ({children}) => {
     currentUser,
     getUser(): Observable<User> {
       return from(Auth.currentUserInfo()).pipe(
-        map(user => user ? user.attributes : null)
+        map(user => user ? {...user.attributes, username: user.username} : null)
       );
     }
   }

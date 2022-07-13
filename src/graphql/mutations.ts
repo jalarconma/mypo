@@ -10,6 +10,7 @@ export const createUserPortafolio = /* GraphQL */ `
     createUserPortafolio(input: $input, condition: $condition) {
       id
       user
+      owner
       action
       asset_quantity
       action_date
@@ -43,6 +44,7 @@ export const updateUserPortafolio = /* GraphQL */ `
     updateUserPortafolio(input: $input, condition: $condition) {
       id
       user
+      owner
       action
       asset_quantity
       action_date
@@ -76,6 +78,7 @@ export const deleteUserPortafolio = /* GraphQL */ `
     deleteUserPortafolio(input: $input, condition: $condition) {
       id
       user
+      owner
       action
       asset_quantity
       action_date
