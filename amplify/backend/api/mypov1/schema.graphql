@@ -3,7 +3,7 @@ enum PortafolioAction {
   SELL
 }
 
-type UserPortafolio @model @auth(rules: [{allow: private, operations: [create]}, {allow: owner, operations: [read, create, update, delete]}]) {
+type UserPortafolio @model @auth(rules: [{allow: public, operations: [read]}, {allow: private, operations: [create]}, {allow: owner, operations: [read, create, update, delete]}]) {
   id: ID!
   user: AWSEmail!
   owner: String!
