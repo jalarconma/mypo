@@ -10,6 +10,16 @@
           "read"
         ]
       }
+    },
+    "/portafolio/totalized/by-user": {
+      "name": "/portafolio/totalized/by-user",
+      "lambdaFunction": "calculateTotalizedPortafolioByUser",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

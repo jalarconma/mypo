@@ -32,6 +32,10 @@
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
           "s3Key": "amplify-builds/getAssetPriceByDate-746a584c625265725354-build.zip"
+        },
+        "calculateTotalizedPortafolioByUser": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-363958307a37304c6f2f-build.zip"
         }
       },
       "auth": {
