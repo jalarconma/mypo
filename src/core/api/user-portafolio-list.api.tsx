@@ -22,7 +22,11 @@ const UserPortafolioListServiceImpl: FC = ({ children }) => {
   const userPortafolioListService: UserPortafolioListService = {
     getUserPortafolio(): Promise<GraphQLResult<UserPortafolioQuery>> {
       return graphqlQueryWrapper<UserPortafolioQuery>({ query: listUserPortafolios });
-    }
+    },
+    getSymbolById(id: string): Promise<Symbol | undefined> {
+      return DataStore.query(Symbol, id);
+    },
+
   }
 
   return (

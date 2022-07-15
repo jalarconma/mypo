@@ -1,0 +1,15 @@
+.my-portafolio-page {
+
+  .my-portafolio-page_actions {
+
+    button {
+      color: white;
+      border-color: white;
+  
+      &:hover {
+        color: #1976d2;
+        border-color: #1976d2;
+      }
+    }
+  }
+}
