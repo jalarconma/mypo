@@ -15,7 +15,7 @@ AWS.config.update({ region: process.env['REGION'] });
 const lambda = new AWS.Lambda();
 const GRAPHQL_ENDPOINT = process.env.API_MYPOV1_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_MYPOV1_GRAPHQLAPIKEYOUTPUT;
-const FUNCTION_GETASSETPRICEBYDATE_NAME = process.env.FUNCTION_GETASSETPRICEBYDATE_NAME
+const FUNCTION_GETASSETPRICEBYDATE_NAME = process.env.FUNCTION_GETASSETPRICEBYDATE_NAME;
 
 const listUserPortafolios = /* GraphQL */ `
   query ListUserPortafolios(
@@ -45,6 +45,46 @@ const listUserPortafolios = /* GraphQL */ `
   }
 `;
 
+const getSymbol = /* GraphQL */ `
+  query GetSymbol($id: ID!) {
+    getSymbol(id: $id) {
+      id
+      symbol
+      type
+      displaySymbol
+      description
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+
+function formatNumberTo2Digits(input) {
+
+  if (!input) {
+    return null;
+  }
+
+  const value = Math.abs(input);
+
+  return value > 9 ? `${value}` : `0${value}`;
+}
+
+function dateToString(date) {
+  if (!date) {
+    return null;
+  }
+
+  const day = formatNumberTo2Digits(date.getDate());
+  const month = formatNumberTo2Digits(date.getMonth() + 1);
+  const year = formatNumberTo2Digits(date.getFullYear());
+
+  return `${year}-${month}-${day}`;
+}
+
 async function graphqlFetch(query, variables) {
   const options = {
     method: 'POST',
@@ -56,55 +96,25 @@ async function graphqlFetch(query, variables) {
 
   const request = new Request(GRAPHQL_ENDPOINT, options);
 
-  let statusCode = 200;
   let body;
   let response;
 
   try {
     response = await fetch(request);
     body = await response.json();
-    if (body.errors) statusCode = 400;
+
+    if (body.errors) {
+      console.log(`graphqlFetch error: ${JSON.stringify(body.errors)}`);
+      throw new Error(`graphqlFetch error: ${JSON.stringify(body.errors)}`);
+    }
+
   }
   catch (error) {
-    statusCode = 400;
-    body = {
-      errors: [{
-        status: response.status,
-        message: error.message,
-        stack: error.stack
-      }]
-    };
+    console.log('graphqlFetch error: ', error);
+    throw new Error(`graphqlFetch error: ${error}`);
   }
 
-  return {
-    statusCode,
-    body: JSON.stringify(body)
-  };
-}
-
-function getRequest(url) {
-  return new Promise((resolve, reject) => {
-    const req = https.get(url, res => {
-      let rawData = '';
-
-      res.on('data', chunk => {
-        rawData += chunk;
-      });
-
-      res.on('end', () => {
-        try {
-          resolve(JSON.parse(rawData));
-        }
-        catch (err) {
-          reject(new Error(err));
-        }
-      });
-    });
-
-    req.on('error', err => {
-      reject(new Error(err));
-    });
-  });
+  return body;
 }
 
 function executeLambda(lambdaName, lambdaPayload) {
@@ -133,37 +143,132 @@ function executeLambda(lambdaName, lambdaPayload) {
   });
 }
 
+async function getUserPortafolio(user) {
+  const filter = {
+    user: {
+      eq: user
+    }
+  };
+
+  const userPortafolioQuery = await graphqlFetch(listUserPortafolios, { filter: filter });
+
+  console.log('userPortafolioQuery: ', userPortafolioQuery);
+
+  if (!userPortafolioQuery.data) {
+    return [];
+  }
+
+  return userPortafolioQuery.data.listUserPortafolios.items;
+}
+
+function groupAssetsBySymbol(assets) {
+  const grouped = assets.reduce((acc, obj) => {
+    const symbol = obj.userPortafolioSymbolId;
+
+    if (!acc[symbol]) {
+      acc[symbol] = [obj];
+    }
+    else {
+      acc[symbol].push(obj);
+    }
+
+    return acc;
+  }, {});
+
+  return grouped;
+}
+
+async function calculateTotalizedAssets(symbol, assets) {
+  const assetPriceQuery = await executeLambda(FUNCTION_GETASSETPRICEBYDATE_NAME, JSON.stringify({
+    "queryStringParameters": {
+      "assetType": symbol.type,
+      "date": dateToString(new Date()),
+      "symbol": symbol.id
+    }
+  }));
+  
+  const assetCurrentPrice = +assetPriceQuery.body;
+
+  console.log('priceInfo: ', assetCurrentPrice);
+
+  const totalAssetQuantity = assets.reduce((acc, obj) => {
+    return obj.action === 'BUY' ? acc + obj.asset_quantity : acc - obj.asset_quantity;
+  }, 0);
+
+  const totalBuyActions = assets.reduce((acc, obj) => {
+    return obj.action === 'BUY' ? acc + 1 : acc;
+  }, 0);
+
+  if (totalAssetQuantity < 0 || totalBuyActions <= 0) {
+    return {
+      symbol,
+      assetQuantity: 0,
+      assetMidPrice: 0,
+      assetCurrentPrice: 0
+    };
+  }
+
+  const midAssetBuyPrice = assets.reduce((acc, obj) => {
+    return obj.action === 'BUY' ? acc + ((obj.current_asset_price * obj.asset_quantity) / totalAssetQuantity) : acc;
+  }, 0);
+
+  return {
+    symbol,
+    assetQuantity: totalAssetQuantity,
+    assetMidPrice: midAssetBuyPrice,
+    assetCurrentPrice: assetCurrentPrice,
+  };
+}
+
+async function getSymbolById(symbolId) {
+  const fullSymbolQuery = await graphqlFetch(getSymbol, { id: symbolId });
+  console.log('symbol symbolId: ', fullSymbolQuery);
+
+  if (!fullSymbolQuery.data) {
+    return null;
+  }
+
+  return fullSymbolQuery.data.getSymbol;
+}
+
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 export const handler = async (event) => {
   console.log(`calculateTotalizedPortafolioByUser EVENT: ${JSON.stringify(event)}`);
-  console.log('node version: ', process.versions.node)
+
   try {
     const { user } = event.queryStringParameters;
-    const userPortafolioItems = await graphqlFetch(listUserPortafolios, {});
-    const priceInfo = await executeLambda(FUNCTION_GETASSETPRICEBYDATE_NAME, JSON.stringify({
-        "queryStringParameters": {
-          "assetType": "CRYPTO",
-          "date": "2022-07-15",
-          "symbol": "COINBASE:ADA-USD"
-        }
-    }));
+    const userPortafolioItems = await getUserPortafolio(user);
+    console.log('userPortafolioItems: ', userPortafolioItems);
+    const groupedAssets = groupAssetsBySymbol(userPortafolioItems);
+    console.log('groupedAssets: ', groupedAssets);
 
-    console.log('userPortafolioItems: ', userPortafolioItems)
-    console.log('priceInfo: ', priceInfo)
+    const totalizedAssets = [];
 
-    /*let res = {
+    const symbolIds = Object.keys(groupedAssets);
+
+    for (let symbolId of symbolIds) {
+      const fullSymbol = await getSymbolById(symbolId);
+
+      if (fullSymbol) {
+        totalizedAssets.push(await calculateTotalizedAssets(fullSymbol, groupedAssets[symbolId]));
+      }
+    }
+
+    console.log('totalizedAssets: ', totalizedAssets);
+
+    let res = {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*'
       },
-      body: JSON.stringify(price)
+      body: JSON.stringify(totalizedAssets)
     };
 
-    return res;*/
+    return res;
   }
   catch (err) {
     return { error: err };

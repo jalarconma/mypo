@@ -26,7 +26,7 @@ type CurrentPrice @model @auth(rules: [{allow: public}, {allow: private, operati
   symbol: Symbol! @hasOne
 }
 
-type Symbol @model @auth(rules: [{allow: private, operations: [read]}]) {
+type Symbol @model @auth(rules: [{allow: public, operations: [read]}, {allow: private, operations: [read]}]) {
   id: ID!
   symbol: String!
   type: SymbolType!
