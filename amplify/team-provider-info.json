@@ -16,26 +16,26 @@
       "function": {
         "populateSymbols": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/populateSymbols-46313935327a64526938-build.zip"
+          "s3Key": "amplify-builds/populateSymbols-71672b73687434386852-build.zip"
         },
         "populateCryptoSymbols": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/populateCryptoSymbols-757432696f36444d5864-build.zip",
+          "s3Key": "amplify-builds/populateCryptoSymbols-5430703638776d6d6467-build.zip",
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd"
         },
         "updateCryptoSymbolPrices": {
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/updateCryptoSymbolPrices-2b524c7966515972796c-build.zip"
+          "s3Key": "amplify-builds/updateCryptoSymbolPrices-6a322f57664658716b4a-build.zip"
         },
         "getAssetPriceByDate": {
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/getAssetPriceByDate-6b64546f584250697239-build.zip"
+          "s3Key": "amplify-builds/getAssetPriceByDate-746a584c625265725354-build.zip"
         },
         "calculateTotalizedPortafolioByUser": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-7a597558386b58384571-build.zip"
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-5252595477366463786c-build.zip"
         }
       },
       "auth": {

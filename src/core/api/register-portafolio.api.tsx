@@ -1,6 +1,6 @@
 import { API, DataStore } from 'aws-amplify';
 import { GraphQLResult } from '@aws-amplify/api-graphql'
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import ServicesContextualizer from '../contextualizers/services.contextualizer';
 import ProvidedServices from '../enums/provided-services.enum';
@@ -15,8 +15,12 @@ import { CreateUserPortafolioInput } from '../../API';
 export const RegisterPortafolioContext = ServicesContextualizer.createContext(ProvidedServices.RegisterPortafolioServiceImpl);
 
 const RegisterPortafolioServiceImpl: FC = ({ children }) => {
+  const [loading, setLoading] = useState<boolean>(false);
 
   const registerPortafolioService: RegisterPortafolioService = {
+    getLoading() {
+      return loading;
+    },
     getSymbols(assetType: SymbolType): Promise<Symbol[]> {
       return DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
     },
