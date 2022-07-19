@@ -1,8 +1,10 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom'
-import { loggedInModules, loggedOutModules} from './modules';
+import { loggedInNavModules, loggedInUserModules, loggedOutNavModules, loggedOutUserModules} from './modules';
 
 const AppRouting = () => {
-  const modules = [...loggedInModules, ...loggedOutModules];
+  const modules = [...loggedInNavModules, ...loggedInUserModules, 
+    ...loggedOutNavModules, ...loggedOutUserModules];
   return (
     <Routes>
       {

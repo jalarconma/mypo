@@ -1,7 +1,10 @@
-import { Auth, Hub } from 'aws-amplify';
 import React, { FC, useEffect, useState } from 'react';
 
+import { Auth, Hub } from 'aws-amplify';
+import { ICredentials } from '@aws-amplify/core/lib/types';
+
 import { firstValueFrom, from, map, Observable } from 'rxjs'
+
 import { syncDataStore } from '../../amplify-config/datastore-config';
 import ServicesContextualizer from '../../core/contextualizers/services.contextualizer';
 import ProvidedServices from '../../core/enums/provided-services.enum';
@@ -13,6 +16,7 @@ export const UserAuthContext = ServicesContextualizer.createContext(ProvidedServ
 const UserAuthServiceImpl: FC = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const userService: UserAuthService = {
     isLoggedIn,
@@ -21,7 +25,19 @@ const UserAuthServiceImpl: FC = ({children}) => {
       return from(Auth.currentUserInfo()).pipe(
         map(user => user ? {...user.attributes, username: user.username} : null)
       );
-    }
+    },
+    getLoading(): boolean {
+      return loading;
+    },
+    login(): Promise<ICredentials> {
+      const result = Auth.federatedSignIn();
+      return result;
+    },
+    logout(): Promise<any> {
+      setLoading(true);
+      const result =  Auth.signOut();
+      return result;
+    },
   }
 
   useEffect(() => {
@@ -35,6 +51,8 @@ const UserAuthServiceImpl: FC = ({children}) => {
         setIsLoggedIn(false);
         setCurrentUser(null);
       }
+
+      setLoading(false);
     });
 
     Hub.listen('auth', async ({ payload: { event, data } }) => {

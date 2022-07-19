@@ -1,10 +1,16 @@
-import { Auth } from 'aws-amplify';
+import React, { useEffect } from 'react';
+
+import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
 
 const SignInPage = () => {
+  const userAuthService = useUserAuthService();
+
+  useEffect(() => {
+    userAuthService.login();
+  }, [])
+
   return (
-    <div>
-      <button onClick={() => Auth.federatedSignIn()}>Sign In</button>
-    </div>
+    <></>
   )
 }
 

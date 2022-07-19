@@ -1,10 +1,16 @@
-import { Auth } from 'aws-amplify';
+import React, { useEffect } from 'react';
+
+import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
 
 const SignOutPage = () => {
+  const userAuthService = useUserAuthService();
+
+  useEffect(() => {
+    userAuthService.logout();
+  }, [])
+
   return (
-    <div>
-      <button onClick={async () => await Auth.signOut()}>Sign Out</button>
-    </div>
+    <></>
   )
 };
 

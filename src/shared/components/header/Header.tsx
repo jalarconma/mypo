@@ -1,4 +1,7 @@
+import styles from './Header.module.scss';
+
 import * as React from 'react';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,25 +16,30 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
-import { loggedInModules, loggedOutModules } from '../../../modules';
+import {
+  loggedInNavModules, loggedInUserModules,
+  loggedOutNavModules, loggedOutUserModules, logginModule
+} from '../../../modules';
 
 import { UserAuthService } from '../../../authentication/interfaces/user-auth.interface';
 import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
-
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { AppRouteProps } from '../../../core/interfaces/app-route-props';
 
 const Header = () => {
   const userAuthService: UserAuthService = useUserAuthService();
-  const [modules, setModules] = React.useState([]);
+  const [modules, setModules] = React.useState<AppRouteProps[]>([]);
+  const [settings, setSettings] = React.useState<AppRouteProps[]>([]);
 
   React.useEffect(() => {
     console.log('user is logged in?', userAuthService.isLoggedIn);
-    if(userAuthService.isLoggedIn) {
-      setModules(loggedInModules);
+    if (userAuthService.isLoggedIn) {
+      setModules(loggedInNavModules);
+      setSettings(loggedInUserModules);
     } else {
-      setModules(loggedOutModules);
+      setModules(loggedOutNavModules);
+      setSettings(loggedOutUserModules)
     }
-  });
+  }, [userAuthService.currentUser]);
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -52,8 +60,8 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="sticky" >
-      <Container maxWidth="xl">
+    <AppBar position="sticky" className={styles['App-header']}>
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -94,7 +102,7 @@ const Header = () => {
               }}
             >
               {modules.map((module) => (
-                <MenuItem key={module.name} onClick={handleCloseNavMenu}>
+                <MenuItem key={module.name} onClick={handleCloseNavMenu} className={styles['App-header_menu-item']}>
                   <Typography textAlign="center">
                     <Link to={module.routeProps.path}>{module.name}</Link>
                   </Typography>
@@ -123,33 +131,48 @@ const Header = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {
+              !userAuthService.isLoggedIn ?
+                (<Button
+                className={styles['App-header_loggin-button']}
+                >
+                  <Link to={logginModule.routeProps.path}>{logginModule.name}</Link>
+                </Button>) :
+                (
+                  <>
+
+                    <Tooltip title="Open settings">
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                    >
+                      {settings.map((setting) => (
+                        <MenuItem key={setting.name} onClick={handleCloseUserMenu} className={styles['App-header_menu-item']}>
+                          <Typography textAlign="center">
+                            <Link to={setting.routeProps.path}>{setting.name}</Link>
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </>
+                )
+            }
           </Box>
         </Toolbar>
       </Container>
