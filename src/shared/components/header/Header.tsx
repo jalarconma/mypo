@@ -72,44 +72,49 @@ const Header = () => {
             LOGO
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {modules.map((module) => (
-                <MenuItem key={module.name} onClick={handleCloseNavMenu} className={styles['App-header_menu-item']}>
-                  <Typography textAlign="center">
-                    <Link to={module.routeProps.path}>{module.name}</Link>
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          { userAuthService.isLoggedIn ?
+            (
+              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: 'block', md: 'none' },
+                  }}
+                >
+                  {modules.map((module) => (
+                    <MenuItem key={module.name} onClick={handleCloseNavMenu} className={styles['App-header_menu-item']}>
+                      <Typography textAlign="center">
+                        <Link to={module.routeProps.path}>{module.name}</Link>
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            ) : null
+          }
+
           <Typography
             variant="h6"
             noWrap
@@ -134,7 +139,7 @@ const Header = () => {
             {
               !userAuthService.isLoggedIn ?
                 (<Button
-                className={styles['App-header_loggin-button']}
+                  className={styles['App-header_loggin-button']}
                 >
                   <Link to={logginModule.routeProps.path}>{logginModule.name}</Link>
                 </Button>) :

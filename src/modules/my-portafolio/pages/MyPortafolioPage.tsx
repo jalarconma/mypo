@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
 
 import styles from './MyPortafolioPage.module.scss';
+
+import React, { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
@@ -12,12 +13,19 @@ import RegisterPortafolioAsset from "../components/register-portafolio-asset/Reg
 import UserPortafolioList from "../components/user-portafolio-list/UserPortafolioList";
 import LoadingSpinner from '../../../shared/components/loading-spinner/LoadingSpinner'
 import { useUserPortafolioListService } from "../../../core/hooks/use-user-portafolio-list-service";
+import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
+import { UserPortafolioTotalItem } from '../interfaces/user-portafolio-total-item';
 
 const MyPortafolioPage = () => {
   const [showAddAsset, setShowAddAsset] = useState<boolean>(false);
-  const containerRef = useRef(null);
+  const [groupedPortafolioItems, setGroupedPortafolioItems] = useState<UserPortafolioTotalItem[]>([]);
+
+  useEffect(() => {
+    fetchTotalizedAssets();
+  }, []);
 
   const userPortafolioListService = useUserPortafolioListService();
+  const userAuthService = useUserAuthService();
 
   const toggleShowAssetHandler = () => {
     setShowAddAsset((prev) => !prev)
@@ -25,7 +33,24 @@ const MyPortafolioPage = () => {
 
   const isLoading = (): boolean => {
     return userPortafolioListService.getLoading();
-  } 
+  }
+
+  const fetchTotalizedAssets = async () => {
+
+    const user = userAuthService.currentUser?.email
+
+    if(!user) {
+      return;
+    }
+
+    const totalizedAssets = await userPortafolioListService.getUserPortafolioTotalized(user);
+    setGroupedPortafolioItems(totalizedAssets)
+  }
+
+  const submitPortafolioHandler = () => {
+    toggleShowAssetHandler();
+    fetchTotalizedAssets();
+  }
 
   return (
     <>
@@ -37,8 +62,8 @@ const MyPortafolioPage = () => {
             {showAddAsset ? 'Cancel' : 'Add'}
           </Button>
         </Stack>
-        <Collapse in={showAddAsset}><RegisterPortafolioAsset /></Collapse>
-        <UserPortafolioList />
+        <Collapse in={showAddAsset}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler}/></Collapse>
+        <UserPortafolioList groupedPortafolioItems={groupedPortafolioItems}/>
       </div>
     </>
   )

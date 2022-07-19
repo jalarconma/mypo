@@ -195,11 +195,11 @@ async function calculateTotalizedAssets(symbol, assets) {
     return obj.action === 'BUY' ? acc + obj.asset_quantity : acc - obj.asset_quantity;
   }, 0);
 
-  const totalBuyActions = assets.reduce((acc, obj) => {
-    return obj.action === 'BUY' ? acc + 1 : acc;
+  const totalAssetQuantityByBuyAction = assets.reduce((acc, obj) => {
+    return obj.action === 'BUY' ? acc + obj.asset_quantity : acc;
   }, 0);
 
-  if (totalAssetQuantity < 0 || totalBuyActions <= 0) {
+  if (totalAssetQuantity <= 0) {
     return {
       symbol,
       assetQuantity: 0,
@@ -209,7 +209,7 @@ async function calculateTotalizedAssets(symbol, assets) {
   }
 
   const midAssetBuyPrice = assets.reduce((acc, obj) => {
-    return obj.action === 'BUY' ? acc + ((obj.current_asset_price * obj.asset_quantity) / totalAssetQuantity) : acc;
+    return obj.action === 'BUY' ? acc + ((obj.current_asset_price * obj.asset_quantity) / totalAssetQuantityByBuyAction) : acc;
   }, 0);
 
   return {

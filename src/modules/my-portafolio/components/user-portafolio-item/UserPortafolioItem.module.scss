@@ -1,0 +1,33 @@
+.user-portafolio-item {
+
+  .portafolio-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .portafolio-info_asset-name{
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .portafolio-info_value {
+      font-weight: bold;
+
+      &.market-value {
+        font-size: 1.1em;
+      }
+
+      &.negative-roi {
+        color: red;
+      }
+
+      &.positive-roi {
+        color: lightgreen;
+      }
+
+      &.roi-value {
+        font-size: 0.9em;
+      }
+    }
+  }
+}

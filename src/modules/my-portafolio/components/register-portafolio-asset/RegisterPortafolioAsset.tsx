@@ -21,7 +21,7 @@ import { StringUtils } from '../../../../shared/utils/string-utils';
 import React from 'react';
 import { CreateUserPortafolioInput } from '../../../../API';
 
-const RegisterPortafolioAsset = () => {
+const RegisterPortafolioAsset = ({onSubmit}) => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
 
@@ -118,7 +118,7 @@ const RegisterPortafolioAsset = () => {
     return assetQuantity * assetPrice;
   }
 
-  const onSubmit = (data: RegisterPortafolioForm) => {
+  const handlePortafolioSubmit = (data: RegisterPortafolioForm) => {
     console.log('to submit data: ', data);
 
     if(!userAuthService.currentUser) {
@@ -135,7 +135,10 @@ const RegisterPortafolioAsset = () => {
       userPortafolioSymbolId: data.assetSymbol.id
     };
 
-    registerPortafolioService.addAssetToPortafolio(assetToAdd);
+    registerPortafolioService.addAssetToPortafolio(assetToAdd).then(() => {
+      onSubmit();
+      reset();
+    });
   }
 
   return (
@@ -161,7 +164,7 @@ const RegisterPortafolioAsset = () => {
           justifyContent="flex-end"
           alignItems="center"
           padding={1}>
-          <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+          <Button onClick={handleSubmit(handlePortafolioSubmit)}>Submit</Button>
           <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
         </Stack>
       </form>

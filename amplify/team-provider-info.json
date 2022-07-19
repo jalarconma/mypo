@@ -35,7 +35,7 @@
         },
         "calculateTotalizedPortafolioByUser": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-5252595477366463786c-build.zip"
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-43747857423337576e68-build.zip"
         }
       },
       "auth": {
