@@ -15,6 +15,7 @@ import LoadingSpinner from '../../../shared/components/loading-spinner/LoadingSp
 import { useUserPortafolioListService } from "../../../core/hooks/use-user-portafolio-list-service";
 import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
 import { UserPortafolioTotalItem } from '../interfaces/user-portafolio-total-item';
+import { Outlet } from 'react-router-dom';
 
 const MyPortafolioPage = () => {
   const [showAddAsset, setShowAddAsset] = useState<boolean>(false);
@@ -64,6 +65,7 @@ const MyPortafolioPage = () => {
         </Stack>
         <Collapse in={showAddAsset}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler}/></Collapse>
         <UserPortafolioList groupedPortafolioItems={groupedPortafolioItems}/>
+        <Outlet />
       </div>
     </>
   )

@@ -7,12 +7,15 @@ import Grid from "@mui/material/Grid";
 import { UserPortafolioTotalItem } from "../../interfaces/user-portafolio-total-item";
 import SpanNumbericRounded from '../../../../shared/components/span-numeric-rounded/SpanNumericRounded';
 import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   asset: UserPortafolioTotalItem,
 }
 
 const UserPortafolioItem = ({ asset }: Props) => {
+
+  const navigate = useNavigate();
 
   const getInvestedAmount = (): number => {
     return asset.assetQuantity * asset.assetMidPrice;
@@ -49,8 +52,12 @@ const UserPortafolioItem = ({ asset }: Props) => {
     return classes
   }
 
+  const clickHandler = (event) => {
+    navigate(`/my-portafolio/${asset.symbol.id}/details`)
+  }
+
   return (
-    <Grid container spacing={2} className={styles['user-portafolio-item']}>
+    <Grid container spacing={2} className={styles['user-portafolio-item']} onClick={clickHandler}>
       <Grid item xs={3} className={styles['portafolio-info']}>
         <span className={styles['portafolio-info_asset-name']}>{asset.symbol.displaySymbol}</span>
         <span>{asset.assetQuantity}</span>
