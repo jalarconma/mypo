@@ -2,7 +2,6 @@ import styles from './PortafolioInvestmentDetails.module.scss';
 
 import React from "react";
 
-import Stack from "@mui/material/Stack";
 import Grid from '@mui/material/Grid';
 
 import InfoContainer from "../../../../shared/components/info-container/InfoContainer";

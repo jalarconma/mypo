@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import { useLocation } from "react-router-dom";
 import { UserPortafolioTotalItem } from "../../interfaces/user-portafolio-total-item";
 import PortafolioInvestmentDetails from '../../containers/portafolio-investment-details/PortafolioInvestmentDetails';
+import PortafolioActionsHistory from '../../containers/portafolio-actions-history/PortafolioActionsHistory';
 
 const PortafolioDetailsPage = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const PortafolioDetailsPage = () => {
       <span className={styles['title']}>{currentTotalizedAsset.symbol.displaySymbol}</span>
       <span className={styles['current-price']}>$ {currentTotalizedAsset.assetCurrentPrice}</span>
       <PortafolioInvestmentDetails asset={currentTotalizedAsset}/>
+      <PortafolioActionsHistory symbolId={currentTotalizedAsset.symbol.id}/>
     </Stack>
   )
 }
