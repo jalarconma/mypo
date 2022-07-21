@@ -1,0 +1,15 @@
+@import '../../../../styling/styles/variables';
+
+.portafolio-investment-details {
+  font-weight: 600;
+
+  .info-title {
+    color: $label-title-color;
+    font-size: 0.9rem;
+  }
+
+  .info-value {
+    font-size: 1rem;
+  }
+
+}

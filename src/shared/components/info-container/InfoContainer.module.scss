@@ -1,3 +1,17 @@
+@import '../../../styling/styles/variables';
+
 .info-container {
-  padding: 10px;  
+  padding: 10px;
+  color: white;
+  background-color: $base-backgorund-color; 
+  
+  .info-container_title {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .info-container_title-separator {
+    margin-left: -7px;
+    margin-right: -7px;
+  }
 }

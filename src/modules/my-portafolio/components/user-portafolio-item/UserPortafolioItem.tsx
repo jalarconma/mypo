@@ -2,12 +2,14 @@ import styles from './UserPortafolioItem.module.scss';
 
 import React from "react";
 
+import { useNavigate } from 'react-router-dom';
+
 import Grid from "@mui/material/Grid";
+import { Stack } from '@mui/material';
 
 import { UserPortafolioTotalItem } from "../../interfaces/user-portafolio-total-item";
 import SpanNumbericRounded from '../../../../shared/components/span-numeric-rounded/SpanNumericRounded';
-import { Stack } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { PortafolioInvestmentUtils } from '../../utils/portafolio-investment.utils';
 
 interface Props {
   asset: UserPortafolioTotalItem,
@@ -17,50 +19,30 @@ const UserPortafolioItem = ({ asset }: Props) => {
 
   const navigate = useNavigate();
 
-  const getInvestedAmount = (): number => {
-    return asset.assetQuantity * asset.assetMidPrice;
-  }
-
-  const getROIByDollarAmout = (): number => {
-    return getAssetMarketValue() - getInvestedAmount();
-  }
-
-  const getROIByPercentage = (): number => {
-    const investedAmount = getInvestedAmount();
-
-    if (investedAmount === 0) {
-      return 0
-    }
-
-    return (getROIByDollarAmout() / investedAmount) * 100
-  }
-
-  const getAssetMarketValue = (): number => {
-    return asset.assetCurrentPrice * asset.assetQuantity;
-  }
-
   const getMarketROIClases = (): string => {
     let classes = `${styles['portafolio-info_value']}`;
 
-    if (getROIByPercentage() < 0) {
-      classes = `${classes} ${styles['negative-roi']}`;
+    if (PortafolioInvestmentUtils.getROIByPercentage(asset) < 0) {
+      return `${classes} negative-roi`;
 
-    } else if (getROIByPercentage() > 0) {
-      classes = `${classes} ${styles['positive-roi']}`;
+    } else if (PortafolioInvestmentUtils.getROIByPercentage(asset) > 0) {
+      return `${classes} positive-roi`;
     }
 
-    return classes
+    return `${classes} zero-roi`;
   }
 
   const clickHandler = (event) => {
-    navigate(`/my-portafolio/${asset.symbol.id}/details`)
+    navigate(`/my-portafolio/${asset.symbol.id}/details`, {
+        state: asset
+    });
   }
 
   return (
     <Grid container spacing={2} className={styles['user-portafolio-item']} onClick={clickHandler}>
-      <Grid item xs={3} className={styles['portafolio-info']}>
+      <Grid item xs={6} className={styles['portafolio-info']}>
         <span className={styles['portafolio-info_asset-name']}>{asset.symbol.displaySymbol}</span>
-        <span>{asset.assetQuantity}</span>
+        <SpanNumbericRounded value={asset.assetQuantity}/>
       </Grid>
       {
         asset.assetQuantity === 0 ?
@@ -71,19 +53,15 @@ const UserPortafolioItem = ({ asset }: Props) => {
           ) :
           (
             <>
-              <Grid item xs={4} className={styles['portafolio-info']}>
-                <span>Invested Amount</span>
-                <SpanNumbericRounded value={getInvestedAmount()} styles={styles['portafolio-info_value']} startAdornment={'$'} />
-                <br />
-                <span>Average purchase price</span>
-                <SpanNumbericRounded value={asset.assetMidPrice} styles={styles['portafolio-info_value']} startAdornment={'$'} />
-              </Grid>
-              <Grid item xs={5} className={styles['portafolio-info']}>
-                <SpanNumbericRounded value={getAssetMarketValue()} styles={`${getMarketROIClases()} ${styles['market-value']}`} startAdornment={'$'} />
+              <Grid item xs={6} className={styles['portafolio-info']}>
+                <SpanNumbericRounded value={PortafolioInvestmentUtils.getAssetMarketValue(asset)} 
+                  styles={`${getMarketROIClases()} ${styles['market-value']}`} startAdornment={'$'} />
                 <br />
                 <Stack spacing={2} direction="row">
-                  <SpanNumbericRounded value={getROIByPercentage()} styles={`${getMarketROIClases()} ${styles['roi-value']}`} startAdornment={'%'} />
-                  <SpanNumbericRounded value={getROIByDollarAmout()} styles={`${getMarketROIClases()} ${styles['roi-value']}`} startAdornment={'$'} />
+                  <SpanNumbericRounded value={PortafolioInvestmentUtils.getROIByPercentage(asset)} 
+                    styles={`${getMarketROIClases()} ${styles['roi-value']}`} startAdornment={'%'} />
+                  <SpanNumbericRounded value={PortafolioInvestmentUtils.getROIByDollarAmout(asset)} 
+                    styles={`${getMarketROIClases()} ${styles['roi-value']}`} startAdornment={'$'} />
                 </Stack>
               </Grid>
             </>

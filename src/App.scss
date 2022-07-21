@@ -1,7 +1,9 @@
+@import './styling/styles/variables';
+
 .App {
   display: flex;
   flex-direction: column;
-  background-color: #282c34;
+  background-color: $base-backgorund-color;
   color: white;
 
   .App-content {

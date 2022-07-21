@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import './index.css';
+import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -10,6 +10,7 @@ import { Amplify, DataStore } from 'aws-amplify';
 import updatedAwsConfig from './amplify-config/amplify-config';
 import GlobalServices from './core/components/GlobalServices';
 import dataStoreConfigs from './amplify-config/datastore-config';
+import GlobalStylesPriority from './styling/styles/global-styles-priority';
 
 Amplify.configure(updatedAwsConfig);
 DataStore.configure(dataStoreConfigs);
@@ -20,7 +21,9 @@ ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
       <GlobalServices>
-        <App />
+        <GlobalStylesPriority>
+          <App />
+        </GlobalStylesPriority>
       </GlobalServices>
     </React.StrictMode>
   </BrowserRouter>,

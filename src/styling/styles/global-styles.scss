@@ -1,0 +1,13 @@
+@import './variables';
+
+.negative-roi {
+  color: $roi-negative;
+}
+
+.positive-roi {
+  color: $roi-positive;
+}
+
+.zero-roi {
+  color: $roi-zero;
+}
