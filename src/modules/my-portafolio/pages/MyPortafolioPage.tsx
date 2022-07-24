@@ -16,6 +16,7 @@ import { useUserPortafolioListService } from "../../../core/hooks/use-user-porta
 import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-service';
 import { UserPortafolioTotalItem } from '../interfaces/user-portafolio-total-item';
 import { Outlet } from 'react-router-dom';
+import { useRegisterPortafolioService } from '../../../core/hooks/use-register-portafolio-service';
 
 const MyPortafolioPage = () => {
   const [showAddAsset, setShowAddAsset] = useState<boolean>(false);
@@ -27,13 +28,14 @@ const MyPortafolioPage = () => {
 
   const userPortafolioListService = useUserPortafolioListService();
   const userAuthService = useUserAuthService();
+  const registerPortafolioService = useRegisterPortafolioService();
 
   const toggleShowAssetHandler = () => {
     setShowAddAsset((prev) => !prev)
   }
 
   const isLoading = (): boolean => {
-    return userPortafolioListService.getLoading();
+    return userPortafolioListService.getLoading() || userAuthService.getLoading() || registerPortafolioService.getLoading();
   }
 
   const fetchTotalizedAssets = async () => {

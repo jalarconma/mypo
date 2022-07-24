@@ -89,18 +89,26 @@ export const REGISTER_PORTAFOLIO_ASSET_FIELDS: RegisterPortafolioAssetField[] = 
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.EstimatedAssetPrice, 
     label: 'Estimated asset price in USD',
     type: RegisterPortafolioFieldType.NUMERIC,
-    inputProps: {startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')}
+    inputProps: {
+      readOnly: true,
+      startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')
+    }
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.DollarAmount,
     label: 'Dollar amount',
     type: RegisterPortafolioFieldType.NUMERIC,
     rules: {validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'},
-    inputProps: {startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')}
+    inputProps: {
+      startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')
+    }
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.EstimatedAssetQuantity,
     label: 'Estimated asset quantity',
-    type: RegisterPortafolioFieldType.NUMERIC
+    type: RegisterPortafolioFieldType.NUMERIC,
+    inputProps: {
+      readOnly: true
+    }
   }
 ];

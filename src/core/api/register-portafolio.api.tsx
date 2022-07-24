@@ -22,19 +22,44 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
       return loading;
     },
     getSymbols(assetType: SymbolType): Promise<Symbol[]> {
-      return DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
+      setLoading(true);
+      const result =  DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
+
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false);
+        throw new Error(err);
+      });
+
+      return result;
     },
     getPrice(assetType: SymbolType, assetActionDate: Date, assetSymbol: string): Promise<number> {
-      return API.get('myporest', '/prices/by-date', {
+      setLoading(true);
+
+      const result =  API.get('myporest', '/prices/by-date', {
         'queryStringParameters': {
           "assetType": assetType,
           "date": StringUtils.dateToString(assetActionDate),
           "symbol": assetSymbol
         }
       });
+
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false);
+        throw new Error(err);
+      });
+
+      return result;
     },
     addAssetToPortafolio(asset: CreateUserPortafolioInput): Promise<GraphQLResult<any>> {
-      return graphqlQueryWrapper({ query: createUserPortafolio, variables: { input: asset}})
+      setLoading(true);
+      const result =  graphqlQueryWrapper({ query: createUserPortafolio, variables: { input: asset}});
+
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false);
+        throw new Error(err);
+      });
+
+      return result;
     }
   }
 

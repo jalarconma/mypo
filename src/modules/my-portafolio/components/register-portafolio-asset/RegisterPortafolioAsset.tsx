@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
-import { PortafolioAction, Symbol, SymbolType, UserPortafolio } from '../../../../models';
+import { PortafolioAction, SymbolType } from '../../../../models';
 import { RegisterPortafolioForm } from '../../interfaces/register-portafolio-form';
 import { EMPTY_SYMBOL_SELECTOR } from '../../constants/register-portafolio-asset..constant';
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
@@ -51,6 +51,7 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
 
   useEffect(() => {
     getData();
+    reset();
   }, []);
 
   useEffect(() => {
@@ -143,7 +144,6 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
 
   return (
     <div className={styles['register-portafolio-asset']}>
-      <h3>Register an action</h3>
       <form >
         <Grid container spacing={4}>
           {fields.map((item, index) => (
