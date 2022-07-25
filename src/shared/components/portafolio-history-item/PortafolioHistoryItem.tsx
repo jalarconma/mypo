@@ -1,13 +1,17 @@
 import styles from './PortafolioHistoryItem.module.scss';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import IconButton from '@mui/material/IconButton';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import { PortafolioAction, UserPortafolio } from "../../../models";
+import { useUserPortafolioListService } from '../../../core/hooks/use-user-portafolio-list-service';
 import SpanNumbericRounded from '../span-numeric-rounded/SpanNumericRounded';
-import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import RegisterPortafolioAsset from '../../../modules/my-portafolio/components/register-portafolio-asset/RegisterPortafolioAsset';
 
 interface Props {
   asset: UserPortafolio
@@ -15,38 +19,77 @@ interface Props {
 
 const PortafolioHistoryItem = ({ asset }: Props) => {
 
+  const [fullAsset, setFullAsset] = useState<UserPortafolio>(asset);
+  const [showEditForm, setShowEditForm] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchFullSymbol();
+  }, []);
+
+  const userPortafolioListService = useUserPortafolioListService();
+
   const getActionClassName = (): string => {
 
-    if (asset.action === PortafolioAction.BUY) {
+    if (fullAsset.action === PortafolioAction.BUY) {
       return 'positive-roi';
 
-    } else if (asset.action === PortafolioAction.SELL) {
+    } else if (fullAsset.action === PortafolioAction.SELL) {
       return 'negative-roi';
     }
 
     return '';
   }
 
+  const fetchFullSymbol = async () => {
+    const fullSymbol = await userPortafolioListService.getSymbolById(fullAsset.userPortafolioSymbolId);
+
+    if (!fullSymbol) {
+      return;
+    }
+
+    setFullAsset({ ...asset, symbol: fullSymbol });
+  }
+
+  const toggleEditPortafolio = (): void => {
+    setShowEditForm(prev => !prev);
+  }
+
+  const submitPortafolioHandler = () => {
+
+  }
+
   return (
-    <div className={styles['portafolio-history-item']}>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <span className={styles['item-title']}>{asset.action_date}</span>
+    <>
+      <div className={styles['portafolio-history-item']}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <span className={styles['item-title']}>{fullAsset.action_date}</span>
+          </Grid>
+          <Grid item xs={6}>
+            <SpanNumbericRounded value={fullAsset.asset_quantity} styles={styles['item-value']} />
+          </Grid>
+          <Grid item xs={6}>
+            <span className={`${styles['item-value']} ${getActionClassName()}`}>{fullAsset.action}</span>
+          </Grid>
+          <Grid item xs={6} >
+            <SpanNumbericRounded value={fullAsset.current_asset_price} styles={styles['item-title']} startAdornment={'$'} />
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <SpanNumbericRounded value={asset.asset_quantity} styles={styles['item-value']} />
-        </Grid>
-        <Grid item xs={6}>
-          <span className={`${styles['item-value']} ${getActionClassName()}`}>{asset.action}</span>
-        </Grid>
-        <Grid item xs={6} >
-          <SpanNumbericRounded value={asset.current_asset_price} styles={styles['item-title']} startAdornment={'$'} />
-        </Grid>
-      </Grid>
-      <IconButton aria-label="edit" size="small" color="primary" className={styles['item-action']}>
-        <ModeEditIcon />
-      </IconButton>
-    </div>
+        {showEditForm ?
+          (
+            <IconButton aria-label="edit" size="small" color="primary" className={styles['item-action']} onClick={toggleEditPortafolio}>
+              <CancelIcon />
+            </IconButton>
+          ) :
+          (
+            <IconButton aria-label="edit" size="small" color="primary" className={styles['item-action']} 
+              onClick={toggleEditPortafolio} disabled={!fullAsset || !fullAsset.symbol}>
+              <ModeEditIcon />
+            </IconButton>
+          )}
+      </div>
+      <Collapse in={showEditForm}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler} /></Collapse>
+    </>
   )
 }
 
