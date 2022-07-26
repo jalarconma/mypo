@@ -1,19 +1,18 @@
 import styles from './EditPortafolioAsset.module.scss';
 
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
-import { PortafolioAction, UserPortafolio } from '../../../../models';
+import { PortafolioAction, SymbolType, UserPortafolio } from '../../../../models';
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
 import { UserAuthService } from '../../../../authentication/interfaces/user-auth.interface';
 import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
 import FormFieldItem from '../form-field-item/FormFieldItem';
-import React from 'react';
 import { EditPortafolioFieldsFactory } from '../../factories/edit-portafolio-fields.factory';
 import { REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
 import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
@@ -24,6 +23,8 @@ interface Props {
 }
 
 const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
+
+  const [ initialRendering, setInitialRendering ] = useState<boolean>(true);
 
   const { handleSubmit, reset, control, setValue } = useForm<EditPortafolioForm>({
     mode: 'onChange',
@@ -42,50 +43,18 @@ const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
   const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
   const userAuthService: UserAuthService = useUserAuthService();
 
-  /*const [ mode, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
+  const [ mode, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
     name: [ "mode", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
     control
-  });*/
-
-  const [mode, dollarAmount] = useWatch({
-    name: ["mode", "dollarAmount"],
-    control
-  });
-
-  const assetPrice = useWatch({
-    name: "assetPrice",
-    control,
-    defaultValue: asset.current_asset_price
-  });
-
-  const assetQuantity = useWatch({
-    name: "assetQuantity",
-    control,
-    defaultValue:  asset.asset_quantity
-  });
-
-  const assetActionDate = useWatch({
-    name: "assetActionDate",
-    control,
-    defaultValue: new Date(asset.action_date)
   });
 
   useEffect(() => {
-    reset(
-      {
-        action: PortafolioAction[asset.action],
-        assetActionDate: new Date(asset.action_date),
-        mode: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity,
-        assetQuantity: asset.asset_quantity,
-        dollarAmount: 0,
-        assetPrice: asset.current_asset_price,
-        estimatedAssetQuantity: 0,
-        estimatedAssetPrice: asset.asset_quantity * asset.current_asset_price
-      }
-    );
-  }, []);
 
-  useEffect(() => {
+    if(initialRendering) {
+      setInitialRendering(false);
+      return;
+    }
+
     setValue("dollarAmount", 0);
     setValue("assetQuantity", 0);
   }, [mode])
@@ -102,13 +71,14 @@ const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
   const fields = EditPortafolioFieldsFactory.getEditFields(mode);
 
   const fetchPrice = async () => {
-    /*if (!assetActionDate) {
+    
+    if (!asset.symbol || !assetActionDate || initialRendering) {
       return;
     }
 
     const price = await registerPortafolioService.getPrice(SymbolType[asset.symbol.type], assetActionDate, asset.symbol.id);
 
-    setValue("assetPrice", price);*/
+    setValue("assetPrice", price);
   }
 
   const calculateAssetQuantity = (): number => {
