@@ -1,23 +1,40 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
+
 import { ToggleSelectorOption } from "../../interfaces/ToggleSelectorOption";
 
 type ToggleColor = 'standard' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
 
-const ToggleSelectorUnique = ({ options, onChange, value, label = '' }) => {
-  const [color, setColor] = useState<ToggleColor>('primary');
+interface Props {
+  options: any;
+  onChange: (value: any) => void;
+  value: any;
+  label?: string;
+  buttonColor?: ToggleColor;
+}
+
+const ToggleSelectorUnique = ({ options, onChange, value, label = '', buttonColor = 'primary' }: Props) => {
+  const [color, setColor] = useState<ToggleColor>(buttonColor);
 
   const changeHandler = (onChange, value): string => {
-    const selectedOption = options.find(option => option.value === value);
-    const selectedColor: ToggleColor = selectedOption ? selectedOption.selectionColor : 'primary';
-    setColor(selectedColor);
+    setButtonColor();
     onChange(value);
     return value
   };
+
+  useEffect(() => {
+    setButtonColor();
+  }, [value]);
+
+  const setButtonColor= () => {
+    const selectedOption = options.find(option => option.value === value);
+    const selectedColor: ToggleColor = selectedOption ? selectedOption.selectionColor : buttonColor;
+    setColor(selectedColor);
+  }
 
   return (
     <Stack
