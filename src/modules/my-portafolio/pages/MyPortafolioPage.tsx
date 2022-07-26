@@ -17,10 +17,18 @@ import { useUserAuthService } from '../../../authentication/hooks/use-user-auth-
 import { UserPortafolioTotalItem } from '../interfaces/user-portafolio-total-item';
 import { Outlet } from 'react-router-dom';
 import { useRegisterPortafolioService } from '../../../core/hooks/use-register-portafolio-service';
+import { CreateUserPortafolioInput } from '../../../API';
+import { PortafolioAction } from '../../../models';
+import { RegisterPortafolioFieldsFactory } from '../factories/register-portafolio-fields.factory';
+import { RegisterPortafolioForm } from '../interfaces/register-portafolio-form';
+import { StringUtils } from '../../../shared/utils/string-utils';
+import { SubmitPortafolioState } from '../models/submit-portafolio-state';
+import AlertDialog from '../../../shared/components/alert-dialog/AlertDialog';
 
 const MyPortafolioPage = () => {
   const [showAddAsset, setShowAddAsset] = useState<boolean>(false);
   const [groupedPortafolioItems, setGroupedPortafolioItems] = useState<UserPortafolioTotalItem[]>([]);
+  const [ submitState, setSubmitState ] = useState<SubmitPortafolioState>(new SubmitPortafolioState(false, undefined));
 
   useEffect(() => {
     fetchTotalizedAssets();
@@ -50,9 +58,36 @@ const MyPortafolioPage = () => {
     setGroupedPortafolioItems(totalizedAssets)
   }
 
-  const submitPortafolioHandler = () => {
+  const submitPortafolioHandler = async (data: RegisterPortafolioForm) => {
+    console.log('to submit data: ', data);
+    setSubmitState(submitState.onSubmit(data));
+  }
+
+  const submitNewAssset = async () => {
+    if(!userAuthService.currentUser) {
+      return ;
+    }
+
+    const data = submitState.getSubmitData() as RegisterPortafolioForm;
+
+    if(!data) {
+      return;
+    }
+
+    const assetToAdd: CreateUserPortafolioInput = {
+      user: userAuthService.currentUser.email,
+      owner: userAuthService.currentUser.username,
+      action: PortafolioAction[data.action],
+      asset_quantity: RegisterPortafolioFieldsFactory.getAssetQuantity(data),
+      action_date: StringUtils.dateToValidString(data.assetActionDate),
+      current_asset_price: data.assetPrice,
+      userPortafolioSymbolId: data.assetSymbol.id
+    };
+
+    await registerPortafolioService.addAssetToPortafolio(assetToAdd);
+    setSubmitState(submitState.onCancel());
     toggleShowAssetHandler();
-    fetchTotalizedAssets();
+    await fetchTotalizedAssets();
   }
 
   return (
@@ -67,6 +102,7 @@ const MyPortafolioPage = () => {
         </Stack>
         <Collapse in={showAddAsset}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler} formOpened={showAddAsset}/></Collapse>
         <UserPortafolioList groupedPortafolioItems={groupedPortafolioItems}/>
+        <AlertDialog open={submitState.isOpened()} onClose={() => setSubmitState(submitState.onCancel())} onContinue={submitNewAssset}/>
         <Outlet />
       </div>
     </>

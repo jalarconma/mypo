@@ -7,11 +7,11 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-import { PortafolioAction, UserPortafolio } from "../../../models";
-import { useUserPortafolioListService } from '../../../core/hooks/use-user-portafolio-list-service';
-import SpanNumbericRounded from '../span-numeric-rounded/SpanNumericRounded';
+import { PortafolioAction, UserPortafolio } from "../../../../models";
+import { useUserPortafolioListService } from '../../../../core/hooks/use-user-portafolio-list-service';
+import SpanNumbericRounded from '../../../../shared/components/span-numeric-rounded/SpanNumericRounded';
 import Collapse from '@mui/material/Collapse';
-import EditPortafolioAsset from '../../../modules/my-portafolio/components/edit-portafolio-asset/EditPortafolioAsset';
+import EditPortafolioAsset from '../edit-portafolio-asset/EditPortafolioAsset';
 
 interface Props {
   asset: UserPortafolio

@@ -63,7 +63,6 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
     if(initialRendering || !formOpened) {
       setInitialRendering(false);
       return;
-
     }
 
     if(resetting) {

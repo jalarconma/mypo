@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { usePortafolioHistoryService } from '../../../../core/hooks/use-portafolio-history-service';
 import { UserPortafolio } from "../../../../models";
 import InfoContainer from "../../../../shared/components/info-container/InfoContainer";
-import PortafolioHistoryItem from "../../../../shared/components/portafolio-history-item/PortafolioHistoryItem";
+import PortafolioHistoryItem from "../../components/portafolio-history-item/PortafolioHistoryItem";
 
 interface Props {
   symbolId: string
