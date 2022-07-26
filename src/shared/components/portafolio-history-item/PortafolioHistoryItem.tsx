@@ -88,7 +88,7 @@ const PortafolioHistoryItem = ({ asset }: Props) => {
             </IconButton>
           )}
       </div>
-      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={submitPortafolioHandler} asset={fullAsset}/></Collapse>
+      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={submitPortafolioHandler} asset={fullAsset} formOpened={showEditForm}/></Collapse>
     </>
   )
 }

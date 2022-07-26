@@ -19,10 +19,13 @@ import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
 
 interface Props {
   onSubmit: () => void;
-  asset: UserPortafolio
+  asset: UserPortafolio;
+  formOpened: boolean
 }
 
-const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
+const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
+
+  console.log('re rendering EditPortafolioAsset');
 
   const [ initialRendering, setInitialRendering ] = useState<boolean>(true);
 
@@ -43,14 +46,20 @@ const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
   const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
   const userAuthService: UserAuthService = useUserAuthService();
 
-  const [ mode, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
-    name: [ "mode", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
+  const [ mode, dollarAmount, assetPrice, assetQuantity] = useWatch({
+    name: [ "mode", "dollarAmount", "assetPrice", "assetQuantity"],
     control
   });
 
   useEffect(() => {
+    if(!formOpened) {
+      reset();
+    }
+  }, [formOpened])
 
-    if(initialRendering) {
+  useEffect(() => {
+
+    if(initialRendering || !formOpened) {
       setInitialRendering(false);
       return;
     }
@@ -62,24 +71,9 @@ const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
   useEffect(() => {
     setValue("estimatedAssetPrice", calculateAssetPrice());
     setValue("estimatedAssetQuantity", calculateAssetQuantity());
-  }, [assetQuantity, dollarAmount])
-
-  useEffect(() => {
-    fetchPrice();
-  }, [assetActionDate]);
+  }, [assetQuantity, dollarAmount]);
 
   const fields = EditPortafolioFieldsFactory.getEditFields(mode);
-
-  const fetchPrice = async () => {
-    
-    if (!asset.symbol || !assetActionDate || initialRendering) {
-      return;
-    }
-
-    const price = await registerPortafolioService.getPrice(SymbolType[asset.symbol.type], assetActionDate, asset.symbol.id);
-
-    setValue("assetPrice", price);
-  }
 
   const calculateAssetQuantity = (): number => {
 
