@@ -21,11 +21,16 @@ import { StringUtils } from '../../../../shared/utils/string-utils';
 import React from 'react';
 import { CreateUserPortafolioInput } from '../../../../API';
 
-const RegisterPortafolioAsset = ({onSubmit}) => {
+interface Props {
+  onSubmit: () => void;
+  formOpened: boolean;
+}
+
+const RegisterPortafolioAsset = ({ onSubmit, formOpened }: Props) => {
 
   const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
 
-  const { handleSubmit, reset, control, getValues, setValue } = useForm<RegisterPortafolioForm>({
+  const { handleSubmit, reset, control, setValue } = useForm<RegisterPortafolioForm>({
     mode: 'onChange',
     defaultValues: {
       assetType: '',
@@ -51,23 +56,29 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
 
   useEffect(() => {
     getData();
-    reset();
+    handleReset();
   }, []);
+
+  useEffect(() => {
+    if(!formOpened) {
+      handleReset();
+    }
+  }, [formOpened]);
 
   useEffect(() => {
     setValue("dollarAmount", 0);
     setValue("assetQuantity", 0);
-  }, [mode])
+  }, [mode]);
 
   useEffect(() => {
     setValue("estimatedAssetPrice", calculateAssetPrice());
     setValue("estimatedAssetQuantity", calculateAssetQuantity());
-  }, [assetQuantity, dollarAmount])
+  }, [assetQuantity, dollarAmount]);
 
   useEffect(() => {
     setValue('assetSymbol', EMPTY_SYMBOL_SELECTOR);
     fetchSymbols();
-  }, [assetType])
+  }, [assetType]);
 
   useEffect(() => {
     fetchPrice();
@@ -138,8 +149,13 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
 
     registerPortafolioService.addAssetToPortafolio(assetToAdd).then(() => {
       onSubmit();
-      reset();
+      handleReset();
     });
+  }
+
+  const handleReset = (): void => {
+    reset();
+    setSymbols([]);
   }
 
   return (
@@ -165,7 +181,7 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
           alignItems="center"
           padding={1}>
           <Button onClick={handleSubmit(handlePortafolioSubmit)}>Submit</Button>
-          <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
+          <Button onClick={handleReset} variant={"outlined"}>Reset</Button>
         </Stack>
       </form>
     </div>

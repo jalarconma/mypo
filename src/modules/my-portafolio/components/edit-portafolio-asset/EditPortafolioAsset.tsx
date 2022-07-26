@@ -28,6 +28,7 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
   console.log('re rendering EditPortafolioAsset');
 
   const [ initialRendering, setInitialRendering ] = useState<boolean>(true);
+  const [ resetting, setResetting ] = useState<boolean>(false);
 
   const { handleSubmit, reset, control, setValue } = useForm<EditPortafolioForm>({
     mode: 'onChange',
@@ -61,6 +62,14 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
 
     if(initialRendering || !formOpened) {
       setInitialRendering(false);
+      return;
+
+    }
+
+    if(resetting) {
+      setValue("dollarAmount", 0);
+      setValue("assetQuantity", asset.asset_quantity);
+      setResetting(false);
       return;
     }
 
@@ -116,6 +125,11 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
     });*/
   }
 
+  const handleReset = (): void => {
+    setResetting(true);
+    reset();
+  }
+
   return (
     <div className={styles['edit-portafolio-asset']}>
       <form >
@@ -139,7 +153,7 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
           alignItems="center"
           padding={1}>
           <Button onClick={handleSubmit(handlePortafolioSubmit)}>Submit</Button>
-          <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
+          <Button onClick={handleReset} variant={"outlined"}>Reset</Button>
         </Stack>
       </form>
     </div>

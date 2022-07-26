@@ -65,7 +65,7 @@ const MyPortafolioPage = () => {
             {showAddAsset ? 'Cancel' : 'Add'}
           </Button>
         </Stack>
-        <Collapse in={showAddAsset}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler}/></Collapse>
+        <Collapse in={showAddAsset}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler} formOpened={showAddAsset}/></Collapse>
         <UserPortafolioList groupedPortafolioItems={groupedPortafolioItems}/>
         <Outlet />
       </div>
