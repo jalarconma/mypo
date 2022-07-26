@@ -1,6 +1,5 @@
 import { FormSelectorOption } from "../../../core/models/form-selector-option.interface";
-import { PortafolioAction, SymbolType, Symbol } from "../../../models";
-import { ToggleSelectorOption } from "../../../shared/interfaces/ToggleSelectorOption";
+import { PortafolioAction, SymbolType } from "../../../models";
 
 export interface RegisterPortafolioForm {
     assetType: SymbolType | '',

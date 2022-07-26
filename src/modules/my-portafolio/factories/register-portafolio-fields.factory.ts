@@ -1,6 +1,6 @@
 import { FormSelectorOption } from "../../../core/models/form-selector-option.interface";
-import { Symbol, SymbolType } from "../../../models";
 import { REGISTER_PORTAFOLIO_ASSET_FIELDS, REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from "../constants/register-portafolio-asset..constant";
+import { EditPortafolioForm } from "../interfaces/edit-portafolio-form";
 import { RegisterPortafolioAssetField } from "../interfaces/register-portafolio-asset-field";
 import { RegisterPortafolioForm } from "../interfaces/register-portafolio-form";
 
@@ -33,7 +33,7 @@ export class RegisterPortafolioFieldsFactory {
     });
   }
 
-  static getAssetQuantity(data: RegisterPortafolioForm): number {
+  static getAssetQuantity(data: RegisterPortafolioForm | EditPortafolioForm): number {
 
     if(data.assetQuantity && data.assetQuantity > 0) {
       return data.assetQuantity;

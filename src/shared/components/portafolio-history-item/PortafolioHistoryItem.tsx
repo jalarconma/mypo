@@ -11,7 +11,7 @@ import { PortafolioAction, UserPortafolio } from "../../../models";
 import { useUserPortafolioListService } from '../../../core/hooks/use-user-portafolio-list-service';
 import SpanNumbericRounded from '../span-numeric-rounded/SpanNumericRounded';
 import Collapse from '@mui/material/Collapse';
-import RegisterPortafolioAsset from '../../../modules/my-portafolio/components/register-portafolio-asset/RegisterPortafolioAsset';
+import EditPortafolioAsset from '../../../modules/my-portafolio/components/edit-portafolio-asset/EditPortafolioAsset';
 
 interface Props {
   asset: UserPortafolio
@@ -88,7 +88,7 @@ const PortafolioHistoryItem = ({ asset }: Props) => {
             </IconButton>
           )}
       </div>
-      <Collapse in={showEditForm}><RegisterPortafolioAsset onSubmit={submitPortafolioHandler} /></Collapse>
+      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={submitPortafolioHandler} asset={fullAsset}/></Collapse>
     </>
   )
 }

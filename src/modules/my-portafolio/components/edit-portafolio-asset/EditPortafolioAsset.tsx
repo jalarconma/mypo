@@ -1,57 +1,88 @@
-import styles from './RegisterPortafolioAsset.module.scss';
+import styles from './EditPortafolioAsset.module.scss';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
-import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
-import { PortafolioAction, SymbolType } from '../../../../models';
-import { RegisterPortafolioForm } from '../../interfaces/register-portafolio-form';
-import { EMPTY_SYMBOL_SELECTOR, REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
+import { PortafolioAction, UserPortafolio } from '../../../../models';
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
 import { UserAuthService } from '../../../../authentication/interfaces/user-auth.interface';
 import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
 import FormFieldItem from '../form-field-item/FormFieldItem';
-import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
-import { StringUtils } from '../../../../shared/utils/string-utils';
 import React from 'react';
-import { CreateUserPortafolioInput } from '../../../../API';
+import { EditPortafolioFieldsFactory } from '../../factories/edit-portafolio-fields.factory';
+import { REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
+import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
 
-const RegisterPortafolioAsset = ({onSubmit}) => {
+interface Props {
+  onSubmit: () => void;
+  asset: UserPortafolio
+}
 
-  const [symbols, setSymbols] = useState<FormSelectorOption[]>([]);
+const EditPortafolioAsset = ({ onSubmit, asset }: Props) => {
 
-  const { handleSubmit, reset, control, getValues, setValue } = useForm<RegisterPortafolioForm>({
+  const { handleSubmit, reset, control, setValue } = useForm<EditPortafolioForm>({
     mode: 'onChange',
     defaultValues: {
-      assetType: '',
-      action: '',
-      assetActionDate: null,
-      assetSymbol: EMPTY_SYMBOL_SELECTOR,
+      action: PortafolioAction[asset.action],
+      assetActionDate: new Date(asset.action_date),
       mode: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity,
-      assetQuantity: 0,
+      assetQuantity: asset.asset_quantity,
       dollarAmount: 0,
-      assetPrice: 0,
+      assetPrice: asset.current_asset_price,
       estimatedAssetQuantity: 0,
-      estimatedAssetPrice: 0
+      estimatedAssetPrice: asset.asset_quantity * asset.current_asset_price
     }
   });
 
   const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
   const userAuthService: UserAuthService = useUserAuthService();
 
-  const [assetType, assetSymbol, mode, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
-    name: ["assetType", "assetSymbol", "mode", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
+  /*const [ mode, dollarAmount, assetPrice, assetQuantity, assetActionDate] = useWatch({
+    name: [ "mode", "dollarAmount", "assetPrice", "assetQuantity", "assetActionDate"],
+    control
+  });*/
+
+  const [mode, dollarAmount] = useWatch({
+    name: ["mode", "dollarAmount"],
     control
   });
 
+  const assetPrice = useWatch({
+    name: "assetPrice",
+    control,
+    defaultValue: asset.current_asset_price
+  });
+
+  const assetQuantity = useWatch({
+    name: "assetQuantity",
+    control,
+    defaultValue:  asset.asset_quantity
+  });
+
+  const assetActionDate = useWatch({
+    name: "assetActionDate",
+    control,
+    defaultValue: new Date(asset.action_date)
+  });
+
   useEffect(() => {
-    getData();
-    reset();
+    reset(
+      {
+        action: PortafolioAction[asset.action],
+        assetActionDate: new Date(asset.action_date),
+        mode: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity,
+        assetQuantity: asset.asset_quantity,
+        dollarAmount: 0,
+        assetPrice: asset.current_asset_price,
+        estimatedAssetQuantity: 0,
+        estimatedAssetPrice: asset.asset_quantity * asset.current_asset_price
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -65,40 +96,19 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
   }, [assetQuantity, dollarAmount])
 
   useEffect(() => {
-    setValue('assetSymbol', EMPTY_SYMBOL_SELECTOR);
-    fetchSymbols();
-  }, [assetType])
-
-  useEffect(() => {
     fetchPrice();
-  }, [assetActionDate, assetSymbol]);
+  }, [assetActionDate]);
 
-  const fields = RegisterPortafolioFieldsFactory.getRegisterFields(mode, symbols);
+  const fields = EditPortafolioFieldsFactory.getEditFields(mode);
 
   const fetchPrice = async () => {
-    if (!assetType?.length || !assetActionDate || !assetSymbol?.id.length) {
+    /*if (!assetActionDate) {
       return;
     }
 
-    const price = await registerPortafolioService.getPrice(SymbolType[assetType], assetActionDate, assetSymbol.id);
+    const price = await registerPortafolioService.getPrice(SymbolType[asset.symbol.type], assetActionDate, asset.symbol.id);
 
-    setValue("assetPrice", price);
-  }
-
-  const fetchSymbols = async () => {
-
-    if (!assetType?.length) {
-      return;
-    }
-
-    const symbols = await registerPortafolioService.getSymbols(SymbolType[assetType]);
-    const mappedSymbols = symbols.map(symbol => ({ id: symbol.id, label: symbol.displaySymbol}));
-    mappedSymbols.unshift(EMPTY_SYMBOL_SELECTOR);
-    setSymbols(mappedSymbols);
-  }
-
-  const getData = async () => {
-    fetchSymbols();
+    setValue("assetPrice", price);*/
   }
 
   const calculateAssetQuantity = (): number => {
@@ -119,14 +129,14 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
     return assetQuantity * assetPrice;
   }
 
-  const handlePortafolioSubmit = (data: RegisterPortafolioForm) => {
+  const handlePortafolioSubmit = (data: EditPortafolioForm) => {
     console.log('to submit data: ', data);
 
     if(!userAuthService.currentUser) {
       return ;
     }
 
-    const assetToAdd: CreateUserPortafolioInput = {
+    /*const assetToAdd: CreateUserPortafolioInput = {
       user: userAuthService.currentUser.email,
       owner: userAuthService.currentUser.username,
       action: PortafolioAction[data.action],
@@ -139,11 +149,11 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
     registerPortafolioService.addAssetToPortafolio(assetToAdd).then(() => {
       onSubmit();
       reset();
-    });
+    });*/
   }
 
   return (
-    <div className={styles['register-portafolio-asset']}>
+    <div className={styles['edit-portafolio-asset']}>
       <form >
         <Grid container spacing={4}>
           {fields.map((item, index) => (
@@ -172,4 +182,4 @@ const RegisterPortafolioAsset = ({onSubmit}) => {
   );
 }
 
-export default RegisterPortafolioAsset;
+export default EditPortafolioAsset;
