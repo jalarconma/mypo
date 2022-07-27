@@ -6,27 +6,41 @@ import Grid from '@mui/material/Grid';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Collapse from '@mui/material/Collapse';
 
 import { PortafolioAction, UserPortafolio } from "../../../../models";
 import { useUserPortafolioListService } from '../../../../core/hooks/use-user-portafolio-list-service';
 import SpanNumbericRounded from '../../../../shared/components/span-numeric-rounded/SpanNumericRounded';
-import Collapse from '@mui/material/Collapse';
 import EditPortafolioAsset from '../edit-portafolio-asset/EditPortafolioAsset';
+import { SubmitPortafolioState } from '../../models/submit-portafolio-state';
+import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
+import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
+import { UserAuthService } from '../../../../authentication/interfaces/user-auth.interface';
+import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
+import AlertDialog from '../../../../shared/components/alert-dialog/AlertDialog';
+import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
+import { UpdateUserPortafolioInput } from '../../../../API';
+import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
+import { StringUtils } from '../../../../shared/utils/string-utils';
 
 interface Props {
-  asset: UserPortafolio
+  asset: UserPortafolio;
+  onEdit: () => void;
 }
 
-const PortafolioHistoryItem = ({ asset }: Props) => {
+const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
 
   const [fullAsset, setFullAsset] = useState<UserPortafolio>(asset);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
+  const [ submitState, setSubmitState ] = useState<SubmitPortafolioState>(new SubmitPortafolioState(false, undefined));
 
   useEffect(() => {
     fetchFullSymbol();
   }, []);
 
   const userPortafolioListService = useUserPortafolioListService();
+  const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
+  const userAuthService: UserAuthService = useUserAuthService();
 
   const getActionClassName = (): string => {
 
@@ -54,8 +68,38 @@ const PortafolioHistoryItem = ({ asset }: Props) => {
     setShowEditForm(prev => !prev);
   }
 
-  const submitPortafolioHandler = () => {
+  const editPortafolioHandler = async (data: EditPortafolioForm) => {
+    console.log('to submit data: ', data);
+    setSubmitState(submitState.onSubmit(data));
+  }
 
+  const submitEditedAssset = async () => {
+
+    if(!userAuthService.currentUser) {
+      return ;
+    }
+
+    const data = submitState.getSubmitData() as EditPortafolioForm;
+
+    if(!data || !asset.id) {
+      return;
+    }
+
+    const assetToEdit: UpdateUserPortafolioInput = {
+      id: asset.id,
+      user: asset.user,
+      owner: asset.owner,
+      action: PortafolioAction[data.action],
+      asset_quantity: RegisterPortafolioFieldsFactory.getAssetQuantity(data),
+      action_date: StringUtils.dateToValidString(data.assetActionDate),
+      current_asset_price: data.assetPrice,
+      userPortafolioSymbolId: asset.userPortafolioSymbolId
+    };
+
+    await registerPortafolioService.editPortafolioAsset(assetToEdit);
+    setSubmitState(submitState.onCancel());
+    toggleEditPortafolio();
+    onEdit();
   }
 
   return (
@@ -88,7 +132,8 @@ const PortafolioHistoryItem = ({ asset }: Props) => {
             </IconButton>
           )}
       </div>
-      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={submitPortafolioHandler} asset={fullAsset} formOpened={showEditForm}/></Collapse>
+      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={editPortafolioHandler} asset={fullAsset} formOpened={showEditForm}/></Collapse>
+      <AlertDialog open={submitState.isOpened()} onClose={() => setSubmitState(submitState.onCancel())} onContinue={submitEditedAssset}/>
     </>
   )
 }

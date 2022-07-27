@@ -18,7 +18,7 @@ import { REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-p
 import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
 
 interface Props {
-  onSubmit: () => void;
+  onSubmit: (data: EditPortafolioForm) => void;
   asset: UserPortafolio;
   formOpened: boolean
 }
@@ -43,9 +43,6 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
       estimatedAssetPrice: asset.asset_quantity * asset.current_asset_price
     }
   });
-
-  const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
-  const userAuthService: UserAuthService = useUserAuthService();
 
   const [ mode, dollarAmount, assetPrice, assetQuantity] = useWatch({
     name: [ "mode", "dollarAmount", "assetPrice", "assetQuantity"],
@@ -101,32 +98,13 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
     return assetQuantity * assetPrice;
   }
 
-  const handlePortafolioSubmit = (data: EditPortafolioForm) => {
-    console.log('to submit data: ', data);
-
-    if(!userAuthService.currentUser) {
-      return ;
-    }
-
-    /*const assetToAdd: CreateUserPortafolioInput = {
-      user: userAuthService.currentUser.email,
-      owner: userAuthService.currentUser.username,
-      action: PortafolioAction[data.action],
-      asset_quantity: RegisterPortafolioFieldsFactory.getAssetQuantity(data),
-      action_date: StringUtils.dateToValidString(data.assetActionDate),
-      current_asset_price: data.assetPrice,
-      userPortafolioSymbolId: data.assetSymbol.id
-    };
-
-    registerPortafolioService.addAssetToPortafolio(assetToAdd).then(() => {
-      onSubmit();
-      reset();
-    });*/
-  }
-
   const handleReset = (): void => {
     setResetting(true);
     reset();
+  }
+
+  const handlePortafolioSubmit = (data: EditPortafolioForm): void => {
+    onSubmit(data);
   }
 
   return (

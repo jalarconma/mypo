@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { usePortafolioHistoryService } from '../../../../core/hooks/use-portafolio-history-service';
 import { UserPortafolio } from "../../../../models";
+import AlertDialog from "../../../../shared/components/alert-dialog/AlertDialog";
 import InfoContainer from "../../../../shared/components/info-container/InfoContainer";
 import PortafolioHistoryItem from "../../components/portafolio-history-item/PortafolioHistoryItem";
 
@@ -30,12 +31,16 @@ const PortafolioActionsHistory = ({ symbolId }: Props) => {
     setUserPortafolio(userPortafolio.data.listUserPortafolios.items);
   }
 
+  const handleEditPortafolioItem = (): void => {
+    fetchPortafolioHistory();
+  }
+
   return (
     <Stack spacing={2}>
       {
         userPortafolio.map((asset: UserPortafolio) => (
           <InfoContainer key={asset.id}>
-            <PortafolioHistoryItem asset={asset} />
+            <PortafolioHistoryItem asset={asset} onEdit={handleEditPortafolioItem}/>
           </InfoContainer>
         ))
       }

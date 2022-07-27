@@ -8,9 +8,9 @@ import { SymbolType, Symbol, UserPortafolio } from '../../models';
 import { RegisterPortafolioService } from '../interfaces/register-portafolio.service';
 import { StringUtils } from '../../shared/utils/string-utils';
 
-import { createUserPortafolio } from '../../graphql/mutations';
+import { createUserPortafolio, updateUserPortafolio } from '../../graphql/mutations';
 import { graphqlQueryWrapper } from '../utils/graphql-query-wrapper';
-import { CreateUserPortafolioInput } from '../../API';
+import { CreateUserPortafolioInput, UpdateUserPortafolioInput } from '../../API';
 
 export const RegisterPortafolioContext = ServicesContextualizer.createContext(ProvidedServices.RegisterPortafolioServiceImpl);
 
@@ -60,7 +60,18 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
       });
 
       return result;
-    }
+    },
+    editPortafolioAsset(asset: UpdateUserPortafolioInput): Promise<GraphQLResult<any>> {
+      setLoading(true);
+      const result =  graphqlQueryWrapper({ query: updateUserPortafolio, variables: { input: asset}});
+
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false);
+        throw new Error(err);
+      });
+
+      return result;
+    },
   }
 
   return (
