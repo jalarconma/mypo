@@ -1,6 +1,6 @@
 import styles from './PortafolioDetailsPage.module.scss';
 
-import React from "react";
+import React, { useState } from "react";
 
 import Stack from "@mui/material/Stack";
 
@@ -10,8 +10,15 @@ import PortafolioInvestmentDetails from '../../containers/portafolio-investment-
 import PortafolioActionsHistory from '../../containers/portafolio-actions-history/PortafolioActionsHistory';
 
 const PortafolioDetailsPage = () => {
+  console.log('PortafolioDetailsPage re-rendered')
   const location = useLocation();
-  const currentTotalizedAsset: UserPortafolioTotalItem = location.state as UserPortafolioTotalItem;
+
+  const [currentTotalizedAsset, setCurrentTotalizedAsset] = useState<UserPortafolioTotalItem>(location.state as UserPortafolioTotalItem);
+
+  const editedPortafolioHandler = () => {
+    console.log('PortafolioDetailsPage edited')
+    setCurrentTotalizedAsset((prev) => ({...prev}))
+  }
 
   return (
     <Stack
@@ -21,7 +28,7 @@ const PortafolioDetailsPage = () => {
       <span className={styles['title']}>{currentTotalizedAsset.symbol.displaySymbol}</span>
       <span className={styles['current-price']}>$ {currentTotalizedAsset.assetCurrentPrice}</span>
       <PortafolioInvestmentDetails asset={currentTotalizedAsset}/>
-      <PortafolioActionsHistory symbolId={currentTotalizedAsset.symbol.id}/>
+      <PortafolioActionsHistory symbolId={currentTotalizedAsset.symbol.id} onEditedPortafolio={editedPortafolioHandler} />
     </Stack>
   )
 }

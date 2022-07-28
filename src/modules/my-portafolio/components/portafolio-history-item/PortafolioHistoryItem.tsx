@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Collapse from '@mui/material/Collapse';
 
-import { PortafolioAction, UserPortafolio } from "../../../../models";
+import { PortafolioAction } from "../../../../models";
 import { useUserPortafolioListService } from '../../../../core/hooks/use-user-portafolio-list-service';
 import SpanNumbericRounded from '../../../../shared/components/span-numeric-rounded/SpanNumericRounded';
 import EditPortafolioAsset from '../edit-portafolio-asset/EditPortafolioAsset';
@@ -19,7 +19,7 @@ import { UserAuthService } from '../../../../authentication/interfaces/user-auth
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import AlertDialog from '../../../../shared/components/alert-dialog/AlertDialog';
 import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
-import { UpdateUserPortafolioInput } from '../../../../API';
+import { UpdateUserPortafolioInput, UserPortafolio } from '../../../../API';
 import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
 import { StringUtils } from '../../../../shared/utils/string-utils';
 
@@ -29,6 +29,7 @@ interface Props {
 }
 
 const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
+  console.log('PortafolioHistoryItem asset: ', asset)
 
   const [fullAsset, setFullAsset] = useState<UserPortafolio>(asset);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
@@ -37,6 +38,10 @@ const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
   useEffect(() => {
     fetchFullSymbol();
   }, []);
+
+  useEffect(() => {
+    fetchFullSymbol();
+  }, [asset]);
 
   const userPortafolioListService = useUserPortafolioListService();
   const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
@@ -93,7 +98,8 @@ const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
       asset_quantity: RegisterPortafolioFieldsFactory.getAssetQuantity(data),
       action_date: StringUtils.dateToValidString(data.assetActionDate),
       current_asset_price: data.assetPrice,
-      userPortafolioSymbolId: asset.userPortafolioSymbolId
+      userPortafolioSymbolId: asset.userPortafolioSymbolId,
+      _version: asset._version
     };
 
     await registerPortafolioService.editPortafolioAsset(assetToEdit);

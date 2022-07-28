@@ -1,4 +1,4 @@
-import { UserPortafolio } from "../../../models"
+import { UserPortafolio } from "../../../API"
 
 export interface UserPortafolioQuery {
   listUserPortafolios: {

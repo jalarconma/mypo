@@ -1,17 +1,17 @@
 import Stack from "@mui/material/Stack";
 import React, { useEffect, useState } from "react";
 
+import { UserPortafolio } from "../../../../API";
 import { usePortafolioHistoryService } from '../../../../core/hooks/use-portafolio-history-service';
-import { UserPortafolio } from "../../../../models";
-import AlertDialog from "../../../../shared/components/alert-dialog/AlertDialog";
 import InfoContainer from "../../../../shared/components/info-container/InfoContainer";
 import PortafolioHistoryItem from "../../components/portafolio-history-item/PortafolioHistoryItem";
 
 interface Props {
-  symbolId: string
+  symbolId: string;
+  onEditedPortafolio: () => void;
 }
 
-const PortafolioActionsHistory = ({ symbolId }: Props) => {
+const PortafolioActionsHistory = ({ symbolId, onEditedPortafolio }: Props) => {
 
   const portafolioHistoryService = usePortafolioHistoryService();
 
@@ -33,6 +33,7 @@ const PortafolioActionsHistory = ({ symbolId }: Props) => {
 
   const handleEditPortafolioItem = (): void => {
     fetchPortafolioHistory();
+    onEditedPortafolio();
   }
 
   return (

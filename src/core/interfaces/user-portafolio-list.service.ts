@@ -1,4 +1,4 @@
-import { Symbol } from '../../models';
+import { Symbol } from '../../API';
 import { UserPortafolioTotalItem } from '../../modules/my-portafolio/interfaces/user-portafolio-total-item';
 
 export interface UserPortafolioListService {

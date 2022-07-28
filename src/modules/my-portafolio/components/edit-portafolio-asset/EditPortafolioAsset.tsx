@@ -7,11 +7,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
-import { PortafolioAction, SymbolType, UserPortafolio } from '../../../../models';
-import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
-import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
-import { UserAuthService } from '../../../../authentication/interfaces/user-auth.interface';
-import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
+import { PortafolioAction, UserPortafolio } from '../../../../models';
 import FormFieldItem from '../form-field-item/FormFieldItem';
 import { EditPortafolioFieldsFactory } from '../../factories/edit-portafolio-fields.factory';
 import { REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
@@ -27,8 +23,8 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
 
   console.log('re rendering EditPortafolioAsset');
 
-  const [ initialRendering, setInitialRendering ] = useState<boolean>(true);
-  const [ resetting, setResetting ] = useState<boolean>(false);
+  const [initialRendering, setInitialRendering] = useState<boolean>(true);
+  const [resetting, setResetting] = useState<boolean>(false);
 
   const { handleSubmit, reset, control, setValue } = useForm<EditPortafolioForm>({
     mode: 'onChange',
@@ -44,25 +40,38 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
     }
   });
 
-  const [ mode, dollarAmount, assetPrice, assetQuantity] = useWatch({
-    name: [ "mode", "dollarAmount", "assetPrice", "assetQuantity"],
+  const [mode, dollarAmount, assetPrice, assetQuantity] = useWatch({
+    name: ["mode", "dollarAmount", "assetPrice", "assetQuantity"],
     control
   });
 
   useEffect(() => {
-    if(!formOpened) {
+    if (!formOpened) {
       reset();
     }
   }, [formOpened])
 
   useEffect(() => {
+    handleReset({
+      action: PortafolioAction[asset.action],
+      assetActionDate: new Date(asset.action_date),
+      mode: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity,
+      assetQuantity: asset.asset_quantity,
+      dollarAmount: 0,
+      assetPrice: asset.current_asset_price,
+      estimatedAssetQuantity: 0,
+      estimatedAssetPrice: asset.asset_quantity * asset.current_asset_price
+    });
+  }, [asset])
 
-    if(initialRendering || !formOpened) {
+  useEffect(() => {
+
+    if (initialRendering || !formOpened) {
       setInitialRendering(false);
       return;
     }
 
-    if(resetting) {
+    if (resetting) {
       setValue("dollarAmount", 0);
       setValue("assetQuantity", asset.asset_quantity);
       setResetting(false);
@@ -82,11 +91,11 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
 
   const calculateAssetQuantity = (): number => {
 
-    if(!dollarAmount || !assetPrice) {
+    if (!dollarAmount || !assetPrice) {
       return 0;
     }
 
-    return dollarAmount/assetPrice;
+    return dollarAmount / assetPrice;
   }
 
   const calculateAssetPrice = (): number => {
@@ -98,9 +107,9 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
     return assetQuantity * assetPrice;
   }
 
-  const handleReset = (): void => {
+  const handleReset = (value: EditPortafolioForm | undefined = undefined): void => {
     setResetting(true);
-    reset();
+    reset(value);
   }
 
   const handlePortafolioSubmit = (data: EditPortafolioForm): void => {
@@ -130,7 +139,7 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
           alignItems="center"
           padding={1}>
           <Button onClick={handleSubmit(handlePortafolioSubmit)}>Submit</Button>
-          <Button onClick={handleReset} variant={"outlined"}>Reset</Button>
+          <Button onClick={() => handleReset()} variant={"outlined"}>Reset</Button>
         </Stack>
       </form>
     </div>
