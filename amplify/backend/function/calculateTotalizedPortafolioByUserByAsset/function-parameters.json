@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "api": {
+      "mypov1": [
+        "Query"
+      ]
+    },
+    "function": {
+      "getAssetPriceByDate": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

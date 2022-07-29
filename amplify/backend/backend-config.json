@@ -54,6 +54,14 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "calculateTotalizedPortafolioByUserByAsset",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
@@ -103,6 +111,29 @@
       "dependsOn": []
     },
     "calculateTotalizedPortafolioByUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "mypov1",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "getAssetPriceByDate",
+          "attributes": [
+            "Name"
+          ]
+        }
+      ]
+    },
+    "calculateTotalizedPortafolioByUserByAsset": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",

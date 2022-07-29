@@ -20,6 +20,16 @@
           "read"
         ]
       }
+    },
+    "/portafolio/totalized/by-user/by-asset": {
+      "name": "/portafolio/totalized/by-user/by-asset",
+      "lambdaFunction": "calculateTotalizedPortafolioByUserByAsset",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }
