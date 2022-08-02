@@ -10,7 +10,6 @@ export type CreateUserPortafolioInput = {
   asset_quantity: number,
   action_date: string,
   current_asset_price: number,
-  _version?: number | null,
   userPortafolioSymbolId: string,
 };
 
@@ -118,9 +117,6 @@ export type UserPortafolio = {
   symbol: Symbol,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
   userPortafolioSymbolId: string,
 };
 
@@ -133,9 +129,6 @@ export type Symbol = {
   description?: string | null,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export enum SymbolType {
@@ -152,20 +145,17 @@ export type UpdateUserPortafolioInput = {
   asset_quantity?: number | null,
   action_date?: string | null,
   current_asset_price?: number | null,
-  _version?: number | null,
   userPortafolioSymbolId?: string | null,
 };
 
 export type DeleteUserPortafolioInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateCurrentPriceInput = {
   id?: string | null,
   price: number,
   updated: boolean,
-  _version?: number | null,
   currentPriceSymbolId: string,
 };
 
@@ -193,9 +183,6 @@ export type CurrentPrice = {
   symbol: Symbol,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
   currentPriceSymbolId: string,
 };
 
@@ -203,13 +190,11 @@ export type UpdateCurrentPriceInput = {
   id: string,
   price?: number | null,
   updated?: boolean | null,
-  _version?: number | null,
   currentPriceSymbolId?: string | null,
 };
 
 export type DeleteCurrentPriceInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateSymbolInput = {
@@ -218,7 +203,6 @@ export type CreateSymbolInput = {
   type: SymbolType,
   displaySymbol: string,
   description?: string | null,
-  _version?: number | null,
 };
 
 export type ModelSymbolConditionInput = {
@@ -242,12 +226,10 @@ export type UpdateSymbolInput = {
   type?: SymbolType | null,
   displaySymbol?: string | null,
   description?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteSymbolInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type ModelUserPortafolioFilterInput = {
@@ -268,7 +250,6 @@ export type ModelUserPortafolioConnection = {
   __typename: "ModelUserPortafolioConnection",
   items:  Array<UserPortafolio | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelCurrentPriceFilterInput = {
@@ -285,7 +266,6 @@ export type ModelCurrentPriceConnection = {
   __typename: "ModelCurrentPriceConnection",
   items:  Array<CurrentPrice | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelSymbolFilterInput = {
@@ -303,7 +283,6 @@ export type ModelSymbolConnection = {
   __typename: "ModelSymbolConnection",
   items:  Array<Symbol | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type CreateUserPortafolioMutationVariables = {
@@ -330,15 +309,9 @@ export type CreateUserPortafolioMutation = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -367,15 +340,9 @@ export type UpdateUserPortafolioMutation = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -404,15 +371,9 @@ export type DeleteUserPortafolioMutation = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -437,15 +398,9 @@ export type CreateCurrentPriceMutation = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -470,15 +425,9 @@ export type UpdateCurrentPriceMutation = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -503,15 +452,9 @@ export type DeleteCurrentPriceMutation = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -531,9 +474,6 @@ export type CreateSymbolMutation = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -552,9 +492,6 @@ export type UpdateSymbolMutation = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -573,9 +510,6 @@ export type DeleteSymbolMutation = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -602,15 +536,9 @@ export type GetUserPortafolioQuery = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -635,44 +563,9 @@ export type ListUserPortafoliosQuery = {
       current_asset_price: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       userPortafolioSymbolId: string,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncUserPortafoliosQueryVariables = {
-  filter?: ModelUserPortafolioFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncUserPortafoliosQuery = {
-  syncUserPortafolios?:  {
-    __typename: "ModelUserPortafolioConnection",
-    items:  Array< {
-      __typename: "UserPortafolio",
-      id: string,
-      user: string,
-      owner: string,
-      action: PortafolioAction,
-      asset_quantity: number,
-      action_date: string,
-      current_asset_price: number,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      userPortafolioSymbolId: string,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -695,15 +588,9 @@ export type GetCurrentPriceQuery = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -724,40 +611,9 @@ export type ListCurrentPricesQuery = {
       updated: boolean,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       currentPriceSymbolId: string,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncCurrentPricesQueryVariables = {
-  filter?: ModelCurrentPriceFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncCurrentPricesQuery = {
-  syncCurrentPrices?:  {
-    __typename: "ModelCurrentPriceConnection",
-    items:  Array< {
-      __typename: "CurrentPrice",
-      id: string,
-      price: number,
-      updated: boolean,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      currentPriceSymbolId: string,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -775,9 +631,6 @@ export type GetSymbolQuery = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -799,40 +652,8 @@ export type ListSymbolsQuery = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncSymbolsQueryVariables = {
-  filter?: ModelSymbolFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncSymbolsQuery = {
-  syncSymbols?:  {
-    __typename: "ModelSymbolConnection",
-    items:  Array< {
-      __typename: "Symbol",
-      id: string,
-      symbol: string,
-      type: SymbolType,
-      displaySymbol: string,
-      description?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -859,15 +680,9 @@ export type OnCreateUserPortafolioSubscription = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -895,15 +710,9 @@ export type OnUpdateUserPortafolioSubscription = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -931,15 +740,9 @@ export type OnDeleteUserPortafolioSubscription = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     userPortafolioSymbolId: string,
   } | null,
 };
@@ -959,15 +762,9 @@ export type OnCreateCurrentPriceSubscription = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -987,15 +784,9 @@ export type OnUpdateCurrentPriceSubscription = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -1015,15 +806,9 @@ export type OnDeleteCurrentPriceSubscription = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     currentPriceSymbolId: string,
   } | null,
 };
@@ -1038,9 +823,6 @@ export type OnCreateSymbolSubscription = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1054,9 +836,6 @@ export type OnUpdateSymbolSubscription = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1070,8 +849,5 @@ export type OnDeleteSymbolSubscription = {
     description?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };

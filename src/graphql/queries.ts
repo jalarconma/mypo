@@ -20,15 +20,9 @@ export const getUserPortafolio = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       userPortafolioSymbolId
     }
   }
@@ -50,46 +44,9 @@ export const listUserPortafolios = /* GraphQL */ `
         current_asset_price
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         userPortafolioSymbolId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncUserPortafolios = /* GraphQL */ `
-  query SyncUserPortafolios(
-    $filter: ModelUserPortafolioFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncUserPortafolios(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        user
-        owner
-        action
-        asset_quantity
-        action_date
-        current_asset_price
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        userPortafolioSymbolId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -107,15 +64,9 @@ export const getCurrentPrice = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       currentPriceSymbolId
     }
   }
@@ -133,42 +84,9 @@ export const listCurrentPrices = /* GraphQL */ `
         updated
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         currentPriceSymbolId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncCurrentPrices = /* GraphQL */ `
-  query SyncCurrentPrices(
-    $filter: ModelCurrentPriceFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncCurrentPrices(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        price
-        updated
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        currentPriceSymbolId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -182,9 +100,6 @@ export const getSymbol = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -203,42 +118,8 @@ export const listSymbols = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncSymbols = /* GraphQL */ `
-  query SyncSymbols(
-    $filter: ModelSymbolFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncSymbols(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        symbol
-        type
-        displaySymbol
-        description
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;

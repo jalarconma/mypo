@@ -23,15 +23,9 @@ export const createUserPortafolio = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       userPortafolioSymbolId
     }
   }
@@ -57,15 +51,9 @@ export const updateUserPortafolio = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       userPortafolioSymbolId
     }
   }
@@ -91,15 +79,9 @@ export const deleteUserPortafolio = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       userPortafolioSymbolId
     }
   }
@@ -121,15 +103,9 @@ export const createCurrentPrice = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       currentPriceSymbolId
     }
   }
@@ -151,15 +127,9 @@ export const updateCurrentPrice = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       currentPriceSymbolId
     }
   }
@@ -181,15 +151,9 @@ export const deleteCurrentPrice = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       currentPriceSymbolId
     }
   }
@@ -207,9 +171,6 @@ export const createSymbol = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -226,9 +187,6 @@ export const updateSymbol = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -245,9 +203,6 @@ export const deleteSymbol = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;

@@ -34,13 +34,9 @@ const listUserPortafolios = /* GraphQL */ `
         current_asset_price
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         userPortafolioSymbolId
       }
       nextToken
-      startedAt
     }
   }
 `;
@@ -55,9 +51,6 @@ const getSymbol = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -179,6 +172,16 @@ function groupAssetsBySymbol(assets) {
 }
 
 async function calculateTotalizedAssets(symbol, assets) {
+
+  if (!assets) {
+    return {
+      symbol,
+      assetQuantity: 0,
+      assetMidPrice: 0,
+      assetCurrentPrice: 0
+    };
+  }
+  
   const assetPriceQuery = await executeLambda(FUNCTION_GETASSETPRICEBYDATE_NAME, JSON.stringify({
     "queryStringParameters": {
       "assetType": symbol.type,

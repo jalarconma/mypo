@@ -35,11 +35,11 @@
         },
         "calculateTotalizedPortafolioByUser": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-43747857423337576e68-build.zip"
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-6c727063453348687555-build.zip"
         },
         "calculateTotalizedPortafolioByUserByAsset": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUserByAsset-714672316d622f455437-build.zip"
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUserByAsset-69495248597037526e34-build.zip"
         }
       },
       "auth": {

@@ -23,6 +23,7 @@ import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
 import { DeleteUserPortafolioInput, Symbol, UpdateUserPortafolioInput, UserPortafolio } from '../../../../API';
 import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
 import { StringUtils } from '../../../../shared/utils/string-utils';
+import { DeletePortafolioState } from '../../models/delete-portafolio-state';
 
 interface Props {
   asset: UserPortafolio;
@@ -36,6 +37,7 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
   const [fullAsset, setFullAsset] = useState<UserPortafolio>(asset);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
   const [ submitState, setSubmitState ] = useState<SubmitPortafolioState>(new SubmitPortafolioState(false, undefined));
+  const [ deleteState, setDeleteState ] = useState<DeletePortafolioState>(new DeletePortafolioState(false, undefined));
 
   useEffect(() => {
     fetchFullSymbol();
@@ -80,17 +82,42 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
     setSubmitState(submitState.onSubmit(data));
   }
 
-  const deleteAssetHandler = async () => {
-    const assetToDelete: DeleteUserPortafolioInput = {
-      id: asset.id,
-      _version: asset._version
+  const deleteAssetHandler = () => {
+    console.log('to delete data: ', asset);
+    setDeleteState(deleteState.onDelete(asset.id));
+  }
+
+  const cancelDialog = () => {
+    setSubmitState(submitState.onCancel());
+    setDeleteState(deleteState.onCancel());
+  }
+
+  const continueAssetAction = async () => {
+    
+    if(submitState.getSubmitData()) {
+      submitEditedAsset();
+
+    } else if(deleteState.getDeleteId()) {
+      onDeleteAsset();
+    }
+  }
+
+  const onDeleteAsset = async () => {
+    
+    if(!userAuthService.currentUser) {
+      return ;
     }
 
+    const assetToDelete: DeleteUserPortafolioInput = {
+      id: asset.id
+    };
+
     await registerPortafolioService.deletePortafolioAsset(assetToDelete);
+    setDeleteState(deleteState.onCancel());
     onDelete();
   }
 
-  const submitEditedAssset = async () => {
+  const submitEditedAsset = async () => {
 
     if(!userAuthService.currentUser) {
       return ;
@@ -110,8 +137,7 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
       asset_quantity: RegisterPortafolioFieldsFactory.getAssetQuantity(data),
       action_date: StringUtils.dateToValidString(data.assetActionDate),
       current_asset_price: data.assetPrice,
-      userPortafolioSymbolId: asset.userPortafolioSymbolId,
-      _version: asset._version
+      userPortafolioSymbolId: asset.userPortafolioSymbolId
     };
 
     await registerPortafolioService.editPortafolioAsset(assetToEdit);
@@ -158,7 +184,7 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
           )}
       </div>
       <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={editPortafolioHandler} asset={fullAsset} formOpened={showEditForm}/></Collapse>
-      <AlertDialog open={submitState.isOpened()} onClose={() => setSubmitState(submitState.onCancel())} onContinue={submitEditedAssset}/>
+      <AlertDialog open={submitState.isOpened() || deleteState.isOpened()} onClose={cancelDialog} onContinue={continueAssetAction}/>
     </>
   )
 }

@@ -1,5 +1,7 @@
-import Stack from "@mui/material/Stack";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Stack from "@mui/material/Stack";
 
 import { UserPortafolio } from "../../../../API";
 import { usePortafolioHistoryService } from '../../../../core/hooks/use-portafolio-history-service';
@@ -15,6 +17,8 @@ const PortafolioActionsHistory = ({ symbolId, onEditedPortafolio }: Props) => {
 
   const portafolioHistoryService = usePortafolioHistoryService();
 
+  const navigate = useNavigate();
+
   const [userPortafolio, setUserPortafolio] = useState<UserPortafolio[]>([]);
 
   useEffect(() => {
@@ -25,6 +29,11 @@ const PortafolioActionsHistory = ({ symbolId, onEditedPortafolio }: Props) => {
     const userPortafolio = await portafolioHistoryService.getUserPortafolioBySymbolId(symbolId);
 
     if (!userPortafolio.data) {
+      return;
+    }
+
+    if(userPortafolio.data.listUserPortafolios.items.length === 0) {
+      navigate(`/my-portafolio`);
       return;
     }
 
