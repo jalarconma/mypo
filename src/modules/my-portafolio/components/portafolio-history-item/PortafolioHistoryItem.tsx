@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Collapse from '@mui/material/Collapse';
@@ -19,16 +20,17 @@ import { UserAuthService } from '../../../../authentication/interfaces/user-auth
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import AlertDialog from '../../../../shared/components/alert-dialog/AlertDialog';
 import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
-import { UpdateUserPortafolioInput, UserPortafolio } from '../../../../API';
+import { DeleteUserPortafolioInput, Symbol, UpdateUserPortafolioInput, UserPortafolio } from '../../../../API';
 import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
 import { StringUtils } from '../../../../shared/utils/string-utils';
 
 interface Props {
   asset: UserPortafolio;
   onEdit: () => void;
+  onDelete: () => void;
 }
 
-const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
+const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
   console.log('PortafolioHistoryItem asset: ', asset)
 
   const [fullAsset, setFullAsset] = useState<UserPortafolio>(asset);
@@ -60,7 +62,7 @@ const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
   }
 
   const fetchFullSymbol = async () => {
-    const fullSymbol = await userPortafolioListService.getSymbolById(fullAsset.userPortafolioSymbolId);
+    const fullSymbol = await userPortafolioListService.getSymbolById(fullAsset.userPortafolioSymbolId) as Symbol;
 
     if (!fullSymbol) {
       return;
@@ -76,6 +78,16 @@ const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
   const editPortafolioHandler = async (data: EditPortafolioForm) => {
     console.log('to submit data: ', data);
     setSubmitState(submitState.onSubmit(data));
+  }
+
+  const deleteAssetHandler = async () => {
+    const assetToDelete: DeleteUserPortafolioInput = {
+      id: asset.id,
+      _version: asset._version
+    }
+
+    await registerPortafolioService.deletePortafolioAsset(assetToDelete);
+    onDelete();
   }
 
   const submitEditedAssset = async () => {
@@ -125,9 +137,16 @@ const PortafolioHistoryItem = ({ asset, onEdit }: Props) => {
             <SpanNumbericRounded value={fullAsset.current_asset_price} styles={styles['item-title']} startAdornment={'$'} />
           </Grid>
         </Grid>
+        {!showEditForm ?
+          (
+            <IconButton aria-label="delete" size="small" color="error" className={styles['item-action']} 
+              onClick={deleteAssetHandler} disabled={!fullAsset || !fullAsset.symbol}>
+              <DeleteIcon />
+            </IconButton>
+          ) : null}
         {showEditForm ?
           (
-            <IconButton aria-label="edit" size="small" color="primary" className={styles['item-action']} onClick={toggleEditPortafolio}>
+            <IconButton aria-label="cancel" size="small" color="primary" className={styles['item-action']} onClick={toggleEditPortafolio}>
               <CancelIcon />
             </IconButton>
           ) :

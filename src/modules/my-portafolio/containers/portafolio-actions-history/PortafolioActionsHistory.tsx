@@ -31,7 +31,12 @@ const PortafolioActionsHistory = ({ symbolId, onEditedPortafolio }: Props) => {
     setUserPortafolio(userPortafolio.data.listUserPortafolios.items);
   }
 
-  const handleEditPortafolioItem = (): void => {
+  const editPortafolioItemHandler = (): void => {
+    fetchPortafolioHistory();
+    onEditedPortafolio();
+  }
+
+  const deletePortafolioItemHandler = (): void => {
     fetchPortafolioHistory();
     onEditedPortafolio();
   }
@@ -41,7 +46,7 @@ const PortafolioActionsHistory = ({ symbolId, onEditedPortafolio }: Props) => {
       {
         userPortafolio.map((asset: UserPortafolio) => (
           <InfoContainer key={asset.id}>
-            <PortafolioHistoryItem asset={asset} onEdit={handleEditPortafolioItem}/>
+            <PortafolioHistoryItem asset={asset} onEdit={editPortafolioItemHandler} onDelete={deletePortafolioItemHandler}/>
           </InfoContainer>
         ))
       }

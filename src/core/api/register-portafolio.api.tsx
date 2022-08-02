@@ -8,9 +8,9 @@ import { SymbolType, Symbol, UserPortafolio } from '../../models';
 import { RegisterPortafolioService } from '../interfaces/register-portafolio.service';
 import { StringUtils } from '../../shared/utils/string-utils';
 
-import { createUserPortafolio, updateUserPortafolio } from '../../graphql/mutations';
+import { createUserPortafolio, deleteUserPortafolio, updateUserPortafolio } from '../../graphql/mutations';
 import { graphqlQueryWrapper } from '../utils/graphql-query-wrapper';
-import { CreateUserPortafolioInput, UpdateUserPortafolioInput } from '../../API';
+import { CreateUserPortafolioInput, DeleteUserPortafolioInput, UpdateUserPortafolioInput } from '../../API';
 
 export const RegisterPortafolioContext = ServicesContextualizer.createContext(ProvidedServices.RegisterPortafolioServiceImpl);
 
@@ -64,6 +64,17 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
     editPortafolioAsset(asset: UpdateUserPortafolioInput): Promise<GraphQLResult<any>> {
       setLoading(true);
       const result =  graphqlQueryWrapper({ query: updateUserPortafolio, variables: { input: asset}});
+
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false);
+        throw new Error(err);
+      });
+
+      return result;
+    },
+    deletePortafolioAsset(asset: DeleteUserPortafolioInput): Promise<GraphQLResult<any>>  {
+      setLoading(true);
+      const result =  graphqlQueryWrapper({ query: deleteUserPortafolio, variables: { input: asset}});
 
       result.then(() => setLoading(false)).catch((err) => {
         setLoading(false);
