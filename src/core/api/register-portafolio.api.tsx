@@ -11,6 +11,8 @@ import { StringUtils } from '../../shared/utils/string-utils';
 import { createUserPortafolio, deleteUserPortafolio, updateUserPortafolio } from '../../graphql/mutations';
 import { graphqlQueryWrapper } from '../utils/graphql-query-wrapper';
 import { CreateUserPortafolioInput, DeleteUserPortafolioInput, UpdateUserPortafolioInput } from '../../API';
+import { UserPortafolioEditQuery } from '../../modules/my-portafolio/interfaces/user-portafolio-edit-query';
+import { UserPortafolioDeleteQuery } from '../../modules/my-portafolio/interfaces/user-portafolio-delete-query';
 
 export const RegisterPortafolioContext = ServicesContextualizer.createContext(ProvidedServices.RegisterPortafolioServiceImpl);
 
@@ -61,9 +63,9 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
 
       return result;
     },
-    editPortafolioAsset(asset: UpdateUserPortafolioInput): Promise<GraphQLResult<any>> {
+    editPortafolioAsset(asset: UpdateUserPortafolioInput): Promise<GraphQLResult<UserPortafolioEditQuery>> {
       setLoading(true);
-      const result =  graphqlQueryWrapper({ query: updateUserPortafolio, variables: { input: asset}});
+      const result =  graphqlQueryWrapper<UserPortafolioEditQuery>({ query: updateUserPortafolio, variables: { input: asset}});
 
       result.then(() => setLoading(false)).catch((err) => {
         setLoading(false);
@@ -72,9 +74,9 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
 
       return result;
     },
-    deletePortafolioAsset(asset: DeleteUserPortafolioInput): Promise<GraphQLResult<any>>  {
+    deletePortafolioAsset(asset: DeleteUserPortafolioInput): Promise<GraphQLResult<UserPortafolioDeleteQuery>>  {
       setLoading(true);
-      const result =  graphqlQueryWrapper({ query: deleteUserPortafolio, variables: { input: asset}});
+      const result = graphqlQueryWrapper<UserPortafolioDeleteQuery>({ query: deleteUserPortafolio, variables: { input: asset}});
 
       result.then(() => setLoading(false)).catch((err) => {
         setLoading(false);

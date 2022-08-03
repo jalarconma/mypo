@@ -31,6 +31,7 @@ const MyPortafolioPage = () => {
   const [ submitState, setSubmitState ] = useState<SubmitPortafolioState>(new SubmitPortafolioState(false, undefined));
 
   useEffect(() => {
+    console.log('MyPortafolioPage did mount');
     fetchTotalizedAssets();
   }, []);
 

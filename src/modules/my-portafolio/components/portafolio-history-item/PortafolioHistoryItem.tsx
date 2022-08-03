@@ -27,8 +27,8 @@ import { DeletePortafolioState } from '../../models/delete-portafolio-state';
 
 interface Props {
   asset: UserPortafolio;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit: (editedAsset: UserPortafolio | undefined) => void;
+  onDelete: (deletedAsset: UserPortafolio | undefined) => void;
 }
 
 const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
@@ -112,9 +112,9 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
       id: asset.id
     };
 
-    await registerPortafolioService.deletePortafolioAsset(assetToDelete);
+    const result = await registerPortafolioService.deletePortafolioAsset(assetToDelete);
     setDeleteState(deleteState.onCancel());
-    onDelete();
+    onDelete(result.data?.deleteUserPortafolio);
   }
 
   const submitEditedAsset = async () => {
@@ -140,10 +140,10 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
       userPortafolioSymbolId: asset.userPortafolioSymbolId
     };
 
-    await registerPortafolioService.editPortafolioAsset(assetToEdit);
+    const result = await registerPortafolioService.editPortafolioAsset(assetToEdit);
     setSubmitState(submitState.onCancel());
     toggleEditPortafolio();
-    onEdit();
+    onEdit(result.data?.updateUserPortafolio);
   }
 
   return (
