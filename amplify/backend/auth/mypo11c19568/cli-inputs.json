@@ -63,7 +63,8 @@
     "userPoolGroups": false,
     "adminQueries": false,
     "authProviders": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d9y58zm1bjgsd.amplifyapp.com/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://dev.d9y58zm1bjgsd.amplifyapp.com/\",\"http://localhost:3000/\"]}",
-    "thirdPartyAuth": false
+    "thirdPartyAuth": false,
+    "hostedUIProviderCreds": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d9y58zm1bjgsd.amplifyapp.com/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://dev.d9y58zm1bjgsd.amplifyapp.com/\",\"http://localhost:3000/\"]}"
   }
 }
