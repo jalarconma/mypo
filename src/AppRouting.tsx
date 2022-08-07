@@ -1,12 +1,15 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom'
-import { loggedInNavModules, loggedInUserModules, loggedOutNavModules, loggedOutUserModules } from './modules';
+import { Navigate, Route, Routes } from 'react-router-dom'
+import LoginPage from './authentication/pages/login/LoginPage';
+import { homeModule, loggedInNavModules, loggedInUserModules, loggedOutNavModules, loggedOutUserModules } from './modules';
+import NotFoundPage from './shared/components/not-found/NotFoundPage';
 
 const AppRouting = () => {
   const modules = [...loggedInNavModules, ...loggedInUserModules,
   ...loggedOutNavModules, ...loggedOutUserModules];
   return (
     <Routes>
+      <Route path="/" element={<Navigate to={homeModule.routeProps.path} replace />} />
       {
         modules.map(module => (
           <React.Fragment key={module.name}>
@@ -32,13 +35,11 @@ const AppRouting = () => {
         ))
       }
       <Route
-        path="*"
-        element={
-          <main style={{ padding: "1rem" }}>
-            <p>There's nothing here!</p>
-          </main>
-        }
+        path="/login"
+        element={<LoginPage />}
       />
+      <Route path="/404" element={<NotFoundPage />} />
+      <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );
 }

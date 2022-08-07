@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { useUserAuthService } from "../../authentication/hooks/use-user-auth-service";
 import { UserAuthService } from "../../authentication/interfaces/user-auth.interface";
 
-const ProtectedRoute = ({ redirectPath = '/', children }) => {
+const ProtectedRoute = ({ redirectPath = '/login', children }) => {
 
   const userAuthService: UserAuthService = useUserAuthService();
+  const location = useLocation();
 
   if (!userAuthService.currentUser) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={redirectPath} state={{ prevRoute: location }} replace />;
   }
 
   return children ? children : <Outlet />;

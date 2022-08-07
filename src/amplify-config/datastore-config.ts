@@ -11,22 +11,5 @@ const dataStoreConfigs = {
   ]*/
 };
 
-export const syncDataStore = async () => {
-  console.log('clearing DB...');
-  //await DataStore.start();
-
-  await new Promise<boolean>((resolve) => {
-    const clearTimmer = setTimeout(async () => {
-      clearTimeout(clearTimmer);
-      //await DataStore.clear();
-    }, 1000);
-
-    const startTimmer = setTimeout(async () => {
-      clearTimeout(startTimmer);
-      //await DataStore.query(UserPortafolio);
-      resolve(true);
-    }, 2000);
-  });
-}
 
 export default dataStoreConfigs;

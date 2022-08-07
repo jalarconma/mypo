@@ -8,8 +8,8 @@ import { AppRouteProps } from '../core/interfaces/app-route-props';
 export const loggedOutNavModules: AppRouteProps[] = [];
 
 export const loggedInNavModules: AppRouteProps[]  = [
-  Overview,
   MyPortafolio,
+  Overview,
   ContactUs
 ];
 
@@ -21,4 +21,6 @@ export const loggedOutUserModules: AppRouteProps[] = [
   SignIn
 ];
 
-export const logginModule: AppRouteProps = SignIn; 
+export const logginModule: AppRouteProps = SignIn;
+
+export const homeModule: AppRouteProps = MyPortafolio;

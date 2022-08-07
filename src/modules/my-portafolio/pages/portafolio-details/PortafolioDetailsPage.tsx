@@ -2,7 +2,7 @@ import styles from './PortafolioDetailsPage.module.scss';
 
 import React, { useState } from "react";
 
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 import Stack from "@mui/material/Stack";
 
@@ -12,12 +12,13 @@ import PortafolioActionsHistory from '../../containers/portafolio-actions-histor
 import { useUserPortafolioListService } from '../../../../core/hooks/use-user-portafolio-list-service';
 import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
 import LoadingSpinner from '../../../../shared/components/loading-spinner/LoadingSpinner';
+import { homeModule } from '../../..';
 
 const PortafolioDetailsPage = () => {
   console.log('PortafolioDetailsPage re-rendered')
   const location = useLocation();
 
-  const [currentTotalizedAsset, setCurrentTotalizedAsset] = useState<UserPortafolioTotalItem>(location.state as UserPortafolioTotalItem);
+  const [currentTotalizedAsset, setCurrentTotalizedAsset] = useState<UserPortafolioTotalItem | null>(location.state as UserPortafolioTotalItem);
 
   const userPortafolioService = useUserPortafolioListService();
   const userAuthService = useUserAuthService();
@@ -34,7 +35,7 @@ const PortafolioDetailsPage = () => {
 
     const user = userAuthService.currentUser?.email
 
-    if (!user) {
+    if (!user || !currentTotalizedAsset) {
       return;
     }
 
@@ -43,8 +44,10 @@ const PortafolioDetailsPage = () => {
   }
 
   return (
-    <>
-      {isLoading() ? <LoadingSpinner /> : null}
+    !currentTotalizedAsset ? <Navigate to={homeModule.routeProps.path} replace/> : 
+    (
+      <>
+      {isLoading() && <LoadingSpinner />}
       <Stack
         spacing={2}
         className={styles['portafolio-details-page']}
@@ -55,6 +58,7 @@ const PortafolioDetailsPage = () => {
         <PortafolioActionsHistory symbolId={currentTotalizedAsset.symbol.id} onEditedPortafolio={editedPortafolioHandler} />
       </Stack>
     </>
+    )
   )
 }
 

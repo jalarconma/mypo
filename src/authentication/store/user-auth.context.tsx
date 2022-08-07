@@ -3,9 +3,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Auth, Hub } from 'aws-amplify';
 import { ICredentials } from '@aws-amplify/core/lib/types';
 
-import { firstValueFrom, from, map, Observable } from 'rxjs'
+import { catchError, firstValueFrom, from, map, Observable, throwError } from 'rxjs'
 
-import { syncDataStore } from '../../amplify-config/datastore-config';
 import ServicesContextualizer from '../../core/contextualizers/services.contextualizer';
 import ProvidedServices from '../../core/enums/provided-services.enum';
 import { UserAuthService } from '../interfaces/user-auth.interface';
@@ -22,20 +21,40 @@ const UserAuthServiceImpl: FC = ({children}) => {
     isLoggedIn,
     currentUser,
     getUser(): Observable<User> {
-      return from(Auth.currentUserInfo()).pipe(
+      setLoading(true);
+      const result = from(Auth.currentUserInfo()).pipe(
         map(user => user ? {...user.attributes, username: user.username} : null)
       );
+      result.pipe(
+        catchError((err) => {
+          setLoading(false);
+          return throwError(() => new Error(err));
+        })
+      );
+      result.subscribe(() => setLoading(false));
+      return result
     },
     getLoading(): boolean {
       return loading;
     },
     login(): Promise<ICredentials> {
+      setLoading(true);
       const result = Auth.federatedSignIn();
+
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false)
+        throw new Error(err);
+      });
+
       return result;
     },
     logout(): Promise<any> {
       setLoading(true);
       const result =  Auth.signOut();
+      result.then(() => setLoading(false)).catch((err) => {
+        setLoading(false)
+        throw new Error(err);
+      });
       return result;
     },
   }
@@ -60,14 +79,12 @@ const UserAuthServiceImpl: FC = ({children}) => {
         case 'signIn':
         case 'cognitoHostedUI':
           console.log('user is logged in');
-          await syncDataStore();
           const user = await firstValueFrom(userService.getUser());
           setIsLoggedIn(true);
           setCurrentUser(user);
           break;
         case 'signOut':
           console.log('user is logged out');
-          //await syncDataStore();
           setIsLoggedIn(false);
           setCurrentUser(null);
           break;
@@ -75,7 +92,6 @@ const UserAuthServiceImpl: FC = ({children}) => {
         case 'cognitoHostedUI_failure':
           setIsLoggedIn(false);
           setCurrentUser(null);
-          //await syncDataStore();
           console.log('Sign in failure', data);
           break;
         default:
