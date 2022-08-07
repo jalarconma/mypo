@@ -32,7 +32,7 @@
     "sharedId": "11c19568",
     "resourceName": "mypo11c19568",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "defaultSocial",
+    "useDefault": "manual",
     "hostedUI": true,
     "usernameAttributes": [
       "email"
@@ -62,7 +62,8 @@
     "dependsOn": [],
     "userPoolGroups": false,
     "adminQueries": false,
+    "authProviders": [],
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d9y58zm1bjgsd.amplifyapp.com/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://dev.d9y58zm1bjgsd.amplifyapp.com/\",\"http://localhost:3000/\"]}",
-    "authProviders": []
+    "thirdPartyAuth": false
   }
 }
