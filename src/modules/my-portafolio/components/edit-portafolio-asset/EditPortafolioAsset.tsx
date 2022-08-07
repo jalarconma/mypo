@@ -95,7 +95,7 @@ const EditPortafolioAsset = ({ onSubmit, asset, formOpened }: Props) => {
       return 0;
     }
 
-    return dollarAmount / assetPrice; 
+    return dollarAmount / assetPrice;
   }
 
   const calculateAssetPrice = (): number => {
