@@ -1,6 +1,6 @@
 import styles from './PortafolioHistoryItem.module.scss';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -10,7 +10,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Collapse from '@mui/material/Collapse';
 
 import { PortafolioAction } from "../../../../models";
-import { useUserPortafolioListService } from '../../../../core/hooks/use-user-portafolio-list-service';
 import SpanNumbericRounded from '../../../../shared/components/span-numeric-rounded/SpanNumericRounded';
 import EditPortafolioAsset from '../edit-portafolio-asset/EditPortafolioAsset';
 import { SubmitPortafolioState } from '../../models/submit-portafolio-state';
@@ -20,7 +19,7 @@ import { UserAuthService } from '../../../../authentication/interfaces/user-auth
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import AlertDialog from '../../../../shared/components/alert-dialog/AlertDialog';
 import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';
-import { DeleteUserPortafolioInput, Symbol, UpdateUserPortafolioInput, UserPortafolio } from '../../../../API';
+import { DeleteUserPortafolioInput, UpdateUserPortafolioInput, UserPortafolio } from '../../../../API';
 import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
 import { StringUtils } from '../../../../shared/utils/string-utils';
 import { DeletePortafolioState } from '../../models/delete-portafolio-state';
@@ -34,43 +33,23 @@ interface Props {
 const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
   console.log('PortafolioHistoryItem asset: ', asset)
 
-  const [fullAsset, setFullAsset] = useState<UserPortafolio>(asset);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
   const [ submitState, setSubmitState ] = useState<SubmitPortafolioState>(new SubmitPortafolioState(false, undefined));
   const [ deleteState, setDeleteState ] = useState<DeletePortafolioState>(new DeletePortafolioState(false, undefined));
 
-  useEffect(() => {
-    fetchFullSymbol();
-  }, []);
-
-  useEffect(() => {
-    fetchFullSymbol();
-  }, [asset]);
-
-  const userPortafolioListService = useUserPortafolioListService();
   const registerPortafolioService: RegisterPortafolioService = useRegisterPortafolioService();
   const userAuthService: UserAuthService = useUserAuthService();
 
   const getActionClassName = (): string => {
 
-    if (fullAsset.action === PortafolioAction.BUY) {
+    if (asset?.action === PortafolioAction.BUY) {
       return 'positive-roi';
 
-    } else if (fullAsset.action === PortafolioAction.SELL) {
+    } else if (asset?.action === PortafolioAction.SELL) {
       return 'negative-roi';
     }
 
     return '';
-  }
-
-  const fetchFullSymbol = async () => {
-    const fullSymbol = await userPortafolioListService.getSymbolById(fullAsset.userPortafolioSymbolId) as Symbol;
-
-    if (!fullSymbol) {
-      return;
-    }
-
-    setFullAsset({ ...asset, symbol: fullSymbol });
   }
 
   const toggleEditPortafolio = (): void => {
@@ -147,26 +126,27 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
   }
 
   return (
+    !asset ? null : 
     <>
       <div className={styles['portafolio-history-item']}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <span className={styles['item-title']}>{fullAsset.action_date}</span>
+            <span className={styles['item-title']}>{asset.action_date}</span>
           </Grid>
           <Grid item xs={6}>
-            <SpanNumbericRounded value={fullAsset.asset_quantity} styles={styles['item-value']} />
+            <SpanNumbericRounded value={asset.asset_quantity} styles={styles['item-value']} />
           </Grid>
           <Grid item xs={6}>
-            <span className={`${styles['item-value']} ${getActionClassName()}`}>{fullAsset.action}</span>
+            <span className={`${styles['item-value']} ${getActionClassName()}`}>{asset.action}</span>
           </Grid>
           <Grid item xs={6} >
-            <SpanNumbericRounded value={fullAsset.current_asset_price} styles={styles['item-title']} startAdornment={'$'} />
+            <SpanNumbericRounded value={asset.current_asset_price} styles={styles['item-title']} startAdornment={'$'} />
           </Grid>
         </Grid>
         {!showEditForm ?
           (
             <IconButton aria-label="delete" size="small" color="error" className={styles['item-action']} 
-              onClick={deleteAssetHandler} disabled={!fullAsset || !fullAsset.symbol}>
+              onClick={deleteAssetHandler} disabled={!asset.symbol}>
               <DeleteIcon />
             </IconButton>
           ) : null}
@@ -178,12 +158,12 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
           ) :
           (
             <IconButton aria-label="edit" size="small" color="primary" className={styles['item-action']} 
-              onClick={toggleEditPortafolio} disabled={!fullAsset || !fullAsset.symbol}>
+              onClick={toggleEditPortafolio} disabled={!asset.symbol}>
               <ModeEditIcon />
             </IconButton>
           )}
       </div>
-      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={editPortafolioHandler} asset={fullAsset} formOpened={showEditForm}/></Collapse>
+      <Collapse in={showEditForm}><EditPortafolioAsset onSubmit={editPortafolioHandler} asset={asset} formOpened={showEditForm}/></Collapse>
       <AlertDialog open={submitState.isOpened() || deleteState.isOpened()} onClose={cancelDialog} onContinue={continueAssetAction}/>
     </>
   )
