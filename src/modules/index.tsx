@@ -1,15 +1,15 @@
-import Overview from './overview';
 import MyPortafolio from './my-portafolio';
 import ContactUs  from './contact-us';
 import SignIn from './sign-in';
 import SignOut from './sign-out';
+import History from './history';
 import { AppRouteProps } from '../core/interfaces/app-route-props';
 
 export const loggedOutNavModules: AppRouteProps[] = [];
 
 export const loggedInNavModules: AppRouteProps[]  = [
   MyPortafolio,
-  Overview,
+  History,
   ContactUs
 ];
 

@@ -39,7 +39,7 @@ const PortafolioHistoryServiceImpl: FC = ({ children }) => {
     },
     getUserPortafolio(): Promise<GraphQLResult<UserPortafolioQuery>> {
       setLoading(true);
-      const result =  graphqlQueryWrapper<UserPortafolioQuery>({ query: listUserPortafolios});
+      const result =  graphqlQueryWrapper<UserPortafolioQuery>({ query: listFullUserPortafolios});
       result.then(() => setLoading(false)).catch((err) => {
         setLoading(false)
         throw new Error(err);
