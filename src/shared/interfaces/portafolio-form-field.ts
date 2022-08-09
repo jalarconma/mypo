@@ -8,5 +8,6 @@ export interface PortafolioFormField {
   inputProps?: any;
   format?: string;
   options?: any[];
-  hidden?: boolean
+  multiple?: boolean;
+  hidden?: boolean;
 }

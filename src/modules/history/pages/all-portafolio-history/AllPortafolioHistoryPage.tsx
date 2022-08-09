@@ -1,15 +1,16 @@
 import styles from './AllPortafolioHistoryPage.module.scss';
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useUserAuthService } from '../../../../authentication/hooks/use-user-auth-service';
 import LoadingSpinner from '../../../../shared/components/loading-spinner/LoadingSpinner';
 import { usePortafolioHistoryService } from '../../../../core/hooks/use-portafolio-history-service';
-import { UserPortafolio } from '../../../../API';
+import { Symbol, UserPortafolio } from '../../../../API';
 import Stack from '@mui/material/Stack';
 import InfoContainer from '../../../../shared/components/info-container/InfoContainer';
 import PortafolioHistoryItem from '../../../my-portafolio/components/portafolio-history-item/PortafolioHistoryItem';
 import HistoryActions from '../../components/history-actions/HistoryActions';
+import { HistoryActionFilterForm } from '../../interfaces/history-action-filter-form';
 
 const AllPortafolioHistoryPage = () => {
   const userAuthService = useUserAuthService();
@@ -18,7 +19,7 @@ const AllPortafolioHistoryPage = () => {
   const [portafolio, setPortafolio] = useState<UserPortafolio[]>([]);
 
   const isLoading = (): boolean => {
-    return userAuthService.getLoading()
+    return userAuthService.getLoading() || portafolioHistoryService.getLoading();
   }
 
   useEffect(() => {
@@ -72,12 +73,30 @@ const AllPortafolioHistoryPage = () => {
     setPortafolio(editedPortafolio);
   }
 
+  const getAssetSymbols = (): Symbol[] => {
+
+    if(!portafolio.length) {
+      return [];
+    }
+
+    const hashSymbols = portafolio.reduce((acc, item) => {
+      acc[`${item.symbol.id}`] = item.symbol;
+      return acc;
+    }, {});
+
+    return Object.values(hashSymbols);
+  }
+
+  const filterHandler = useCallback((filters: HistoryActionFilterForm): void => {
+    //portafolio.filter(item => item.symbol.)
+  }, []);
+
   return (
     <>
       {isLoading() ? <LoadingSpinner /> : null}
       <div className={styles['history-page']}>
         <h2>History</h2>
-        <HistoryActions />
+        <HistoryActions symbols={getAssetSymbols()} onFilter={filterHandler}/>
         <Stack spacing={2}>
           {
             portafolio.map((asset: UserPortafolio) => (

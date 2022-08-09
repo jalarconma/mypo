@@ -1,8 +1,11 @@
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import React from "react";
+
 import { Controller } from "react-hook-form";
 
-const FormAutocompleteSelector = ({ control, name, options, label = '', rules = {} }) => {
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+
+const FormAutocompleteSelector = ({ control, name, options, label = '', rules = {}, multiple = false}) => {
   return (
     <Controller
       name={name}
@@ -10,6 +13,7 @@ const FormAutocompleteSelector = ({ control, name, options, label = '', rules = 
       rules={rules}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <Autocomplete
+          multiple={multiple}
           disablePortal
           options={options}
           value={value}

@@ -1,7 +1,10 @@
 import { FormSelectorOption } from "../../../core/models/form-selector-option.interface";
-import { SymbolType } from "../../../models";
+import { DateRange } from "../../../shared/interfaces/portafolio-date-range";
 
 export interface HistoryActionFilterForm {
-  assetType: SymbolType | '',
-  assetSymbol: FormSelectorOption;
+  action: FormSelectorOption,
+  action_date: DateRange,
+  symbol: FormSelectorOption[],
+  createdAt: DateRange,
+  updatedAt: DateRange,
 }

@@ -5,8 +5,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { FormSelectorOption } from "../../../core/models/form-selector-option.interface";
 import { PortafolioAction, SymbolType } from "../../../models";
 import { ToggleSelectorOption } from "../../../shared/interfaces/ToggleSelectorOption";
-import { RegisterPortafolioFieldType } from "../enums/register-portafolio-field-type";
 import { RegisterPortafolioAssetField } from "../interfaces/register-portafolio-asset-field";
+import { PortafolioFieldType } from "../../../shared/enums/portafolio-field-type";
 
 export const REGISTER_PORTAFOLIO_ASSET_FIELD_NAME = {
   AssetType: 'assetType',
@@ -43,52 +43,52 @@ export const REGISTER_PORTAFOLIO_ASSET_FIELDS: RegisterPortafolioAssetField[] = 
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetType,
     label: 'Select asset type',
-    type: RegisterPortafolioFieldType.SELECTOR_UNIQUE,
+    type: PortafolioFieldType.SELECTOR_UNIQUE,
     options: ASSET_TYPES,
     rules: { validate: (symbol: SymbolType | '') => symbol !== '' ? true : 'the asset type is required' }
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetSymbol,
     label: 'Select symbol',
-    type: RegisterPortafolioFieldType.AUTOCOMPLETE_SELECTOR,
+    type: PortafolioFieldType.AUTOCOMPLETE_SELECTOR,
     rules: { validate: (symbol: FormSelectorOption) => !symbol?.id.length ? 'the symbol is required' : true }
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.Action,
     label: 'Action',
-    type: RegisterPortafolioFieldType.TOGGLE,
+    type: PortafolioFieldType.TOGGLE,
     rules:{ validate: (symbol: string) => symbol !== '' ? true : 'the action is required' },
     options: PORTAFOLIO_TOGGLE_ACTIONS
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetActionDate,
     label: 'Select action date',
-    type: RegisterPortafolioFieldType.DATE,
+    type: PortafolioFieldType.DATE,
     rules:{ required: 'The action date is required' }
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetPrice,
     label: 'Asset price in USD',
-    type: RegisterPortafolioFieldType.NUMERIC,
+    type: PortafolioFieldType.NUMERIC,
     rules: { validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required' },
     inputProps: {startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')}
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.Mode,
     label: 'Mode',
-    type: RegisterPortafolioFieldType.TOGGLE,
+    type: PortafolioFieldType.TOGGLE,
     options: REGISTER_PORTAFOLIO_MODES
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.AssetQuantity,
     label: 'Asset quantity',
-    type: RegisterPortafolioFieldType.NUMERIC,
+    type: PortafolioFieldType.NUMERIC,
     rules: {validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'}
   },
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.EstimatedAssetPrice, 
     label: 'Estimated asset price in USD',
-    type: RegisterPortafolioFieldType.NUMERIC,
+    type: PortafolioFieldType.NUMERIC,
     inputProps: {
       readOnly: true,
       startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')
@@ -97,7 +97,7 @@ export const REGISTER_PORTAFOLIO_ASSET_FIELDS: RegisterPortafolioAssetField[] = 
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.DollarAmount,
     label: 'Dollar amount',
-    type: RegisterPortafolioFieldType.NUMERIC,
+    type: PortafolioFieldType.NUMERIC,
     rules: {validate: (price: number) => !isNaN(price) && price > 0 ? true : 'the price is required'},
     inputProps: {
       startAdornment: React.createElement(InputAdornment, { position: 'start'}, '$')
@@ -106,7 +106,7 @@ export const REGISTER_PORTAFOLIO_ASSET_FIELDS: RegisterPortafolioAssetField[] = 
   {
     name: REGISTER_PORTAFOLIO_ASSET_FIELD_NAME.EstimatedAssetQuantity,
     label: 'Estimated asset quantity',
-    type: RegisterPortafolioFieldType.NUMERIC,
+    type: PortafolioFieldType.NUMERIC,
     inputProps: {
       readOnly: true
     }

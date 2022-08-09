@@ -12,7 +12,7 @@ import { RegisterPortafolioForm } from '../../interfaces/register-portafolio-for
 import { EMPTY_SYMBOL_SELECTOR, REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
 import { RegisterPortafolioService } from '../../../../core/interfaces/register-portafolio.service';
 import { useRegisterPortafolioService } from '../../../../core/hooks/use-register-portafolio-service';
-import FormFieldItem from '../form-field-item/FormFieldItem';
+import FormFieldItem from '../../../../shared/components/form-field-item/FormFieldItem';
 import { RegisterPortafolioFieldsFactory } from '../../factories/register-portafolio-fields.factory';
 import { SymbolType } from '../../../../models';
 

@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 
 import { PortafolioAction, UserPortafolio } from '../../../../models';
-import FormFieldItem from '../form-field-item/FormFieldItem';
+import FormFieldItem from '../../../../shared/components/form-field-item/FormFieldItem';
 import { EditPortafolioFieldsFactory } from '../../factories/edit-portafolio-fields.factory';
 import { REGISTER_PORTAFOLIO_ASSET_FIELD_NAME } from '../../constants/register-portafolio-asset..constant';
 import { EditPortafolioForm } from '../../interfaces/edit-portafolio-form';

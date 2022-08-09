@@ -1,5 +1,6 @@
 export enum PortafolioFieldType {
   DATE = 'DATE',
+  DATE_RANGE = 'DATE_RANGE',
   TEXT = 'TEXT',
   NUMERIC = 'NUMERIC',
   TOGGLE = 'TOGGLE',
