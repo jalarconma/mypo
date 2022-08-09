@@ -9,6 +9,7 @@ import { UserPortafolio } from '../../../../API';
 import Stack from '@mui/material/Stack';
 import InfoContainer from '../../../../shared/components/info-container/InfoContainer';
 import PortafolioHistoryItem from '../../../my-portafolio/components/portafolio-history-item/PortafolioHistoryItem';
+import HistoryActions from '../../components/history-actions/HistoryActions';
 
 const AllPortafolioHistoryPage = () => {
   const userAuthService = useUserAuthService();
@@ -76,6 +77,7 @@ const AllPortafolioHistoryPage = () => {
       {isLoading() ? <LoadingSpinner /> : null}
       <div className={styles['history-page']}>
         <h2>History</h2>
+        <HistoryActions />
         <Stack spacing={2}>
           {
             portafolio.map((asset: UserPortafolio) => (

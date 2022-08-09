@@ -1,0 +1,17 @@
+@import '../../../../styling/styles/variables.scss';
+
+.history-page_actions {
+
+  button  {
+
+    &.action-button {
+      color: white;
+      border-color: white;
+  
+      &:hover {
+        color: $label-title-color;
+        border-color: $label-title-color;
+      }
+    }
+  }
+}
