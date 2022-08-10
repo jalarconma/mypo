@@ -71,7 +71,12 @@ const FormDateRangeSelector = ({ control, name, label = "", rules = {}, format =
         //   <FormHelperText error={!!error}>{error?.message}</FormHelperText>
         // </Stack>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Stack spacing={1}>
+          <Stack
+            direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
+            spacing={1}
+            justifyContent="center"
+            alignItems={{ xs: 'flex-start', sm: 'flex-start', md: 'flex-start', lg: 'center' }}
+          >
             <Typography variant="button" display="block" gutterBottom>
               {label}
             </Typography>

@@ -8,7 +8,7 @@ export class HistoryActionFilterFactory {
   static getFields(symbols: FormSelectorOption[]): PortafolioFormField[] {
     return HISTORY_ACTION_FILTER_FIELDS.map(field => {
 
-      if (field.name === HISTORY_ACTION_FILTER_FIELD_NAME.AssetSymbol) {
+      if (field.name === HISTORY_ACTION_FILTER_FIELD_NAME.Symbol) {
         field.options = symbols;
       }
 

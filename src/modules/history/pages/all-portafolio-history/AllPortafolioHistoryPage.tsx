@@ -11,12 +11,14 @@ import InfoContainer from '../../../../shared/components/info-container/InfoCont
 import PortafolioHistoryItem from '../../../my-portafolio/components/portafolio-history-item/PortafolioHistoryItem';
 import HistoryActions from '../../components/history-actions/HistoryActions';
 import { HistoryActionFilterForm } from '../../interfaces/history-action-filter-form';
+import { PortafolioAction } from '../../../../models';
 
 const AllPortafolioHistoryPage = () => {
   const userAuthService = useUserAuthService();
   const portafolioHistoryService = usePortafolioHistoryService();
 
   const [portafolio, setPortafolio] = useState<UserPortafolio[]>([]);
+  const [originalPortafolio, setOriginalPortafolio] = useState<UserPortafolio[]>([]);
 
   const isLoading = (): boolean => {
     return userAuthService.getLoading() || portafolioHistoryService.getLoading();
@@ -33,6 +35,7 @@ const AllPortafolioHistoryPage = () => {
       return;
     }
 
+    setOriginalPortafolio(result.data.listUserPortafolios.items);
     setPortafolio(result.data.listUserPortafolios.items);
   }
 
@@ -52,6 +55,7 @@ const AllPortafolioHistoryPage = () => {
     const editedPortafolio = [...portafolio];
     editedPortafolio[index] = editedAsset;
     setPortafolio(editedPortafolio);
+    setOriginalPortafolio(editedPortafolio);
   }
 
   const deletePortafolioItemHandler = (deletedAsset: UserPortafolio | undefined): void => {
@@ -71,6 +75,7 @@ const AllPortafolioHistoryPage = () => {
     const editedPortafolio = [...portafolio];
     editedPortafolio.splice(index, 1);
     setPortafolio(editedPortafolio);
+    setOriginalPortafolio(editedPortafolio);
   }
 
   const getAssetSymbols = (): Symbol[] => {
@@ -88,8 +93,42 @@ const AllPortafolioHistoryPage = () => {
   }
 
   const filterHandler = useCallback((filters: HistoryActionFilterForm): void => {
-    //portafolio.filter(item => item.symbol.)
-  }, []);
+    const filteredPortafolio = originalPortafolio.filter(item => {
+
+      let hasSymbol = true;
+      let hasAction = true;
+      let hasMinCreatedAtDate = true;
+      let hasMaxCreatedAtDate = true;
+
+      if(filters.symbol.length > 0) {
+        hasSymbol = filters.symbol.findIndex(symbol => symbol.id === item.symbol.id) !== -1
+      }
+
+      if(filters.action && filters.action.id) {
+        hasAction = item.action ===  PortafolioAction[filters.action.id];
+      }
+
+      if(filters.createdAt[0]) {
+        const createdAtFrom = new Date(filters.createdAt[0]);
+        createdAtFrom.setHours(0, 0, 0, 0);
+        const itemCreatedAt = new Date(item.createdAt);
+        itemCreatedAt.setHours(0, 0, 0, 0)
+        hasMinCreatedAtDate = itemCreatedAt.getTime() >= createdAtFrom.getTime()
+      }
+
+      if(filters.createdAt[1]) {
+        const createdAtTo = new Date(filters.createdAt[1]);
+        createdAtTo.setHours(0, 0, 0, 0);
+        const itemCreatedAt = new Date(item.createdAt);
+        itemCreatedAt.setHours(0, 0, 0, 0)
+        hasMaxCreatedAtDate = itemCreatedAt.getTime() <= createdAtTo.getTime()
+      }
+
+      return hasSymbol && hasAction && hasMinCreatedAtDate && hasMaxCreatedAtDate;
+    });
+
+    setPortafolio(filteredPortafolio);
+  }, [originalPortafolio]);
 
   return (
     <>
