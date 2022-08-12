@@ -13,11 +13,11 @@ import HistoryActionFilter from '../history-action-filter/HistoryActionFilter';
 import { Symbol } from '../../../../API';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
 import { HistoryActionFilterFactory } from '../../factories/history-action-filter.factory';
-import { HistoryActionFilterForm } from '../../interfaces/history-action-filter-form';
+import { PortafolioFilterForm } from '../../../../shared/interfaces/portafolio-filter-form';
 
 interface Props {
   symbols: Symbol[]
-  onFilter: (filters: HistoryActionFilterForm) => void
+  onFilter: (filters: PortafolioFilterForm) => void
 }
 
 const HistoryActions = ({ symbols, onFilter }: Props) => {
@@ -39,7 +39,7 @@ const HistoryActions = ({ symbols, onFilter }: Props) => {
     return HistoryActionFilterFactory.symbolsToSelectorMapper(symbols);
   }
 
-  const filterHandler = useCallback((filters: HistoryActionFilterForm): void => {
+  const filterHandler = useCallback((filters: PortafolioFilterForm): void => {
     onFilter(filters);
   }, []);
   

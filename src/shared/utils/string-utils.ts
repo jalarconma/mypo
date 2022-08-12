@@ -21,7 +21,7 @@ export class StringUtils {
     const month = StringUtils.formatNumberTo2Digits(date.getMonth() + 1);
     const year = StringUtils.formatNumberTo2Digits(date.getFullYear());
 
-    return `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}T00:00:00`;
   }
 
   static formatNumberTo2Digits(input: number): string | null {

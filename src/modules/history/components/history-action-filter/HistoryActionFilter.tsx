@@ -9,23 +9,21 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import FormFieldItem from '../../../../shared/components/form-field-item/FormFieldItem';
-import { EMPTY_SYMBOL_SELECTOR } from '../../../my-portafolio/constants/register-portafolio-asset..constant';
 import { HistoryActionFilterFactory } from '../../factories/history-action-filter.factory';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
-import { HistoryActionFilterForm } from '../../interfaces/history-action-filter-form';
-import { Symbol } from '../../../../API';
+import { PortafolioFilterForm } from '../../../../shared/interfaces/portafolio-filter-form';
 
 interface Props {
   symbols: FormSelectorOption[];
-  onFilter: (data: HistoryActionFilterForm) => void
+  onFilter: (data: PortafolioFilterForm) => void
 }
 
 const HistoryActionFilter = ({ symbols, onFilter }: Props) => {
 
-  const { handleSubmit, reset, control, setValue } = useForm<HistoryActionFilterForm>({
+  const { handleSubmit, reset, control } = useForm<PortafolioFilterForm>({
     mode: 'onChange',
     defaultValues: {
-      action: {  id: '', label: 'select an action'},
+      action: {  id: '', label: 'Select an action'},
       action_date: [null, null],
       symbol: [],
       createdAt: [null, null],
@@ -35,7 +33,7 @@ const HistoryActionFilter = ({ symbols, onFilter }: Props) => {
 
   const fields = HistoryActionFilterFactory.getFields(symbols);
 
-  const applyFiltersHandler = (data: HistoryActionFilterForm): void => {
+  const applyFiltersHandler = (data: PortafolioFilterForm): void => {
     onFilter(data);
   }
   
