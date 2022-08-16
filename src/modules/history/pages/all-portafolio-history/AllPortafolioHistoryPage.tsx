@@ -10,81 +10,37 @@ import Stack from '@mui/material/Stack';
 import InfoContainer from '../../../../shared/components/info-container/InfoContainer';
 import PortafolioHistoryItem from '../../../my-portafolio/components/portafolio-history-item/PortafolioHistoryItem';
 import HistoryActions from '../../components/history-actions/HistoryActions';
-import useFilterPortafolio from '../../../../shared/hooks/use-filter-portafolio';
+import useManagePortafolio from '../../../../shared/hooks/use-manage-portafolio';
 
 const AllPortafolioHistoryPage = () => {
   const userAuthService = useUserAuthService();
   const portafolioHistoryService = usePortafolioHistoryService();
-  const { portafolio, setAllPortafolio, setFilter } = useFilterPortafolio({
-    action: {id: '', label: ''},
-    action_date: [null, null],
-    symbol: [],
-    createdAt: [null, null],
-    updatedAt: [null, null],
-  });
+
+  const {processedPortafolio, allPortafolio, onFilter, onEditedPortafolio, onDeletedPortafolioItem, fetchPortafolio} = useManagePortafolio(undefined);
 
   const isLoading = (): boolean => {
     return userAuthService.getLoading() || portafolioHistoryService.getLoading();
   }
 
   useEffect(() => {
-    fetchPortafolioHistory();
+    fetchPortafolio()
   }, []);
 
-  const fetchPortafolioHistory = async () => {
-    const result = await portafolioHistoryService.getUserPortafolio();
-
-    if (!result.data) {
-      return;
-    }
-
-    setAllPortafolio(result.data.listUserPortafolios.items);
-  }
-
   const editPortafolioItemHandler = (editedAsset: UserPortafolio | undefined): void => {
-    if(!editedAsset) {
-      fetchPortafolioHistory();
-      return;
-    }
-
-    const index = portafolio.findIndex(asset => asset.id === editedAsset.id);
-
-    if(index === -1) {
-      fetchPortafolioHistory();
-      return;
-    }
-
-    const editedPortafolio = [...portafolio];
-    editedPortafolio[index] = editedAsset;
-    setAllPortafolio(editedPortafolio);
+    onEditedPortafolio(editedAsset);
   }
 
   const deletePortafolioItemHandler = (deletedAsset: UserPortafolio | undefined): void => {
-
-    if(!deletedAsset) {
-      fetchPortafolioHistory();
-      return;
-    }
-
-    const index = portafolio.findIndex(asset => asset.id === deletedAsset.id);
-
-    if(index === -1) {
-      fetchPortafolioHistory();
-      return;
-    }
-
-    const editedPortafolio = [...portafolio];
-    editedPortafolio.splice(index, 1);
-    setAllPortafolio(editedPortafolio);
+    onDeletedPortafolioItem(deletedAsset);
   }
 
   const getAssetSymbols = (): Symbol[] => {
 
-    if(!portafolio.length) {
+    if(!allPortafolio.length) {
       return [];
     }
 
-    const hashSymbols = portafolio.reduce((acc, item) => {
+    const hashSymbols = allPortafolio.reduce((acc, item) => {
       acc[`${item.symbol.id}`] = item.symbol;
       return acc;
     }, {});
@@ -97,10 +53,10 @@ const AllPortafolioHistoryPage = () => {
       {isLoading() ? <LoadingSpinner /> : null}
       <div className={styles['history-page']}>
         <h2>History</h2>
-        <HistoryActions symbols={getAssetSymbols()} onFilter={(filter) => setFilter(filter)}/>
+        <HistoryActions symbols={getAssetSymbols()} onFilter={(filter) => onFilter(filter)}/>
         <Stack spacing={2}>
           {
-            portafolio.map((asset: UserPortafolio) => (
+            processedPortafolio.map((asset: UserPortafolio) => (
               <InfoContainer key={asset.id}>
                 <h4>{asset.symbol.displaySymbol}</h4>
                 <PortafolioHistoryItem asset={asset} onEdit={editPortafolioItemHandler} onDelete={deletePortafolioItemHandler} />
