@@ -9,7 +9,7 @@ type UserPortafolio @model @auth(rules: [{allow: public, operations: [read]}, {a
   owner: String!
   action: PortafolioAction!
   asset_quantity: Float!
-  action_date: AWSDate!
+  action_date: AWSDateTime!
   current_asset_price: Float!
   symbol: Symbol! @hasOne
 }
