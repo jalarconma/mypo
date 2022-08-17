@@ -131,7 +131,7 @@ const PortafolioHistoryItem = ({ asset, onEdit, onDelete }: Props) => {
       <div className={styles['portafolio-history-item']}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <span className={styles['item-title']}>{asset.action_date}</span>
+            <span className={styles['item-title']}>{asset.action_date.split('T')[0]}</span>
           </Grid>
           <Grid item xs={6}>
             <SpanNumbericRounded value={asset.asset_quantity} styles={styles['item-value']} />

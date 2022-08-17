@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserPortafolio } from "../../API";
 import { usePortafolioHistoryService } from "../../core/hooks/use-portafolio-history-service";
+import { PortafolioAdapter } from "../adapters/portafolio-adapter";
 import { PortafolioFilterForm } from "../interfaces/portafolio-filter-form";
 import useFilterPortafolio from "./use-filter-portafolio";
 
@@ -39,7 +40,8 @@ const useManagePortafolio = (symbolId: string | undefined) => {
       return;
     }
 
-    onAllPortafolioChange(result.data.listUserPortafolios.items);
+    const portafolio = PortafolioAdapter.portafolioActionDateAdapter(result.data.listUserPortafolios.items);
+    onAllPortafolioChange(portafolio);
   }
 
   const onEditedPortafolio = (editedAsset: UserPortafolio | undefined): void  => {

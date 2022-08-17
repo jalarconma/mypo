@@ -1,5 +1,23 @@
 export class StringUtils {
 
+  static stringDateToStringDateWithoutTimezone(date: string | null): string {
+    if(!date) {
+      return '';
+    }
+
+    if(isNaN(Date.parse(date))) {
+      return '';
+    }
+
+    const [ formatedDate ] = date.split('.');
+
+    if(!formatedDate || !formatedDate.includes(':')) {
+      return '';
+    }
+
+    return formatedDate;
+  }
+
   static dateToString(date: Date | null): string | null {
     if(!date) {
       return null;
