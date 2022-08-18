@@ -1,6 +1,4 @@
-import styles from './HistoryActionFilter.module.scss';
-
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -12,6 +10,7 @@ import FormFieldItem from '../../../../shared/components/form-field-item/FormFie
 import { HistoryActionFilterFactory } from '../../factories/history-action-filter.factory';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
 import { PortafolioFilterForm } from '../../../../shared/interfaces/portafolio-filter-form';
+import CollapsibleLayout from '../../../../shared/components/collapsible-layout/CollapsibleLayout';
 
 interface Props {
   symbols: FormSelectorOption[];
@@ -38,7 +37,7 @@ const HistoryActionFilter = ({ symbols, onFilter }: Props) => {
   }
   
   return (
-    <div className={styles['filter-form']}>
+    <CollapsibleLayout >
       <form >
         <Grid container spacing={4}>
           {fields.map((item, index) => (
@@ -63,7 +62,7 @@ const HistoryActionFilter = ({ symbols, onFilter }: Props) => {
           <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
         </Stack>
       </form>
-    </div>
+    </CollapsibleLayout>
   )
 }
 

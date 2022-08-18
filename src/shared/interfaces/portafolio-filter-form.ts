@@ -8,3 +8,11 @@ export interface PortafolioFilterForm {
   createdAt: DateRange,
   updatedAt: DateRange,
 }
+
+export const EmptyPortafolioFilterForm: PortafolioFilterForm = {
+  action: {id: '', label: ''},
+  action_date: [null, null],
+  symbol: [],
+  createdAt: [null, null],
+  updatedAt: [null, null],
+}

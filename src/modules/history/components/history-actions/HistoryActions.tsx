@@ -14,13 +14,16 @@ import { Symbol } from '../../../../API';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
 import { HistoryActionFilterFactory } from '../../factories/history-action-filter.factory';
 import { PortafolioFilterForm } from '../../../../shared/interfaces/portafolio-filter-form';
+import { PortafolioSortForm } from '../../../../shared/interfaces/portafolio-sort-form';
+import HistoryActionSort from '../history-action-sort/HistoryActionSort';
 
 interface Props {
   symbols: Symbol[]
   onFilter: (filters: PortafolioFilterForm) => void
+  onSort: (sort: PortafolioSortForm) => void
 }
 
-const HistoryActions = ({ symbols, onFilter }: Props) => {
+const HistoryActions = ({ symbols, onFilter, onSort }: Props) => {
 
   const [ showSorts, setShowSorts ] = useState<boolean>(false);
   const [ showFilters, setShowFilters ] = useState<boolean>(false);
@@ -42,6 +45,10 @@ const HistoryActions = ({ symbols, onFilter }: Props) => {
   const filterHandler = useCallback((filters: PortafolioFilterForm): void => {
     onFilter(filters);
   }, []);
+
+  const sortHandler = useCallback((sort: PortafolioSortForm): void => {
+    onSort(sort)
+  }, [])
   
   return (
     <div className={styles['history-page_actions']}>
@@ -53,7 +60,7 @@ const HistoryActions = ({ symbols, onFilter }: Props) => {
           {showFilters ? 'Close' : 'Filter'}
         </Button>
       </Stack>
-      <Collapse in={showSorts}><h1>HERE THE SORTS</h1></Collapse>
+      <Collapse in={showSorts}><HistoryActionSort onSort={sortHandler}/></Collapse>
       <Collapse in={showFilters}><HistoryActionFilter symbols={getSelectorSymbols()} onFilter={filterHandler}/></Collapse>
     </div>
   );

@@ -2,29 +2,35 @@ import { useEffect, useState } from "react";
 import { UserPortafolio } from "../../API";
 import { usePortafolioHistoryService } from "../../core/hooks/use-portafolio-history-service";
 import { PortafolioAdapter } from "../adapters/portafolio-adapter";
-import { PortafolioFilterForm } from "../interfaces/portafolio-filter-form";
+import { EmptyPortafolioFilterForm, PortafolioFilterForm } from "../interfaces/portafolio-filter-form";
+import { EmptyPortafolioSortForm, PortafolioSortForm } from "../interfaces/portafolio-sort-form";
 import useFilterPortafolio from "./use-filter-portafolio";
+import useSortPortafolio from "./use-sort-portafolio";
 
 const useManagePortafolio = (symbolId: string | undefined) => {
   const [processedPortafolio, setProcessedPortafolio] = useState<UserPortafolio[]>([]);
   const [allPortafolio, setAllPortafolio] = useState<UserPortafolio[]>([]);
 
-  const { portafolio: filteredPortafolio, setAllPortafolio: setFilterPortafolio, setFilter } = useFilterPortafolio({
-    action: {id: '', label: ''},
-    action_date: [null, null],
-    symbol: [],
-    createdAt: [null, null],
-    updatedAt: [null, null],
-  });
+  const { portafolio: filteredPortafolio, setAllPortafolio: setFilterPortafolio, setFilter } = useFilterPortafolio(EmptyPortafolioFilterForm);
+
+  const { portafolio: sortedPortafolio, setAllPortafolio: setSortPortafolio, setSort } = useSortPortafolio(EmptyPortafolioSortForm)
 
   const portafolioHistoryService = usePortafolioHistoryService();
 
   useEffect(() => {
-    setProcessedPortafolio(filteredPortafolio);
-  }, [filteredPortafolio])
+    setSortPortafolio(filteredPortafolio);
+  }, [filteredPortafolio]);
+
+  useEffect(() => {
+    setProcessedPortafolio(sortedPortafolio);
+  }, [sortedPortafolio]);
 
   const onFilter = (filter: PortafolioFilterForm): void => {
     setFilter(filter);
+  }
+
+  const onSort = (sort: PortafolioSortForm): void => {
+    setSort(sort);
   }
 
   const fetchPortafolio = async () => {
@@ -86,7 +92,7 @@ const useManagePortafolio = (symbolId: string | undefined) => {
     setFilterPortafolio(portafolio);
   }
 
-  return { processedPortafolio, allPortafolio, onFilter, onEditedPortafolio, onDeletedPortafolioItem, fetchPortafolio };
+  return { processedPortafolio, allPortafolio, onFilter, onSort, onEditedPortafolio, onDeletedPortafolioItem, fetchPortafolio };
 }
 
 export default useManagePortafolio;

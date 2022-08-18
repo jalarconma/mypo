@@ -16,7 +16,8 @@ const AllPortafolioHistoryPage = () => {
   const userAuthService = useUserAuthService();
   const portafolioHistoryService = usePortafolioHistoryService();
 
-  const {processedPortafolio, allPortafolio, onFilter, onEditedPortafolio, onDeletedPortafolioItem, fetchPortafolio} = useManagePortafolio(undefined);
+  const { processedPortafolio, allPortafolio, onFilter, onSort, 
+    onEditedPortafolio, onDeletedPortafolioItem, fetchPortafolio} = useManagePortafolio(undefined);
 
   const isLoading = (): boolean => {
     return userAuthService.getLoading() || portafolioHistoryService.getLoading();
@@ -53,7 +54,7 @@ const AllPortafolioHistoryPage = () => {
       {isLoading() ? <LoadingSpinner /> : null}
       <div className={styles['history-page']}>
         <h2>History</h2>
-        <HistoryActions symbols={getAssetSymbols()} onFilter={(filter) => onFilter(filter)}/>
+        <HistoryActions symbols={getAssetSymbols()} onFilter={(filter) => onFilter(filter)} onSort={(sort) => onSort(sort)}/>
         <Stack spacing={2}>
           {
             processedPortafolio.map((asset: UserPortafolio) => (
