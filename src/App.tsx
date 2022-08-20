@@ -3,6 +3,7 @@ import './App.scss';
 import AppRouting from './AppRouting';
 import { useUserAuthService } from './authentication/hooks/use-user-auth-service';
 import Header from './shared/components/header/Header';
+import InfoContainer from './shared/components/info-container/InfoContainer';
 import LoadingSpinner from './shared/components/loading-spinner/LoadingSpinner';
 
 function App() {
@@ -16,8 +17,10 @@ function App() {
           <AppRouting />
         </div>
       </main>
-      <footer className='App-footer'>
-        <h4>Developed by Julian Alarcon TM</h4>
+      <footer>
+        <InfoContainer>
+          <h4>Developed by Julian Alarcon TM</h4>
+        </InfoContainer>
       </footer>
     </>
   );

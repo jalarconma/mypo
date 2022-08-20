@@ -17,7 +17,7 @@ const useRedirectIntendedUrl = (): void => {
     const routeState = location.state as ProtectedRouteState;
     const homePath = homeModule.routeProps.path;
 
-    if(!localStorage.getItem(intendUrlPropertyName) && routeState.prevRoute.pathname !== homePath) {
+    if(routeState && !localStorage.getItem(intendUrlPropertyName) && routeState.prevRoute.pathname !== homePath) {
       localStorage.setItem(intendUrlPropertyName, routeState.prevRoute.pathname);
     }
 

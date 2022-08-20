@@ -25,7 +25,7 @@ const LoginPage = () => {
   return (
     <div className={styles['login-page']}>
       <Box className={styles['login-info']}>
-        <h1 className={styles['main-title']}>WELCOME TO MYPO</h1>
+        <h2 className={styles['main-title']}>WELCOME TO <span className={styles['brand-name']}>MYPO</span></h2>
         <h4>Register your crypto and stock investments</h4>
         <p>Please loging to continue</p>
         <Button onClick={loginHandler} variant="outlined"> Login</Button>
