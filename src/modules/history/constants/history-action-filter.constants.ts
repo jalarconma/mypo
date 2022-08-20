@@ -40,9 +40,9 @@ export const HISTORY_ACTION_FILTER_FIELDS: PortafolioFormField[] = [
     label: 'Created at',
     type: PortafolioFieldType.DATE_RANGE,
   },
-  {
+  /*{
     name: HISTORY_ACTION_FILTER_FIELD_NAME.UpdatedAt,
     label: 'Updated at',
     type: PortafolioFieldType.DATE_RANGE,
-  },
+  },*/
 ];

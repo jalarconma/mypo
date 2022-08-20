@@ -12,7 +12,7 @@ export const EmptyPortafolioSortForm: PortafolioSortForm = {
   action: '',
   action_date: '',
   symbol: '',
-  createdAt: '',
+  createdAt: PortafolioSortType.DESC,
   updatedAt: ''
 }
 

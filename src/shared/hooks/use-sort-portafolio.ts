@@ -74,7 +74,7 @@ const useSortPortafolio = (initialSort: PortafolioSortForm): UseSortPortafolio =
         updatedAtComparison = compareDates(sort.updatedAt, new Date(portafolioA.updatedAt), new Date(portafolioB.updatedAt));
       }
 
-      return createdAtComparison || updatedAtComparison || actionDateComparison || symbolComparison || actionComparison;
+      return symbolComparison || actionDateComparison || actionComparison || createdAtComparison || updatedAtComparison ;
     });
 
     setPortafolio(sortedPortafolio);

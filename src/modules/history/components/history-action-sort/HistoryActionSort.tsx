@@ -28,6 +28,11 @@ const HistoryActionSort = ({ onSort }: Props) => {
     onSort(data);
   }
 
+  const clearSortHandler = (): void => {
+    reset();
+    applySortsHandler(EmptyPortafolioSortForm);
+  }
+
   return (
     <CollapsibleLayout >
       <form >
@@ -51,7 +56,7 @@ const HistoryActionSort = ({ onSort }: Props) => {
           alignItems="center"
           padding={1}>
           <Button onClick={handleSubmit(applySortsHandler)}>Sort</Button>
-          <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
+          <Button onClick={clearSortHandler} variant={"outlined"}>Clear</Button>
         </Stack>
       </form>
     </CollapsibleLayout>

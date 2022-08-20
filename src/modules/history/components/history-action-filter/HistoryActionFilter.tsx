@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import FormFieldItem from '../../../../shared/components/form-field-item/FormFieldItem';
 import { HistoryActionFilterFactory } from '../../factories/history-action-filter.factory';
 import { FormSelectorOption } from '../../../../core/models/form-selector-option.interface';
-import { PortafolioFilterForm } from '../../../../shared/interfaces/portafolio-filter-form';
+import { EmptyPortafolioFilterForm, PortafolioFilterForm } from '../../../../shared/interfaces/portafolio-filter-form';
 import CollapsibleLayout from '../../../../shared/components/collapsible-layout/CollapsibleLayout';
 
 interface Props {
@@ -21,19 +21,18 @@ const HistoryActionFilter = ({ symbols, onFilter }: Props) => {
 
   const { handleSubmit, reset, control } = useForm<PortafolioFilterForm>({
     mode: 'onChange',
-    defaultValues: {
-      action: {  id: '', label: 'Select an action'},
-      action_date: [null, null],
-      symbol: [],
-      createdAt: [null, null],
-      updatedAt: [null, null]
-    }
+    defaultValues: EmptyPortafolioFilterForm
   });
 
   const fields = HistoryActionFilterFactory.getFields(symbols);
 
   const applyFiltersHandler = (data: PortafolioFilterForm): void => {
     onFilter(data);
+  }
+
+  const clearFilterHandler = (): void => {
+    reset();
+    applyFiltersHandler(EmptyPortafolioFilterForm);
   }
   
   return (
@@ -58,8 +57,8 @@ const HistoryActionFilter = ({ symbols, onFilter }: Props) => {
           justifyContent="flex-end"
           alignItems="center"
           padding={1}>
-          <Button onClick={handleSubmit(applyFiltersHandler)}>Submit</Button>
-          <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
+          <Button onClick={handleSubmit(applyFiltersHandler)}>Filter</Button>
+          <Button onClick={clearFilterHandler} variant={"outlined"}>Clear</Button>
         </Stack>
       </form>
     </CollapsibleLayout>

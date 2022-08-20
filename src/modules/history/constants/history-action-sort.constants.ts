@@ -41,10 +41,10 @@ export const HISTORY_ACTION_SORT_FIELDS: PortafolioFormField[] = [
     type: PortafolioFieldType.TOGGLE,
     options: PORTAFOLIO_SORT_TOGGLE_ACTIONS
   },
-  {
+  /*{
     name: HISTORY_ACTION_SORT_FIELD_NAME.UpdatedAt,
-    label: 'Updated at',
+    label: 'Last Updated',
     type: PortafolioFieldType.TOGGLE,
     options: PORTAFOLIO_SORT_TOGGLE_ACTIONS
-  },
+  },*/
 ];

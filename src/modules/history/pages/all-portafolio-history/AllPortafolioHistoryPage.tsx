@@ -55,7 +55,7 @@ const AllPortafolioHistoryPage = () => {
       <div className={styles['history-page']}>
         <h2>History</h2>
         <HistoryActions symbols={getAssetSymbols()} onFilter={(filter) => onFilter(filter)} onSort={(sort) => onSort(sort)}/>
-        <Stack spacing={2}>
+        <Stack spacing={2} marginTop={5} marginBottom={5}>
           {
             processedPortafolio.map((asset: UserPortafolio) => (
               <InfoContainer key={asset.id}>
