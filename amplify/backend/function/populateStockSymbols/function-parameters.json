@@ -1,0 +1,19 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "test",
+      "environmentVariableName": "test"
+    }
+  ],
+  "permissions": {
+    "api": {
+      "mypov1": [
+        "Query"
+      ]
+    }
+  },
+  "secretNames": [
+    "FINNHUB_API_KEY"
+  ]
+}

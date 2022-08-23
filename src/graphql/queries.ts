@@ -50,46 +50,6 @@ export const listUserPortafolios = /* GraphQL */ `
     }
   }
 `;
-export const getCurrentPrice = /* GraphQL */ `
-  query GetCurrentPrice($id: ID!) {
-    getCurrentPrice(id: $id) {
-      id
-      price
-      updated
-      symbol {
-        id
-        symbol
-        type
-        displaySymbol
-        description
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      currentPriceSymbolId
-    }
-  }
-`;
-export const listCurrentPrices = /* GraphQL */ `
-  query ListCurrentPrices(
-    $filter: ModelCurrentPriceFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCurrentPrices(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        price
-        updated
-        createdAt
-        updatedAt
-        currentPriceSymbolId
-      }
-      nextToken
-    }
-  }
-`;
 export const getSymbol = /* GraphQL */ `
   query GetSymbol($id: ID!) {
     getSymbol(id: $id) {

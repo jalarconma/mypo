@@ -1,3 +1,17 @@
+/*
+Use the following code to retrieve configured secrets from SSM:
+
+const aws = require('aws-sdk');
+
+const { Parameters } = await (new aws.SSM())
+  .getParameters({
+    Names: ["FINNHUB_API_KEY"].map(secretName => process.env[secretName]),
+    WithDecryption: true,
+  })
+  .promise();
+
+Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
+*/
 /* Amplify Params - DO NOT EDIT
 	API_MYPOV1_GRAPHQLAPIENDPOINTOUTPUT
 	API_MYPOV1_GRAPHQLAPIIDOUTPUT
@@ -30,7 +44,7 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
  const FINNHUB_API_KEY_NAME = 'FINNHUB_API_KEY';
  const TABLE_NAME = `Symbol-${process.env['API_MYPOV1_GRAPHQLAPIIDOUTPUT']}-${process.env['ENV']}`;
  
- const docClient = new AWS.DynamoDB.DocumentClient();
+ const docClient = new AWS.DynamoDB.DocumentClient({ region: process.env['REGION'] });
  const ssm = new AWS.SSM();
  
  AWS.config.update({ region: process.env['REGION'] });
@@ -65,8 +79,6 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
      Name: process.env[FINNHUB_API_KEY_NAME],
      WithDecryption: true
    };
-   
-   console.log('finnHubApiKey params:', params)
  
    const request = await ssm.getParameter(params).promise();
  
@@ -79,16 +91,19 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
  
    console.log('result data ok... filtering....');
  
-   const symbols = result.map(symbolData => (
-       { 
-           id: symbolData.symbol, 
-           symbol: symbolData.symbol, 
-           type: 'STOCK',
-           displaySymbol: symbolData.displaySymbol,
-           description: symbolData.description
-        }
-    ));
+   const symbols = result.map(symbolData => ({
+     id: symbolData.symbol,
+     symbol: symbolData.symbol,
+     type: 'STOCK',
+     displaySymbol: symbolData.displaySymbol,
+     description: symbolData.description
+   }));
+   
+   console.log('stock symbols length', symbols.length);
+   const symbolsToProcess = symbols.slice(7500, 30000);
+   console.log('stock symbols to process length', symbolsToProcess.length);
  
+   //return symbolsToProcess;
    return symbols;
  }
  
@@ -113,9 +128,10 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
    console.log('params', params);
  
    console.log('To store', symbols25);
+   console.log('table name', TABLE_NAME);
  
    const storeResult = await docClient.batchWrite(params).promise();
-   console.log('stored', storeResult);
+   console.log('stored', JSON.stringify(storeResult));
  }
  
  
@@ -135,7 +151,7 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
        continue;
      }
  
-     storeOnDB(symbols25);
+     await storeOnDB(symbols25);
    }
  
  }

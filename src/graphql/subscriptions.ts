@@ -77,69 +77,6 @@ export const onDeleteUserPortafolio = /* GraphQL */ `
     }
   }
 `;
-export const onCreateCurrentPrice = /* GraphQL */ `
-  subscription OnCreateCurrentPrice {
-    onCreateCurrentPrice {
-      id
-      price
-      updated
-      symbol {
-        id
-        symbol
-        type
-        displaySymbol
-        description
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      currentPriceSymbolId
-    }
-  }
-`;
-export const onUpdateCurrentPrice = /* GraphQL */ `
-  subscription OnUpdateCurrentPrice {
-    onUpdateCurrentPrice {
-      id
-      price
-      updated
-      symbol {
-        id
-        symbol
-        type
-        displaySymbol
-        description
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      currentPriceSymbolId
-    }
-  }
-`;
-export const onDeleteCurrentPrice = /* GraphQL */ `
-  subscription OnDeleteCurrentPrice {
-    onDeleteCurrentPrice {
-      id
-      price
-      updated
-      symbol {
-        id
-        symbol
-        type
-        displaySymbol
-        description
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      currentPriceSymbolId
-    }
-  }
-`;
 export const onCreateSymbol = /* GraphQL */ `
   subscription OnCreateSymbol {
     onCreateSymbol {
