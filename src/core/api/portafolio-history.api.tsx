@@ -22,13 +22,6 @@ const PortafolioHistoryServiceImpl: FC = ({ children }) => {
     },
     getUserPortafolioAsset(assetId: string): Promise<GraphQLResult<UserPortafolioAssetQuery>>{
       setLoading(true);
-
-      const filter = {
-        id: {
-            eq: assetId
-        }
-      };
-
       const result =  graphqlQueryWrapper<UserPortafolioAssetQuery>({ query: getUserPortafolio, variables: { id: assetId}});
       result.then(() => setLoading(false)).catch((err) => {
         setLoading(false)

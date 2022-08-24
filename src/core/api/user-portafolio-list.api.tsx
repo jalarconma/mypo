@@ -8,6 +8,7 @@ import { Symbol as QuerySymbol } from '../../models'
 
 import { UserPortafolioListService } from '../interfaces/user-portafolio-list.service';
 import { UserPortafolioTotalItem } from '../../modules/my-portafolio/interfaces/user-portafolio-total-item';
+import { mypoDB } from '../../dexie/db';
 
 export const UserPortafolioListServiceContext = ServicesContextualizer.createContext(ProvidedServices.UserPortafolioListServiceImpl);
 
@@ -20,10 +21,8 @@ const UserPortafolioListServiceImpl: FC = ({ children }) => {
     },
     getSymbolById(id: string): Promise<Symbol | QuerySymbol | undefined> {
       setLoading(true);
-      const result =  DataStore.query(QuerySymbol, id);
-      
+      const result = mypoDB.symbols.where('id').equals(id).first();
       result.then(() => setLoading(false)).catch(() => setLoading(false));
-
       return result;
     },
     getUserPortafolioTotalized(user: string): Promise<UserPortafolioTotalItem[]> {

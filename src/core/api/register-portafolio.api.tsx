@@ -13,6 +13,7 @@ import { graphqlQueryWrapper } from '../utils/graphql-query-wrapper';
 import { CreateUserPortafolioInput, DeleteUserPortafolioInput, UpdateUserPortafolioInput } from '../../API';
 import { UserPortafolioEditQuery } from '../../modules/my-portafolio/interfaces/user-portafolio-edit-query';
 import { UserPortafolioDeleteQuery } from '../../modules/my-portafolio/interfaces/user-portafolio-delete-query';
+import { mypoDB } from '../../dexie/db';
 
 export const RegisterPortafolioContext = ServicesContextualizer.createContext(ProvidedServices.RegisterPortafolioServiceImpl);
 
@@ -25,7 +26,8 @@ const RegisterPortafolioServiceImpl: FC = ({ children }) => {
     },
     getSymbols(assetType: SymbolType): Promise<Symbol[]> {
       setLoading(true);
-      const result =  DataStore.query(Symbol, (sym) => sym.type('eq', SymbolType[assetType]));
+
+      const result = mypoDB.symbols.where('type').equals(assetType).toArray();
 
       result.then(() => setLoading(false)).catch((err) => {
         setLoading(false);
