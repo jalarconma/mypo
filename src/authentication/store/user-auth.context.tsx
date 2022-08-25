@@ -9,6 +9,7 @@ import ServicesContextualizer from '../../core/contextualizers/services.contextu
 import ProvidedServices from '../../core/enums/provided-services.enum';
 import { UserAuthService } from '../interfaces/user-auth.interface';
 import { User } from '../models/user.model';
+import useSyncSymbols from '../../dexie/hooks/use-sync-symbols';
 
 export const UserAuthContext = ServicesContextualizer.createContext(ProvidedServices.UserAuthServiceImpl);
 
@@ -16,6 +17,7 @@ const UserAuthServiceImpl: FC = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { sync: syncMypoDB } = useSyncSymbols();
 
   const userService: UserAuthService = {
     isLoggedIn,
@@ -82,6 +84,7 @@ const UserAuthServiceImpl: FC = ({children}) => {
           const user = await firstValueFrom(userService.getUser());
           setIsLoggedIn(true);
           setCurrentUser(user);
+          syncMypoDB();
           break;
         case 'signOut':
           console.log('user is logged out');

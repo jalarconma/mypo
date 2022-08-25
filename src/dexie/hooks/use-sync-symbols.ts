@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 
@@ -13,17 +13,19 @@ const useSyncSymbols = () => {
     syncSymbolsHandler();
   }, []);
 
+  const clear = useCallback(() => {
+    clearSymbolsHandler();
+  }, []);
+
   const isSymbol = (item: Symbol | null): item is Symbol => {
     return (item as Symbol) !== null;
   }
 
+  const clearSymbolsHandler = async () => {
+    mypoDB.symbols.clear();
+  }
+
   const syncSymbolsHandler = async () => {
-    const totalSyncSymbols = await mypoDB.symbols.count();
-
-    if(totalSyncSymbols > 25000) {
-      return;
-    }
-
     const result =  await fetchSymbols();
     storeDataAndcallNextSyncIteration(result);
   }
@@ -48,14 +50,16 @@ const useSyncSymbols = () => {
       return;
     }
 
-    const result =  await fetchSymbols(nextToken);
-
-    storeDataAndcallNextSyncIteration(result);
+    const timmer = setTimeout(async () => {
+      const result =  await fetchSymbols(nextToken);
+      storeDataAndcallNextSyncIteration(result);
+      clearTimeout(timmer);
+    }, 200)
   }
 
   const fetchSymbols = async (nextToken: string | null = null) => {
     console.log('starting to sync symbols....');
-    return graphqlQueryWrapper<ListSymbolsQuery>({ query: listSymbols, variables: { nextToken }});
+    return graphqlQueryWrapper<ListSymbolsQuery>({ query: listSymbols, variables: { limit: 4000, nextToken }});
   }
 
   const storeSymbolsOnDB = async (data: (Symbol | null)[]) => {
@@ -64,7 +68,7 @@ const useSyncSymbols = () => {
     mypoDB.symbols.bulkPut(filteredSymbols);
   }
 
-  return sync;
+  return { sync, clear };
 }
 
 export default useSyncSymbols;
