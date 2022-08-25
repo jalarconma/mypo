@@ -185,7 +185,7 @@ async function calculateTotalizedAssets(symbol, assets) {
   const assetPriceQuery = await executeLambda(FUNCTION_GETASSETPRICEBYDATE_NAME, JSON.stringify({
     "queryStringParameters": {
       "assetType": symbol.type,
-      "date": dateToString(new Date()),
+      "date": null,
       "symbol": symbol.id
     }
   }));

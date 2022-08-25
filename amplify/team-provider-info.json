@@ -31,15 +31,15 @@
         "getAssetPriceByDate": {
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/getAssetPriceByDate-746a584c625265725354-build.zip"
+          "s3Key": "amplify-builds/getAssetPriceByDate-41444d51675153577434-build.zip"
         },
         "calculateTotalizedPortafolioByUser": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-67314c766b49794c5468-build.zip"
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-374f777457326a304937-build.zip"
         },
         "calculateTotalizedPortafolioByUserByAsset": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUserByAsset-71657736766f716c3545-build.zip"
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUserByAsset-437430483878626c786e-build.zip"
         },
         "populateStockSymbols": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",

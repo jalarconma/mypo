@@ -18,6 +18,12 @@ const useSyncSymbols = () => {
   }
 
   const syncSymbolsHandler = async () => {
+    const totalSyncSymbols = await mypoDB.symbols.count();
+
+    if(totalSyncSymbols > 25000) {
+      return;
+    }
+
     const result =  await fetchSymbols();
     storeDataAndcallNextSyncIteration(result);
   }
