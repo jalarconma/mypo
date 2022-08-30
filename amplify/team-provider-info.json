@@ -53,5 +53,58 @@
         "mypo11c19568": {}
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mypo-prod-182654-authRole",
+      "UnauthRoleArn": "arn:aws:iam::157356677452:role/amplify-mypo-prod-182654-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::157356677452:role/amplify-mypo-prod-182654-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-mypo-prod-182654-deployment",
+      "UnauthRoleName": "amplify-mypo-prod-182654-unauthRole",
+      "StackName": "amplify-mypo-prod-182654",
+      "StackId": "arn:aws:cloudformation:us-east-1:157356677452:stack/amplify-mypo-prod-182654/3f91d270-28bb-11ed-9f48-0a62fb3f9861",
+      "AmplifyAppId": "d9y58zm1bjgsd"
+    },
+    "categories": {
+      "auth": {
+        "mypo11c19568": {}
+      },
+      "function": {
+        "populateSymbols": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/populateSymbols-71672b73687434386852-build.zip"
+        },
+        "populateCryptoSymbols": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/populateCryptoSymbols-4635584442624d554434-build.zip",
+          "secretsPathAmplifyAppId": "d9y58zm1bjgsd"
+        },
+        "updateCryptoSymbolPrices": {
+          "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/updateCryptoSymbolPrices-6a322f57664658716b4a-build.zip"
+        },
+        "getAssetPriceByDate": {
+          "secretsPathAmplifyAppId": "d9y58zm1bjgsd",
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/getAssetPriceByDate-44705931433550445177-build.zip"
+        },
+        "calculateTotalizedPortafolioByUser": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUser-374f777457326a304937-build.zip"
+        },
+        "calculateTotalizedPortafolioByUserByAsset": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/calculateTotalizedPortafolioByUserByAsset-437430483878626c786e-build.zip"
+        },
+        "populateStockSymbols": {
+          "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
+          "s3Key": "amplify-builds/populateStockSymbols-3532417a305269546e7a-build.zip",
+          "test": "test",
+          "secretsPathAmplifyAppId": "d9y58zm1bjgsd"
+        }
+      }
+    }
   }
 }
