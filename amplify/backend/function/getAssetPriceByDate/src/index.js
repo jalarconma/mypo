@@ -83,7 +83,7 @@ async function getStockPrice(priceDate, symbol) {
 async function getAssetPrice(priceDate, symbol, baseUrl) {
   const finnHubApiKey = await getFinnHubApiKey();
   const unixDateTo = getCurrentUnixDate(priceDate);
-  const unixDateFrom = unixDateTo - 800;
+  const unixDateFrom = unixDateTo - 1000000;
 
   const requestUrl = `${baseUrl}/candle?symbol=${symbol}&resolution=1&from=${unixDateFrom}&to=${unixDateTo}&token=${finnHubApiKey}`;
   
