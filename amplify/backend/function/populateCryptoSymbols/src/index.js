@@ -65,8 +65,6 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
      Name: process.env[FINNHUB_API_KEY_NAME],
      WithDecryption: true
    };
-   
-   console.log('finnHubApiKey params:', params)
  
    const request = await ssm.getParameter(params).promise();
  
@@ -75,15 +73,16 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
  
  async function getSymbols() {
    const finnHubApiKey = await getFinnHubApiKey();
-   const result = await getRequest(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${finnHubApiKey}`);
+   const result = await getRequest(`https://finnhub.io/api/v1/crypto/symbol?exchange=COINBASE&token=${finnHubApiKey}`);
  
    console.log('result data ok... filtering....');
  
-   const symbols = result.map(symbolData => (
+   const data = result.filter(symbolData => symbolData.symbol.includes('USD'));
+   const symbols = data.map(symbolData => (
        { 
            id: symbolData.symbol, 
            symbol: symbolData.symbol, 
-           type: 'STOCK',
+           type: 'CRYPTO',
            displaySymbol: symbolData.displaySymbol,
            description: symbolData.description
         }
@@ -135,7 +134,7 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
        continue;
      }
  
-     storeOnDB(symbols25);
+     await storeOnDB(symbols25);
    }
  
  }
@@ -143,7 +142,7 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
  exports.handler = async (event) => {
    try {
      await createItems();
-     return { body: 'Successfully created stock symbols!' };
+     return { body: 'Successfully created crypto symbols!' };
    }
    catch (err) {
      return { error: err };
