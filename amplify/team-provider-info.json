@@ -43,7 +43,7 @@
         },
         "populateStockSymbols": {
           "deploymentBucketName": "amplify-mypo-dev-203822-deployment",
-          "s3Key": "amplify-builds/populateStockSymbols-3532417a305269546e7a-build.zip",
+          "s3Key": "amplify-builds/populateStockSymbols-42755750575431675144-build.zip",
           "test": "test",
           "secretsPathAmplifyAppId": "d9y58zm1bjgsd"
         }
